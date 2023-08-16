@@ -24,3 +24,4 @@ hs_err_pid*
 replay_pid*
 # 프로젝트 제외 경로
 /.gradle/
+.idea
