@@ -25,3 +25,4 @@ replay_pid*
 # 프로젝트 제외 경로
 /.gradle/
 .idea
+application-local.yaml
