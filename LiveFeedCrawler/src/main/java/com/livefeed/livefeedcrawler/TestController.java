@@ -1,20 +1,21 @@
-package com.livefeed.livefeedcommon;
+package com.livefeed.livefeedcrawler;
 
+import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/hello")
+@RequestMapping("/crawler-hello")
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestKafka testKafka;
+    private final KafkaProducerTemplate<String, String> kafkaProducer;
 
     @GetMapping
     public String testKafkaController() {
-        testKafka.send();
+        kafkaProducer.sendMessage("PRODUCER_CRAWLER_TEST", "자동주입 테스트입니다.222");
         return "hello";
     }
 }

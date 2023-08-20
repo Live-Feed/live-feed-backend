@@ -11,11 +11,9 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
 
     private final KafkaTemplate<K, V> kafkaTemplate;
-    private final String targetTopic;
 
-    public KafkaProducer(KafkaTemplate<K, V> kafkaTemplate, String targetTopic) {
+    public KafkaProducer(KafkaTemplate<K, V> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
-        this.targetTopic = targetTopic;
     }
 
     @Override
