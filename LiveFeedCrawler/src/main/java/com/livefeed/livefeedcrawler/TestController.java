@@ -15,7 +15,7 @@ public class TestController {
 
     @GetMapping
     public String testKafkaController() {
-        kafkaProducer.sendMessage("PRODUCER_CRAWLER_TEST", "자동주입 테스트입니다.222");
+        kafkaProducer.sendMessage("PRODUCER_CRAWLER_TEST", "자동주입 테스트입니다.");
         return "hello";
     }
 }
