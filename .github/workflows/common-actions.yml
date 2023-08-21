@@ -10,7 +10,7 @@ name: LiveFeedCommon Module CI
 on:
   push:
     branches:
-      - LF-8/common-ci
+      - main
     paths:
       - "LiveFeedCommon/**"
 
