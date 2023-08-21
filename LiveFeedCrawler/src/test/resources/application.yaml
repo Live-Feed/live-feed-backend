@@ -1,0 +1,4 @@
+custom:
+  kafka:
+    producer:
+      is-enabled: true
