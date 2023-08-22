@@ -1,5 +1,7 @@
 package com.livefeed.livefeedcommon.kafka.producer;
 
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -8,13 +10,10 @@ import org.springframework.kafka.support.SendResult;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
 
     private final KafkaTemplate<K, V> kafkaTemplate;
-
-    public KafkaProducer(KafkaTemplate<K, V> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
 
     @Override
     public void sendMessage(String topic, V value) {
