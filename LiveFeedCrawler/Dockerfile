@@ -11,7 +11,7 @@ ENV active_profile=prod \
 
 RUN chmod a+x /app
 
-COPY build/libs/**.jar .crawler.jar
+COPY build/libs/*.jar crawler.jar
 
 ENTRYPOINT ["java", "-jar", "/app/crawler.jar", "--spring.profiles.active=${active_profile}"]
 
