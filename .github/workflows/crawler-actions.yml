@@ -11,8 +11,8 @@ on:
   push:
     branches:
       - LF-8/common-ci
-    paths:
-      - "LiveFeedCrawler/**"
+#    paths:
+#      - "LiveFeedCrawler/**"
 
 jobs:
   test-and-build:
