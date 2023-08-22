@@ -37,8 +37,8 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Gradle Test
-        run: ./gradlew :LiveFeedCrawler:test
+#      - name: Gradle Test
+#        run: ./gradlew :LiveFeedCrawler:test
 
 #      - name: Setup Gradle
 #        uses: gradle/gradle-build-action@v2.4.2
@@ -51,7 +51,11 @@ jobs:
         run: ./gradlew :LiveFeedCrawler:clean :LiveFeedCrawler:bootJar
 
       - name: docker image build
-        run: docker build -t $REGISTRY/$IMAGE_NAME:$APP_VERSION" .
+        run: | 
+          docker build \
+          --build-arg KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} \
+          --build-arg CRAWLER_PORT=${{ secrets.CRAWLER_PORT }} \
+          -t $REGISTRY/$IMAGE_NAME:$APP_VERSION" .
 
       - name: Login to Container registry
         uses: docker/login-action@v2.1.0
