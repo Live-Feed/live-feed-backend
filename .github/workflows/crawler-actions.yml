@@ -50,7 +50,10 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew :LiveFeedCrawler:clean :LiveFeedCrawler:bootJar
 
-      - name: docker image build
+      - name: Move to target module location
+        run: cd ./LiveFeedCrawler
+
+      - name: Docker image build
         run: | 
           docker build \
           --build-arg KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} \
@@ -64,5 +67,5 @@ jobs:
           username: $USERNAME
           password: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
 
-      - name: docker image push to container registry
+      - name: Docker image push to container registry
         run : docker push $REGISTRY/$IMAGE_NAME:$APP_VERSION
