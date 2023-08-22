@@ -51,10 +51,13 @@ jobs:
         run: ./gradlew :LiveFeedCrawler:clean :LiveFeedCrawler:bootJar
 
       - name: Move to target module location
-        run: cd ./LiveFeedCrawler
+        run: |
+          cd ./LiveFeedCrawler
+          ls
 
       - name: Docker image build
         run: | 
+          ls
           docker build \
           --build-arg KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} \
           --build-arg CRAWLER_PORT=${{ secrets.CRAWLER_PORT }} \
