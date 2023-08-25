@@ -1,6 +1,7 @@
 package com.livefeed.livefeedcrawler;
 
 import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
+import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ public class TestController {
 
     @GetMapping
     public String testKafkaController() {
-        kafkaProducer.sendMessage("PRODUCER_CRAWLER_TEST", "crawler ci 테스트 입니다.");
+        kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, "crawler ci 테스트 입니다.");
         return "hello";
     }
 }
