@@ -1,6 +1,8 @@
-package com.livefeed.livefeedcrawler.crawler;
+package com.livefeed.livefeedcrawler.batch;
 
+import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.micrometer.common.lang.NonNullApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -8,6 +10,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,18 +23,25 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@StepScope
+@NonNullApi
 @RequiredArgsConstructor
-public class GoogleNewsCrawler implements NewsCrawlerTemplate {
+public class GoogleNewsCrawlTasklet implements Tasklet {
 
-    public void crawlPage() {
+    @Value("#{jobParameters[pageUrl]}")
+    private String pageUrl;
+
+    private final KafkaProducerTemplate<String, String> kafkaProducer;
+
+    @Override
+    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 
-        String pageUrl = "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRFp1ZEdvU0FtdHZHZ0pMVWlnQVAB?hl=ko&gl=KR&ceid=KR%3Ako";
-        driver.get(pageUrl);
-
         try {
+            driver.get(pageUrl);
+
             while (true) {
                 double currentScrollPosition = getCurrentScrollPosition(javascriptExecutor);
                 scrollDown(javascriptExecutor);
@@ -42,6 +57,8 @@ public class GoogleNewsCrawler implements NewsCrawlerTemplate {
         } finally {
             driver.quit();
         }
+
+        return RepeatStatus.FINISHED;
     }
 
     private void scrollDown(JavascriptExecutor javascriptExecutor) {
@@ -64,8 +81,7 @@ public class GoogleNewsCrawler implements NewsCrawlerTemplate {
 
         for (WebElement linkElement : articleLinks) {
             String articleUrl = linkElement.getAttribute("href");
-            // TODO: send to kafka
+            kafkaProducer.sendMessage("LIVEFEED.STREAM.ARTICLE.URL", articleUrl);
         }
     }
-
 }
