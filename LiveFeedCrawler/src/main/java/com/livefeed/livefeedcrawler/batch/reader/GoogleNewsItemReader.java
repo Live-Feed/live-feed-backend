@@ -1,40 +1,48 @@
-package com.livefeed.livefeedcrawler.batch;
+package com.livefeed.livefeedcrawler.batch.reader;
 
-import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.micrometer.common.lang.NonNullApi;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.batch.item.support.AbstractItemCountingItemStreamItemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@Component
 @StepScope
-@NonNullApi
-@RequiredArgsConstructor
-public class GoogleNewsCrawlTasklet implements Tasklet {
+@Component
+public class GoogleNewsItemReader extends AbstractItemCountingItemStreamItemReader<String> {
 
     @Value("#{jobParameters[pageUrl]}")
     private String pageUrl;
 
-    private final KafkaProducerTemplate<String, String> kafkaProducer;
+    private final List<String> articleUrls = new ArrayList<>();
+
+    public GoogleNewsItemReader() {
+        super();
+        setExecutionContextName(ClassUtils.getShortName(GoogleNewsItemReader.class));
+    }
 
     @Override
-    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+    protected String doRead() {
+        if (articleUrls.isEmpty()) {
+            return null;
+        }
+
+        return articleUrls.remove(0);
+    }
+
+    @Override
+    protected void doOpen() {
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
         JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
@@ -50,15 +58,18 @@ public class GoogleNewsCrawlTasklet implements Tasklet {
                 }
 
                 Thread.sleep(3000);
-                sendArticleUrls(driver);
+                readArticles(driver);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
             driver.quit();
         }
+    }
 
-        return RepeatStatus.FINISHED;
+    @Override
+    protected void doClose() {
+        articleUrls.clear();
     }
 
     private void scrollDown(JavascriptExecutor javascriptExecutor) {
@@ -76,12 +87,12 @@ public class GoogleNewsCrawlTasklet implements Tasklet {
         return getCurrentScrollPosition(javascriptExecutor) == lastScrollPosition;
     }
 
-    private void sendArticleUrls(WebDriver driver) {
+    private void readArticles(WebDriver driver) {
         List<WebElement> articleLinks = driver.findElements(By.cssSelector("[jsname='hXwDdf']"));
 
         for (WebElement linkElement : articleLinks) {
             String articleUrl = linkElement.getAttribute("href");
-            kafkaProducer.sendMessage("LIVEFEED.STREAM.ARTICLE.URL", articleUrl);
+            articleUrls.add(articleUrl);
         }
     }
 }
