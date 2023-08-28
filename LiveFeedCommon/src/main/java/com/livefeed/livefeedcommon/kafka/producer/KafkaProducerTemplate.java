@@ -1,9 +1,11 @@
 package com.livefeed.livefeedcommon.kafka.producer;
 
 
+import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
+
 public interface KafkaProducerTemplate<K, V> {
 
-    void sendMessage(String topic, V value);
+    void sendMessage(KafkaTopic kafkaTopic, V value);
 
-    void sendMessage(String topic, K key, V value);
+    void sendMessage(KafkaTopic kafkaTopic, K key, V value);
 }
