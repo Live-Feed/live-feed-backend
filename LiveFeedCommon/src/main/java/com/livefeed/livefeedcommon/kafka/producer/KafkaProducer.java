@@ -40,7 +40,7 @@ public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
 
                 sendRetryRecord(kafkaTopic, exception);
             } else {
-                log.info("kafka producer send success topic = {}, offset = {}, partition = {}",
+                log.info("[kafka producer send] success topic = {}, offset = {}, partition = {}",
                         result.getRecordMetadata().topic(),
                         result.getRecordMetadata().offset(),
                         result.getRecordMetadata().partition());
