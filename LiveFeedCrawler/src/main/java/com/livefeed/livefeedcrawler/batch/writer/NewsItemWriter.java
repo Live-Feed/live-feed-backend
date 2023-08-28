@@ -1,6 +1,7 @@
 package com.livefeed.livefeedcrawler.batch.writer;
 
 import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
+import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
@@ -15,7 +16,7 @@ public class NewsItemWriter implements ItemWriter<String> {
     @Override
     public void write(Chunk<? extends String> chunk) {
         for (String articleUrl : chunk.getItems()) {
-            kafkaProducer.sendMessage("LIVEFEED.STREAM.ARTICLE.URL", articleUrl);
+            kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, articleUrl);
         }
     }
 }
