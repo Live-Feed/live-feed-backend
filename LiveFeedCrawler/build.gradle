@@ -4,17 +4,12 @@ plugins {
 
 version = '0.1'
 
-//ext.VERSION = version
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.seleniumhq.selenium:selenium-java:4.11.0'
     implementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    testImplementation 'org.springframework.kafka:spring-kafka-test'
     testImplementation 'org.springframework.batch:spring-batch-test'
-    testImplementation 'org.projectlombok:lombok'
     implementation project(":LiveFeedCommon")
 }
