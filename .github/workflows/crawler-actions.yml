@@ -54,6 +54,9 @@ jobs:
           docker build \
           --build-arg KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} \
           --build-arg CRAWLER_PORT=${{ secrets.CRAWLER_PORT }} \
+          --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+          --build-arg DATABASE_USER=${{ secrets.DATABASE_USER }} \
+          --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
           -t $REGISTRY/$IMAGE_NAME:$APP_VERSION .
 
       - name: Login to Container registry
