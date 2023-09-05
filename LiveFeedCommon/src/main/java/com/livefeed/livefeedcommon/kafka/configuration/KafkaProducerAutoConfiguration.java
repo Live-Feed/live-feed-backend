@@ -12,7 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 @AutoConfiguration
 @ConditionalOnProperty(name = "custom.kafka.producer.is-enabled", havingValue = "true")
 @RequiredArgsConstructor
-public class KafkaProducerAutoConfiguration<K, V> {
+public class KafkaProducerAutoConfiguration<K extends String, V extends String> {
 
     private final KafkaTemplate<K, V> kafkaTemplate;
 

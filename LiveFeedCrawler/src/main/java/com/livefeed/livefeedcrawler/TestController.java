@@ -19,7 +19,9 @@ public class TestController {
     @GetMapping
     public String testKafkaController() {
         log.info("kafka producer test");
-        kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, "crawler ci 테스트 입니다.");
+        for (int i = 10; i < 20; i++) {
+            kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, String.valueOf(i), "crawler ci 테스트 입니다. " + i);
+        }
         log.info("kafka producer test end");
         return "hello";
     }
