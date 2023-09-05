@@ -15,6 +15,7 @@ import org.springframework.batch.test.StepScopeTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -23,6 +24,7 @@ import java.util.Date;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBatchTest
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9094", "port=9094" })
 @SpringBootTest(classes = {GoogleNewsItemReader.class, NewsItemWriter.class, GoogleNewsCrawlJobConfiguration.class, BatchTestConfiguration.class})
 public class GoogleNewsCrawlJobTest {
 
