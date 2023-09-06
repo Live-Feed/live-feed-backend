@@ -4,6 +4,7 @@ package com.livefeed.livefeedcommon.kafka.producer;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaProducerException;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -24,11 +25,33 @@ public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
 
     @Override
     public void sendMessage(KafkaTopic kafkaTopic, K key, V value) {
-        ProducerRecord<K, V> record = new ProducerRecord<>(kafkaTopic.getTopic(), key, value);
-        sendProducerRecord(record, kafkaTopic);
+        ProducerRecord<K, V> producerRecord = new ProducerRecord<>(kafkaTopic.getTopic(), key, value);
+        sendMessage(producerRecord);
     }
 
-    private void sendProducerRecord(ProducerRecord<K, V> record, KafkaTopic kafkaTopic) {
+    @Override
+    public void sendMessage(ProducerRecord<K, V> producerRecord) {
+        sendProducerRecord(producerRecord);
+    }
+
+    @Override
+    public void sendDlqTopic(KafkaTopic kafkaTopic, ConsumerRecord<K, V> consumerRecord) {
+        String dlqTopic = kafkaTopic.getDlqTopic();
+        ProducerRecord<K, V> producerRecord = new ProducerRecord<>(dlqTopic, (K) kafkaTopic.getTopic(), consumerRecord.value());
+        CompletableFuture<SendResult<K, V>> sendResult = kafkaTemplate.send(producerRecord);
+
+        sendResult.whenComplete((result, ex) -> {
+            KafkaProducerException exception = (KafkaProducerException) ex;
+            if (ex != null) {
+                log.error("[kafka producer send dlq error] record topic = {}, timestamp = {}, partition = {}",
+                        exception.getFailedProducerRecord().topic(),
+                        exception.getFailedProducerRecord().timestamp(),
+                        exception.getFailedProducerRecord().partition());
+            }
+        });
+    }
+
+    private void sendProducerRecord(ProducerRecord<K, V> record) {
         CompletableFuture<SendResult<K, V>> sendResult = kafkaTemplate.send(record);
         sendResult.whenComplete((result, ex) -> {
             if (ex != null) {
@@ -38,7 +61,7 @@ public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
                         exception.getFailedProducerRecord().timestamp(),
                         exception.getFailedProducerRecord().partition());
 
-                sendRetryRecord(kafkaTopic, exception);
+                sendRetryTopic(exception);
             } else {
                 log.info("[kafka producer send] success topic = {}, offset = {}, partition = {}",
                         result.getRecordMetadata().topic(),
@@ -48,7 +71,15 @@ public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
         });
     }
 
-    private void sendRetryRecord(KafkaTopic kafkaTopic, KafkaProducerException kafkaProducerException) {
+    private void sendRetryTopic(KafkaProducerException exception) {
+        for (KafkaTopic kafkaTopic : KafkaTopic.values()) {
+            if (kafkaTopic.getTopic().equals(exception.getFailedProducerRecord().topic())) {
+                sendRetryTopic(kafkaTopic, exception);
+            }
+        }
+    }
+
+    private void sendRetryTopic(KafkaTopic kafkaTopic, KafkaProducerException kafkaProducerException) {
         ProducerRecord<K, V> failedRecord = kafkaProducerException.getFailedProducerRecord();
         String retryTopic = kafkaTopic.getRetryTopic();
         ProducerRecord<K, V> retryRecord = new ProducerRecord<>(retryTopic, failedRecord.key(), failedRecord.value());
