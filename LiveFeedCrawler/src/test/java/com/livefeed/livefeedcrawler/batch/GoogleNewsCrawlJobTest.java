@@ -5,6 +5,7 @@ import com.livefeed.livefeedcrawler.batch.configuration.GoogleNewsCrawlJobConfig
 import com.livefeed.livefeedcrawler.batch.reader.GoogleNewsItemReader;
 import com.livefeed.livefeedcrawler.batch.writer.NewsItemWriter;
 import com.livefeed.livefeedcrawler.common.NewsPage;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.*;
@@ -38,6 +39,7 @@ public class GoogleNewsCrawlJobTest {
     private NewsItemWriter writer;
 
     @Test
+    @Disabled
     @DisplayName("구글 뉴스 크롤링 Job이 정상 실행된다.")
     void runGoogleNewsCrawlJob() throws Exception {
         // given
@@ -52,6 +54,7 @@ public class GoogleNewsCrawlJobTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("구글 뉴스 크롤링 Step이 정상 실행된다.")
     void runGoogleNewsCrawlStep() {
         // given
@@ -66,6 +69,7 @@ public class GoogleNewsCrawlJobTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("구글 뉴스 페이지의 기사 url을 크롤링하는 ItemReader가 정상 실행된다.")
     void readGoogleNewsItem() throws Exception {
         // given

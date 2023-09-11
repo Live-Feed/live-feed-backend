@@ -10,7 +10,7 @@ name: LiveFeedCrawler Module CI
 on:
   push:
     branches:
-      - LF-9/crawler
+      - main
     paths:
       - "LiveFeedCrawler/**"
 
