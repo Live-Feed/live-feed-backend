@@ -5,5 +5,7 @@ plugins {
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
+    implementation 'org.seleniumhq.selenium:selenium-java:4.11.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
     implementation project(":LiveFeedCommon")
 }
