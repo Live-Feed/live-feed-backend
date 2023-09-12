@@ -13,8 +13,12 @@ public class CrawlerScheduler {
 
     private final CrawlJobLauncher crawlJobLauncher;
 
-    @Scheduled(fixedRate = 300000)
     public void crawlGoogleNews() {
         crawlJobLauncher.runGoogleNewsCrawlJob();
+    }
+
+    @Scheduled(fixedRate = 300000)
+    public void crawlNaverNews() {
+        crawlJobLauncher.runNaverNewsCrawlJob();
     }
 }

@@ -18,6 +18,7 @@ public class CrawlJobLauncher {
 
     private final JobLauncher jobLauncher;
     private final Job googleNewsCrawlJob;
+    private final Job naverNewsCrawlJob;
 
     private void runCrawlJob(Job crawlJob, String pageUrl) {
         JobParameters jobParameters = new JobParametersBuilder()
@@ -35,6 +36,12 @@ public class CrawlJobLauncher {
     public void runGoogleNewsCrawlJob() {
         for (String pageUrl : NewsPage.GOOGLE_NEWS.getUrls()) {
             runCrawlJob(googleNewsCrawlJob, pageUrl);
+        }
+    }
+
+    public void runNaverNewsCrawlJob() {
+        for (String pageUrl : NewsPage.NAVER_NEWS.getUrls()) {
+            runCrawlJob(naverNewsCrawlJob, pageUrl);
         }
     }
 }
