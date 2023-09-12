@@ -1,8 +1,8 @@
 package com.livefeed.livefeedcrawler.batch;
 
 import com.livefeed.livefeedcrawler.batch.configuration.BatchTestConfiguration;
-import com.livefeed.livefeedcrawler.batch.configuration.GoogleNewsCrawlJobConfiguration;
-import com.livefeed.livefeedcrawler.batch.reader.GoogleNewsItemReader;
+import com.livefeed.livefeedcrawler.batch.configuration.NaverNewsCrawlJobConfiguration;
+import com.livefeed.livefeedcrawler.batch.reader.NaverNewsItemReader;
 import com.livefeed.livefeedcrawler.batch.writer.NewsItemWriter;
 import com.livefeed.livefeedcrawler.common.NewsPage;
 import org.junit.jupiter.api.Disabled;
@@ -24,24 +24,24 @@ import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Disabled
 @SpringBatchTest
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9094", "port=9094" })
-@SpringBootTest(classes = {GoogleNewsItemReader.class, NewsItemWriter.class, GoogleNewsCrawlJobConfiguration.class, BatchTestConfiguration.class})
-public class GoogleNewsCrawlJobTest {
+@SpringBootTest(classes = {NaverNewsItemReader.class, NewsItemWriter.class, NaverNewsCrawlJobConfiguration.class, BatchTestConfiguration.class})
+public class NaverNewsCrawlJobTest {
 
     @Autowired
     private JobLauncherTestUtils jobLauncher;
 
     @Autowired
-    private GoogleNewsItemReader reader;
+    private NaverNewsItemReader reader;
 
     @Autowired
     private NewsItemWriter writer;
 
     @Test
-    @DisplayName("구글 뉴스 크롤링 Job이 정상 실행된다.")
-    void runGoogleNewsCrawlJob() throws Exception {
+    @Disabled
+    @DisplayName("네이버 뉴스 크롤링 Job이 정상 실행된다.")
+    void runNaverNewsCrawlJob() throws Exception {
         // given
         JobParameters jobParameters = createJobParameters();
 
@@ -54,13 +54,14 @@ public class GoogleNewsCrawlJobTest {
     }
 
     @Test
-    @DisplayName("구글 뉴스 크롤링 Step이 정상 실행된다.")
+    @Disabled
+    @DisplayName("네이버 뉴스 크롤링 Step이 정상 실행된다.")
     void runGoogleNewsCrawlStep() {
         // given
         JobParameters jobParameters = createJobParameters();
 
         // when
-        JobExecution jobExecution = jobLauncher.launchStep("googleNewsCrawlStep", jobParameters);
+        JobExecution jobExecution = jobLauncher.launchStep("naverNewsCrawlStep", jobParameters);
 
         // then
         assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
@@ -68,7 +69,8 @@ public class GoogleNewsCrawlJobTest {
     }
 
     @Test
-    @DisplayName("구글 뉴스 페이지의 기사 url을 크롤링하는 ItemReader가 정상 실행된다.")
+    @Disabled
+    @DisplayName("네이버 뉴스 페이지의 기사 url을 크롤링하는 ItemReader가 정상 실행된다.")
     void readGoogleNewsItem() throws Exception {
         // given
         JobParameters jobParameters = createJobParameters();
@@ -84,18 +86,18 @@ public class GoogleNewsCrawlJobTest {
 
         // then
         assertThat(articleUrl).isNotBlank();
-        assertThat(articleUrl).startsWith("https://news.google.com/articles/");
+        assertThat(articleUrl).startsWith("https://sports.naver.com/");
     }
 
     @Test
     @DisplayName("기사 url을 kafka로 전송하는 ItemWriter가 정상 실행된다.")
     void writeGoogleNewsItem() {
-        writer.write(new Chunk<>(NewsPage.GOOGLE_NEWS.getUrls()));
+        writer.write(new Chunk<>(NewsPage.NAVER_NEWS.getUrls()));
     }
 
     JobParameters createJobParameters() {
         return new JobParametersBuilder()
-                .addString("pageUrl", NewsPage.GOOGLE_NEWS.getUrls().get(0))
+                .addString("pageUrl", NewsPage.NAVER_NEWS.getUrls().get(0))
                 .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .toJobParameters();
     }

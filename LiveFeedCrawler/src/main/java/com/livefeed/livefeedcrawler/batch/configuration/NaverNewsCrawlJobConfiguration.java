@@ -21,13 +21,13 @@ public class NaverNewsCrawlJobConfiguration {
 
     @Bean
     public Job naverNewsCrawlJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new JobBuilder("NaverNewsCrawlJob", jobRepository)
+        return new JobBuilder("naverNewsCrawlJob", jobRepository)
                 .start(naverNewsCrawlStep(jobRepository, transactionManager))
                 .build();
     }
 
     public Step naverNewsCrawlStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("NaverNewsCrawlStep", jobRepository)
+        return new StepBuilder("naverNewsCrawlStep", jobRepository)
                 .<String, String>chunk(chunkSize, transactionManager)
                 .reader(naverNewsItemReader)
                 .writer(newsItemWriter)
