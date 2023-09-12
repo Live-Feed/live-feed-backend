@@ -1,25 +1,32 @@
 package com.livefeed.livefeedparser.parser;
 
-import org.assertj.core.api.Assertions;
+import com.livefeed.livefeedparser.parser.dto.HeaderDto;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ArticleThemeTest {
 
-    @DisplayName("html 클래스 태그를 . 을 기준으로 제대로 구별하는지 확인하는 메서드")
+    @DisplayName("parseHeader에서 스포츠 기사를 제대로 파싱하는지 확인하는 테스트")
     @Test
-    void getSrcValueByClass() {
+    void parseHeaderSports() {
         // given
-        String source = "class.news_headline";
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        String url = "https://sports.news.naver.com/news?oid=109&aid=0004924910";
+        driver.get(url);
+        ArticleTheme sports = ArticleTheme.SPORTS;
         // when
-        By srcValue = ArticleTheme.getSrcValue(source);
+        HeaderDto headerDto = sports.parseHeader(driver);
+        driver.quit();
         // then
-        By.ByClassName result = (By.ByClassName) srcValue;
-
-        assertThat(result.toString()).isEqualTo("By.className: news_headline");
+        assertThat(headerDto.innerHtml()).isNotBlank();
+        assertThat(headerDto.articleTitle()).isEqualTo("AG 기간 필승조 이탈 대비, 이강철 감독이 믿는 카드…'홀드왕' 출신이 있다");
+        assertThat(headerDto.publicationTime()).isEqualTo("기사입력 2023.09.11. 오후 02:31");
+        assertThat(headerDto.originArticleUrl()).isEqualTo("http://www.osen.co.kr/article/G1112180712");
     }
 }

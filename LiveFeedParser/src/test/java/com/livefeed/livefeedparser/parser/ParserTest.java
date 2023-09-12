@@ -10,20 +10,20 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 class ParserTest {
 
-    @DisplayName("WebDriver 가 원하는 페이지를 받아오는지 확인하는 테스트")
+    @DisplayName("스포츠 기사의 헤더를 제대로 파싱하는지 확인하는 테스트, 스포츠 기사는 journalistName = null 입니다.")
     @Test
-    void getArticleHtml() throws InterruptedException {
+    void getHeaderAboutSportsArticle() {
         // given
         Parser parser = new Parser();
-        String url = "https://sports.news.naver.com/news?oid=109&aid=0004924910";
+        String url = "https://sports.news.naver.com/news?oid=658&aid=0000052259";
         // when
-        HeaderDto headerDto = parser.parseHeader(url);
-
-        assertThat(headerDto.outerHtml()).isNotBlank();
-        log.info("outerHtml = {}", headerDto.outerHtml());
-        log.info("title = {}", headerDto.articleTitle());
-        log.info("createdAt = {}", headerDto.createdAt());
-        log.info("publicationTime = {}", headerDto.publicationTime());
-        log.info("originArticleUrl = {}", headerDto.originArticleUrl());
+        HeaderDto headerDto = parser.parseHeader(url, ArticleTheme.SPORTS);
+        // then
+        log.info("headerDto = {}", headerDto);
+        assertThat(headerDto.innerHtml()).isNotBlank();
+        assertThat(headerDto.articleTitle()).isNotBlank();
+        assertThat(headerDto.publicationTime()).isNotBlank();
+        assertThat(headerDto.originArticleUrl()).isNotBlank();
+        assertThat(headerDto.journalistName()).isNull();
     }
 }

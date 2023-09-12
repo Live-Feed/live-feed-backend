@@ -1,18 +1,16 @@
 package com.livefeed.livefeedparser.parser.dto;
 
 public record HeaderDto(
-        String outerHtml,
+        String innerHtml,
         String articleTitle,
-        String createdAt,
         String publicationTime,
         String originArticleUrl,
         String journalistName
 ) {
 
-    public static HeaderDto of(String outerHtml, String articleTitle,
-                               String createdAt, String publicationTime,
-                               String originArticleUrl, String journalistName) {
-        return new HeaderDto(outerHtml, articleTitle, createdAt,
+    public static HeaderDto of(String innerHtml, String articleTitle,
+                               String publicationTime, String originArticleUrl, String journalistName) {
+        return new HeaderDto(innerHtml, articleTitle,
                 publicationTime, originArticleUrl, journalistName);
     }
 }
