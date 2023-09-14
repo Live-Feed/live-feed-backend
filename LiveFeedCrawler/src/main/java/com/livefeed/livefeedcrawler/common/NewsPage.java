@@ -4,18 +4,28 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
 public enum NewsPage {
-    GOOGLE_NEWS(List.of(GoogleNewsPage.SPORTS.url)),
-    NAVER_NEWS(Stream.of(NaverNewsPage.SPORTS.urls)
-            .flatMap(List::stream)
-            .collect(Collectors.toList()));
 
+    GOOGLE_SPORTS_NEWS(Platform.GOOGLE, Theme.SPORTS, List.of(GoogleNewsPage.SPORTS.url)),
+    NAVER_SPORTS_NEWS(Platform.NAVER, Theme.SPORTS, NaverNewsPage.SPORTS.urls);
+
+    private final Platform platform;
+    private final Theme theme;
     private final List<String> urls;
+
+    @RequiredArgsConstructor
+    public enum Platform {
+        GOOGLE,
+        NAVER
+    }
+
+    @RequiredArgsConstructor
+    public enum Theme {
+        SPORTS
+    }
 
     @RequiredArgsConstructor
     private enum GoogleNewsPage {
@@ -26,15 +36,13 @@ public enum NewsPage {
 
     @RequiredArgsConstructor
     private enum NaverNewsPage {
-        SPORTS(List.of(NaverSportsNewsPage.KBASEBALL.url, NaverSportsNewsPage.WBASEBALL.url,
-                NaverSportsNewsPage.KFOOTBALL.url, NaverSportsNewsPage.WFOOTBALL.url,
-                NaverSportsNewsPage.BASKETBALL.url, NaverSportsNewsPage.VOLLEYBALL.url,
-                NaverSportsNewsPage.GOLF.url, NaverSportsNewsPage.GENERAL.url));
+        SPORTS(List.of(Sports.KBASEBALL.url, Sports.WBASEBALL.url, Sports.KFOOTBALL.url, Sports.WFOOTBALL.url,
+                Sports.BASKETBALL.url, Sports.VOLLEYBALL.url, Sports.GOLF.url, Sports.GENERAL.url));
 
         private final List<String> urls;
 
         @RequiredArgsConstructor
-        private enum NaverSportsNewsPage {
+        private enum Sports {
             KBASEBALL("https://sports.naver.com/kbaseball/news/index"),
             WBASEBALL("https://sports.naver.com/wbaseball/news/index"),
             KFOOTBALL("https://sports.naver.com/kfootball/news/index"),

@@ -20,9 +20,11 @@ public class CrawlJobLauncher {
     private final Job googleNewsCrawlJob;
     private final Job naverNewsCrawlJob;
 
-    private void runCrawlJob(Job crawlJob, String pageUrl) {
+    private void runCrawlJob(Job crawlJob, String pageUrl, NewsPage.Platform platform, NewsPage.Theme theme) {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("pageUrl", pageUrl)
+                .addString("platform", platform.name())
+                .addString("theme", theme.name())
                 .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .toJobParameters();
 
@@ -33,15 +35,15 @@ public class CrawlJobLauncher {
         }
     }
 
-    public void runGoogleNewsCrawlJob() {
-        for (String pageUrl : NewsPage.GOOGLE_NEWS.getUrls()) {
-            runCrawlJob(googleNewsCrawlJob, pageUrl);
+    public void runGoogleSportsNewsCrawlJob() {
+        for (String pageUrl : NewsPage.GOOGLE_SPORTS_NEWS.getUrls()) {
+            runCrawlJob(googleNewsCrawlJob, pageUrl, NewsPage.Platform.GOOGLE, NewsPage.Theme.SPORTS);
         }
     }
 
-    public void runNaverNewsCrawlJob() {
-        for (String pageUrl : NewsPage.NAVER_NEWS.getUrls()) {
-            runCrawlJob(naverNewsCrawlJob, pageUrl);
+    public void runNaverSportsNewsCrawlJob() {
+        for (String pageUrl : NewsPage.NAVER_SPORTS_NEWS.getUrls()) {
+            runCrawlJob(naverNewsCrawlJob, pageUrl, NewsPage.Platform.NAVER, NewsPage.Theme.SPORTS);
         }
     }
 }

@@ -89,13 +89,23 @@ public class GoogleNewsCrawlJobTest {
 
     @Test
     @DisplayName("기사 url을 kafka로 전송하는 ItemWriter가 정상 실행된다.")
-    void writeGoogleNewsItem() {
-        writer.write(new Chunk<>(NewsPage.GOOGLE_NEWS.getUrls()));
+    void writeGoogleNewsItem() throws Exception {
+        // given
+        JobParameters jobParameters = createJobParameters();
+        StepExecution stepExecution = MetaDataInstanceFactory.createStepExecution(jobParameters);
+
+        // when
+        StepScopeTestUtils.doInStepScope(stepExecution, () -> {
+            writer.write(new Chunk<>(NewsPage.GOOGLE_SPORTS_NEWS.getUrls()));
+            return null;
+        });
     }
 
     JobParameters createJobParameters() {
         return new JobParametersBuilder()
-                .addString("pageUrl", NewsPage.GOOGLE_NEWS.getUrls().get(0))
+                .addString("pageUrl", NewsPage.GOOGLE_SPORTS_NEWS.getUrls().get(0))
+                .addString("platform", NewsPage.Platform.GOOGLE.name())
+                .addString("theme", NewsPage.Theme.SPORTS.name())
                 .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .toJobParameters();
     }

@@ -4,7 +4,7 @@ spring:
   kafka:
     bootstrap-servers: localhost:9094
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
   datasource:
     driver-class-name: org.h2.Driver
