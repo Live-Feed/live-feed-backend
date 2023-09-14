@@ -1,6 +1,8 @@
 package com.livefeed.livefeedparser.parser;
 
+import com.livefeed.livefeedparser.parser.dto.BodyDto;
 import com.livefeed.livefeedparser.parser.dto.HeaderDto;
+import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,20 +12,21 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 class ParserTest {
 
-    @DisplayName("스포츠 기사의 헤더를 제대로 파싱하는지 확인하는 테스트, 스포츠 기사는 journalistName = null 입니다.")
+    @DisplayName("Parser 클래스에서 기사 url을 통해 기사를 크롤링하여 ParseResultDto 클래스를 전달한다.")
     @Test
-    void getHeaderAboutSportsArticle() {
+    void parseArticle() {
         // given
         Parser parser = new Parser();
         String url = "https://sports.news.naver.com/news?oid=658&aid=0000052259";
         // when
-        HeaderDto headerDto = parser.parseHeader(url, ArticleTheme.SPORTS);
+        ParseResultDto result = parser.parseArticle(url, ArticleTheme.SPORTS);
         // then
-        log.info("headerDto = {}", headerDto);
-        assertThat(headerDto.innerHtml()).isNotBlank();
-        assertThat(headerDto.articleTitle()).isNotBlank();
-        assertThat(headerDto.publicationTime()).isNotBlank();
-        assertThat(headerDto.originArticleUrl()).isNotBlank();
-        assertThat(headerDto.journalistName()).isNull();
+        assertThat(result.articleTitle()).isNotBlank();
+        assertThat(result.publicationTime()).isNotBlank();
+        assertThat(result.pressCompanyName()).isNotBlank();
+        assertThat(result.journalistName()).isNotBlank();
+        assertThat(result.journalistEmail()).isNotBlank();
+        assertThat(result.originArticleUrl()).isNotBlank();
+        assertThat(result.html()).isNotBlank();
     }
 }
