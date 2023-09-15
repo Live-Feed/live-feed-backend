@@ -24,14 +24,4 @@ class KafkaProducerTest {
         kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, "테스트 메시지1");
         kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_HTML, "테스트 메시지2");
     }
-
-    @Test
-    @DisplayName("컨슈머 로직이 실패할 경우 dlq 토픽으로 실패한 consumerRecord를 보낸다.")
-    void sendDlqTopic() {
-        // given
-        ConsumerRecord<String, String> consumerRecord = new ConsumerRecord<>(KafkaTopic.LIVEFEED_URL.getTopic(), 0, 0, null, "테스트 메시지");
-        // when
-        // then
-        kafkaProducer.sendDlqTopic(KafkaTopic.LIVEFEED_URL, consumerRecord);
-    }
 }

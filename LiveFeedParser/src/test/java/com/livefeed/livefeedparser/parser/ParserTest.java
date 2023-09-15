@@ -6,17 +6,22 @@ import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
+@SpringBootTest
 class ParserTest {
+
+    @Autowired
+    private Parser parser;
 
     @DisplayName("Parser 클래스에서 기사 url을 통해 기사를 크롤링하여 ParseResultDto 클래스를 전달한다.")
     @Test
     void parseArticle() {
         // given
-        Parser parser = new Parser();
         String url = "https://sports.news.naver.com/news?oid=658&aid=0000052259";
         // when
         ParseResultDto result = parser.parseArticle(url, ArticleTheme.SPORTS);

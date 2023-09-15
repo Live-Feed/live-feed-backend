@@ -12,6 +12,4 @@ public interface KafkaProducerTemplate<K, V> {
     void sendMessage(KafkaTopic kafkaTopic, K key, V value);
 
     void sendMessage(ProducerRecord<K, V> producerRecord);
-
-    void sendDlqTopic(KafkaTopic kafkaTopic, ConsumerRecord<K, V> consumerRecord);
 }

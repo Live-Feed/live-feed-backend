@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -18,17 +19,18 @@ import org.springframework.stereotype.Component;
 public class CustomKafkaListener {
 
     private final KafkaConsumerTemplate<String, String> consumerTemplate;
-    private final KafkaProducerTemplate<String, String> producerTemplate;
+    private final KafkaProducerTemplate<Object, Object> producerTemplate;
     private final KafkaTopic kafkaTopic = KafkaTopic.LIVEFEED_URL;
 
     @KafkaListener(topics = "#{__listener.kafkaTopic.getTopic()}", groupId = "${spring.application.name}")
     public void consume(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             try {
-                consumerTemplate.processRecord(record);
+                ProducerRecord<Object, Object> producerRecord = consumerTemplate.processRecord(record);
+                producerTemplate.sendMessage(producerRecord);
             } catch (Exception exception) {
-                log.error("[exception when url topic consuming] ", exception);
-                producerTemplate.sendDlqTopic(kafkaTopic, record);
+                log.error("[exception when url topic consuming] error = ", exception);
+                consumerTemplate.sendDlqTopic(kafkaTopic, record);
             }
         }
     }

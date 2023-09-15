@@ -34,23 +34,6 @@ public class KafkaProducer<K, V> implements KafkaProducerTemplate<K, V> {
         sendProducerRecord(producerRecord);
     }
 
-    @Override
-    public void sendDlqTopic(KafkaTopic kafkaTopic, ConsumerRecord<K, V> consumerRecord) {
-        String dlqTopic = kafkaTopic.getDlqTopic();
-        ProducerRecord<K, V> producerRecord = new ProducerRecord<>(dlqTopic, (K) kafkaTopic.getTopic(), consumerRecord.value());
-        CompletableFuture<SendResult<K, V>> sendResult = kafkaTemplate.send(producerRecord);
-
-        sendResult.whenComplete((result, ex) -> {
-            KafkaProducerException exception = (KafkaProducerException) ex;
-            if (ex != null) {
-                log.error("[kafka producer send dlq error] record topic = {}, timestamp = {}, partition = {}",
-                        exception.getFailedProducerRecord().topic(),
-                        exception.getFailedProducerRecord().timestamp(),
-                        exception.getFailedProducerRecord().partition());
-            }
-        });
-    }
-
     private void sendProducerRecord(ProducerRecord<K, V> record) {
         CompletableFuture<SendResult<K, V>> sendResult = kafkaTemplate.send(record);
         sendResult.whenComplete((result, ex) -> {

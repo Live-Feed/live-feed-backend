@@ -18,7 +18,7 @@ public record ParseResultDto(
         String originArticleUrl = header.originArticleUrl();
         String journalistName = body.journalistName();
         String journalistEmail = body.journalistEmail();
-        String html = combineHeaderAndBodyHtml(header, body);
+        String html = replaceTabAndEnterToBlank(combineHeaderAndBodyHtml(header, body));
 
         return new ParseResultDto(articleTitle, publicationTime, pressCompanyName, journalistName, journalistEmail, originArticleUrl, html);
     }
@@ -32,5 +32,9 @@ public record ParseResultDto(
                 .append("\n")
                 .append("</div>")
                 .toString();
+    }
+
+    private static String replaceTabAndEnterToBlank(String html) {
+        return html.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\"", "");
     }
 }

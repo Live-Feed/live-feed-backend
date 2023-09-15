@@ -20,7 +20,7 @@ class ArticleThemeTest {
         // given
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
-        String url = "https://sports.news.naver.com/news?oid=109&aid=0004924910";
+        String url = "https://sports.news.naver.com/news?oid=658&aid=0000052259";
         driver.get(url);
         ArticleTheme sports = ArticleTheme.SPORTS;
         // when
@@ -29,10 +29,10 @@ class ArticleThemeTest {
         // then
         log.info("headerDto = {}", headerDto);
         assertThat(headerDto.html()).isNotBlank();
-        assertThat(headerDto.articleTitle()).isEqualTo("AG 기간 필승조 이탈 대비, 이강철 감독이 믿는 카드…'홀드왕' 출신이 있다");
-        assertThat(headerDto.pressCompanyName()).isEqualTo("OSEN");
-        assertThat(headerDto.publicationTime()).isEqualTo("기사입력 2023.09.11. 오후 02:31");
-        assertThat(headerDto.originArticleUrl()).isEqualTo("http://www.osen.co.kr/article/G1112180712");
+        assertThat(headerDto.articleTitle()).isEqualTo("롯데 PS 진출 희박에도…\"확률 없는 건 아니니 최선\"");
+        assertThat(headerDto.pressCompanyName()).isEqualTo("국제신문");
+        assertThat(headerDto.publicationTime()).isEqualTo("기사입력 2023.09.12. 오후 04:52");
+        assertThat(headerDto.originArticleUrl()).isEqualTo("http://www.kookje.co.kr/news2011/asp/newsbody.asp?code=0600&key=20230912.99099003450");
     }
 
     @DisplayName("parseBody 메서드에서 네이버 스포츠 기사의 본문을 제대로 파싱하는지 확인하는 테스트.")
@@ -41,7 +41,7 @@ class ArticleThemeTest {
         // given
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
-        String url = "https://sports.news.naver.com/news?oid=666&aid=0000021171";
+        String url = "https://sports.news.naver.com/news?oid=658&aid=0000052259";
         driver.get(url);
         ArticleTheme sports = ArticleTheme.SPORTS;
         // when
@@ -55,7 +55,7 @@ class ArticleThemeTest {
         // then
         log.info("bodyDto = {}", bodyDto);
         assertThat(bodyDto.html()).isNotBlank();
-        assertThat(bodyDto.journalistName()).isEqualTo("황선학");
-        assertThat(bodyDto.journalistEmail()).isEqualTo("2hwangpo@kyeonggi.com");
+        assertThat(bodyDto.journalistName()).isEqualTo("백창훈");
+        assertThat(bodyDto.journalistEmail()).isEqualTo("huni@kookje.co.kr");
     }
 }

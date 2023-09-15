@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: ${APPLICATION_NAME}
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:

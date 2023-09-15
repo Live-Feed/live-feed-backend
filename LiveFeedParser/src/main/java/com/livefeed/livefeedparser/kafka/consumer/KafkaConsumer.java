@@ -16,7 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.kafka.core.KafkaProducerException;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @Slf4j
@@ -25,17 +30,36 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
 
     private final ObjectMapper objectMapper;
     private final Parser parser;
-    private final KafkaProducerTemplate<ConsumerKeyDto, ParseResultDto> kafkaProducer;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
-    public void processRecord(ConsumerRecord<String, String> consumerRecord) {
+    public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
         ConsumerKeyDto key = readRecordKey(consumerRecord.key());
         String targetParsingUrl = consumerRecord.value();
         log.info("kafka consumerRecord key = {}, value = {}", key, targetParsingUrl);
 
+        // TODO: 2023/09/15 redis에서 이미 확인한 url인지 확인하는 로직 필요
+
         ArticleTheme articleTheme = findArticleTheme(key);
         ParseResultDto parseResultDto = parser.parseArticle(targetParsingUrl, articleTheme);
-        kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_HTML, key, parseResultDto);
+        return new ProducerRecord<>(KafkaTopic.LIVEFEED_HTML.getTopic(), key, parseResultDto);
+    }
+
+    @Override
+    public void sendDlqTopic(KafkaTopic kafkaTopic, ConsumerRecord<String, String> consumerRecord) {
+        String dlqTopic = kafkaTopic.getDlqTopic();
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>(dlqTopic, kafkaTopic.getTopic(), consumerRecord.value());
+        CompletableFuture<SendResult<String, String>> sendResult = kafkaTemplate.send(producerRecord);
+
+        sendResult.whenComplete((result, ex) -> {
+            KafkaProducerException exception = (KafkaProducerException) ex;
+            if (ex != null) {
+                log.error("[kafka producer send dlq error] record topic = {}, timestamp = {}, partition = {}",
+                        exception.getFailedProducerRecord().topic(),
+                        exception.getFailedProducerRecord().timestamp(),
+                        exception.getFailedProducerRecord().partition());
+            }
+        });
     }
 
     private ConsumerKeyDto readRecordKey(String consumerRecordKey) {
