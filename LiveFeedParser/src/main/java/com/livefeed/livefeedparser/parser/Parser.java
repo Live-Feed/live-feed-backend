@@ -32,26 +32,4 @@ public class Parser {
             driver.quit();
         }
     }
-
-    private HeaderDto parseHeader(String url, ArticleTheme articleTheme) {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-        try {
-            driver.get(url);
-            return articleTheme.parseHeader(driver);
-        } finally {
-            driver.quit();
-        }
-    }
-
-    private BodyDto parseBody(String url, ArticleTheme articleTheme) {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
-        try {
-            driver.get(url);
-            return articleTheme.parseBody(driver);
-        } finally {
-            driver.quit();
-        }
-    }
 }

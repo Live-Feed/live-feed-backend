@@ -25,11 +25,9 @@ public record ParseResultDto(
 
     private static String combineHeaderAndBodyHtml(HeaderDto header, BodyDto body) {
         StringBuilder stringBuilder = new StringBuilder();
-        return stringBuilder.append("<div class=\"article\">\n\t")
+        return stringBuilder.append("<div class=article>")
                 .append(header.html())
-                .append("\n\t")
                 .append(body.html())
-                .append("\n")
                 .append("</div>")
                 .toString();
     }

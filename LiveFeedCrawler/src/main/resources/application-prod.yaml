@@ -19,7 +19,7 @@ spring:
       enabled: false
 
 server:
-  port: ${CRAWLER_PORT}
+  port: ${APPLICATION_PORT}
 
 custom:
   kafka:

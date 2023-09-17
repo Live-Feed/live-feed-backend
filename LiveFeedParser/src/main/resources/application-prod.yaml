@@ -16,7 +16,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server:
-  port: ${PARSER_PORT}
+  port: ${APPLICATION_PORT}
 
 custom:
   kafka:
