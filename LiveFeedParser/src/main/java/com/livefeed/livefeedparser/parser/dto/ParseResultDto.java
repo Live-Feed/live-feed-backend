@@ -25,7 +25,7 @@ public record ParseResultDto(
 
     private static String combineHeaderAndBodyHtml(HeaderDto header, BodyDto body) {
         StringBuilder stringBuilder = new StringBuilder();
-        return stringBuilder.append("<div class=article>")
+        return stringBuilder.append("<div class=\"article\">")
                 .append(header.html())
                 .append(body.html())
                 .append("</div>")
@@ -33,6 +33,6 @@ public record ParseResultDto(
     }
 
     private static String replaceTabAndEnterToBlank(String html) {
-        return html.replaceAll("\t", "").replaceAll("\n", "").replaceAll("\"", "");
+        return html.replaceAll("\t", "").replaceAll("\n", "");
     }
 }

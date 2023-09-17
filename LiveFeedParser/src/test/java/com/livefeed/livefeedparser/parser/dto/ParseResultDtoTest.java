@@ -16,7 +16,7 @@ class ParseResultDtoTest {
         // when
         ParseResultDto result = ParseResultDto.from(headerDto, bodyDto);
         // then
-        String expectedResult = "<div class=article><div>header</div><div>body</div></div>";
+        String expectedResult = "<div class=\"article\"><div>header</div><div>body</div></div>";
         assertThat(result.html()).isEqualTo(expectedResult);
     }
 }
