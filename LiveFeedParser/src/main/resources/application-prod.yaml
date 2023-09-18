@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    listener:
+      type: batch
+      concurrency: 3
+      ack-mode: batch
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+server:
+  port: ${APPLICATION_PORT}
+
+custom:
+  kafka:
+    producer:
+      is-enabled: true

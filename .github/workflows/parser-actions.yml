@@ -5,19 +5,19 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: LiveFeedCrawler Module CI
+name: LiveFeedParser Module CI
 
 on:
   push:
     branches:
       - main
     paths:
-      - "LiveFeedCrawler/**"
+      - "LiveFeedParser/**"
 
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
-    environment: crawler
+    environment: parser
 
     env:
       REGISTRY: ${{ secrets.REGISTRY }}
@@ -39,25 +39,22 @@ jobs:
           java-version: '17'
 
       - name: Gradle Test
-        run: ./gradlew :LiveFeedCrawler:test
+        run: ./gradlew :LiveFeedParser:test
 
       - name: Extract version variable
         run: |
-          echo "APP_VERSION=$(./gradlew :LiveFeedCrawler:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
+          echo "APP_VERSION=$(./gradlew :LiveFeedParser:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
 
       - name: Execute Gradle build
-        run: ./gradlew :LiveFeedCrawler:clean :LiveFeedCrawler:bootJar
+        run: ./gradlew :LiveFeedParser:clean :LiveFeedParser:bootJar
 
       - name: Docker image build
         run: |
-          cd ./LiveFeedCrawler
+          cd ./LiveFeedParser
           docker build \
           --build-arg KAFKA_BOOTSTRAP_SERVERS=${{ secrets.KAFKA_BOOTSTRAP_SERVERS }} \
           --build-arg APPLICATION_NAME=${{ secrets.APPLICATION_NAME }} \
           --build-arg APPLICATION_PORT=${{ secrets.APPLICATION_PORT }} \
-          --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
-          --build-arg DATABASE_USER=${{ secrets.DATABASE_USER }} \
-          --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
           -t $REGISTRY/$IMAGE_NAME:$APP_VERSION .
 
       - name: Login to Container registry

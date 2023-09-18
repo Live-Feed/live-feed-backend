@@ -1,4 +1,7 @@
 spring:
+  application:
+    name: ${APPLICATION_NAME}
+
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:
@@ -16,7 +19,7 @@ spring:
       enabled: false
 
 server:
-  port: ${CRAWLER_PORT}
+  port: ${APPLICATION_PORT}
 
 custom:
   kafka:
