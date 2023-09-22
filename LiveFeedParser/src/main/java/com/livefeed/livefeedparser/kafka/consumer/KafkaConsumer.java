@@ -4,13 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
 import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordKeyParsingException;
-import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.parser.ArticleTheme;
-import com.livefeed.livefeedparser.parser.Parser;
-import com.livefeed.livefeedparser.parser.dto.BodyDto;
-import com.livefeed.livefeedparser.parser.dto.HeaderDto;
+import com.livefeed.livefeedparser.parser.ParserProvider;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +25,7 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
 
     private final ObjectMapper objectMapper;
-    private final Parser parser;
+    private final ParserProvider parserProvider;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
@@ -40,8 +36,7 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
 
         // TODO: 2023/09/15 redis에서 이미 확인한 url인지 확인하는 로직 필요
 
-        ArticleTheme articleTheme = findArticleTheme(key);
-        ParseResultDto parseResultDto = parser.parseArticle(targetParsingUrl, articleTheme);
+        ParseResultDto parseResultDto = parserProvider.parseWebPage(key, targetParsingUrl);
         return new ProducerRecord<>(KafkaTopic.LIVEFEED_HTML.getTopic(), key, parseResultDto);
     }
 
@@ -69,9 +64,5 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
             log.error("kafka key 파싱 에러입니다. key = {}", consumerRecordKey);
             throw new ConsumerRecordKeyParsingException(e.getMessage());
         }
-    }
-
-    private ArticleTheme findArticleTheme(ConsumerKeyDto key) {
-        return ArticleTheme.valueOf(key.theme());
     }
 }

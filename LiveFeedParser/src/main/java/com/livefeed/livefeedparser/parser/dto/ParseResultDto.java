@@ -11,7 +11,6 @@ public record ParseResultDto(
 ) {
 
     public static ParseResultDto from(HeaderDto header, BodyDto body) {
-
         String articleTitle = header.articleTitle();
         String publicationTime = header.publicationTime();
         String pressCompanyName = header.pressCompanyName();
