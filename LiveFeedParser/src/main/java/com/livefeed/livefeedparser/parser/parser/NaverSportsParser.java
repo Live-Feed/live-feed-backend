@@ -1,8 +1,8 @@
 package com.livefeed.livefeedparser.parser.parser;
 
 import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.parser.Platform;
-import com.livefeed.livefeedparser.parser.Theme;
+import com.livefeed.livefeedparser.kafka.consumer.dto.Platform;
+import com.livefeed.livefeedparser.kafka.consumer.dto.Theme;
 import com.livefeed.livefeedparser.parser.dto.BodyDto;
 import com.livefeed.livefeedparser.parser.dto.HeaderDto;
 import lombok.RequiredArgsConstructor;
