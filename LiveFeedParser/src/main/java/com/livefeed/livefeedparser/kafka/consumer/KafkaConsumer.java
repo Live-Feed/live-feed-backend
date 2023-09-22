@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
 import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordKeyParsingException;
+import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordValueParsingException;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedparser.parser.ParserProvider;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +33,12 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
         ConsumerKeyDto key = readRecordKey(consumerRecord.key());
-        String targetParsingUrl = consumerRecord.value();
-        log.info("kafka consumerRecord key = {}, value = {}", key, targetParsingUrl);
+        ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
+        log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto.url());
 
         // TODO: 2023/09/15 redis에서 이미 확인한 url인지 확인하는 로직 필요
 
-        ParseResultDto parseResultDto = parserProvider.parseWebPage(key, targetParsingUrl);
+        ParseResultDto parseResultDto = parserProvider.parseWebPage(key, consumerValueDto.url());
         return new ProducerRecord<>(KafkaTopic.LIVEFEED_HTML.getTopic(), key, parseResultDto);
     }
 
@@ -63,6 +65,15 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         } catch (JsonProcessingException e) {
             log.error("kafka key 파싱 에러입니다. key = {}", consumerRecordKey);
             throw new ConsumerRecordKeyParsingException(e.getMessage());
+        }
+    }
+
+    private ConsumerValueDto readRecordValue(String consumerRecordValue) {
+        try {
+            return objectMapper.readValue(consumerRecordValue, ConsumerValueDto.class);
+        } catch (JsonProcessingException e) {
+            log.error("kafka value 파싱 에러입니다. value = {}", consumerRecordValue);
+            throw new ConsumerRecordValueParsingException(e.getMessage());
         }
     }
 }
