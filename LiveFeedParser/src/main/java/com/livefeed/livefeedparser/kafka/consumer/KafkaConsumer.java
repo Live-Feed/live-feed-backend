@@ -4,13 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
 import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordKeyParsingException;
-import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
+import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordValueParsingException;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.parser.ArticleTheme;
-import com.livefeed.livefeedparser.parser.Parser;
-import com.livefeed.livefeedparser.parser.dto.BodyDto;
-import com.livefeed.livefeedparser.parser.dto.HeaderDto;
+import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedparser.parser.ParserProvider;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,19 +27,18 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
 
     private final ObjectMapper objectMapper;
-    private final Parser parser;
+    private final ParserProvider parserProvider;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
         ConsumerKeyDto key = readRecordKey(consumerRecord.key());
-        String targetParsingUrl = consumerRecord.value();
-        log.info("kafka consumerRecord key = {}, value = {}", key, targetParsingUrl);
+        ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
+        log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto.url());
 
         // TODO: 2023/09/15 redis에서 이미 확인한 url인지 확인하는 로직 필요
 
-        ArticleTheme articleTheme = findArticleTheme(key);
-        ParseResultDto parseResultDto = parser.parseArticle(targetParsingUrl, articleTheme);
+        ParseResultDto parseResultDto = parserProvider.parseWebPage(key, consumerValueDto.url());
         return new ProducerRecord<>(KafkaTopic.LIVEFEED_HTML.getTopic(), key, parseResultDto);
     }
 
@@ -71,7 +68,12 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         }
     }
 
-    private ArticleTheme findArticleTheme(ConsumerKeyDto key) {
-        return ArticleTheme.valueOf(key.theme());
+    private ConsumerValueDto readRecordValue(String consumerRecordValue) {
+        try {
+            return objectMapper.readValue(consumerRecordValue, ConsumerValueDto.class);
+        } catch (JsonProcessingException e) {
+            log.error("kafka value 파싱 에러입니다. value = {}", consumerRecordValue);
+            throw new ConsumerRecordValueParsingException(e.getMessage());
+        }
     }
 }
