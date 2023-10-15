@@ -63,6 +63,8 @@ services:
     environment:
       TZ: Asia/Seoul
       discovery.type: single-node
+      http.publish_host: localhost
+#      plugin.security.disabled: true
 
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest

@@ -1,23 +1,25 @@
 package com.livefeed.livefeedsaver.opensearch.configuration;
 
-import com.livefeed.livefeedsaver.opensearch.repository.ArticleRepository;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.opensearch.client.RestClientBuilder;
+import org.opensearch.client.RestHighLevelClient;
+import org.opensearch.client.sniff.Sniffer;
+import org.opensearch.data.client.orhlc.ClientConfiguration;
 import org.opensearch.spring.boot.autoconfigure.RestClientBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.context.annotation.Profile;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackageClasses = ArticleRepository.class)
 public class OpensearchConfiguration {
 
+    @Profile("local")
     @Bean
     public RestClientBuilderCustomizer customizer() {
         return new RestClientBuilderCustomizer() {
@@ -36,6 +38,12 @@ public class OpensearchConfiguration {
                 }
             }
         };
+    }
+
+    @Profile("local")
+    @Bean
+    public Sniffer sniffer() {
+        return null;
     }
 
 //    @Bean

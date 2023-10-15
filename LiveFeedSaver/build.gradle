@@ -7,6 +7,8 @@ version = '0.0.1-SNAPSHOT'
 dependencies {
     implementation 'org.opensearch.client:spring-data-opensearch:1.2.0'
     implementation 'org.opensearch.client:spring-data-opensearch-starter:1.2.0'
+    implementation 'org.opensearch.client:opensearch-rest-client-sniffer:2.8.0'
+
     implementation project(":LiveFeedCommon")
 
 //    implementation 'software.amazon.awssdk:aws-sdk-java-pom:2.20.68'
