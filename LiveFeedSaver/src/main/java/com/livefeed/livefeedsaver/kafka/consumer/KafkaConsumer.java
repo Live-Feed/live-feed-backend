@@ -9,7 +9,7 @@ import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedsaver.opensearch.entity.Article;
-import com.livefeed.livefeedsaver.opensearch.repository.ArticleRepository;
+import com.livefeed.livefeedsaver.opensearch.repository.ArticleOpensearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -27,16 +27,17 @@ import java.util.concurrent.CompletableFuture;
 public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
 
     private final ObjectMapper objectMapper;
-    private final ArticleRepository articleRepository;
+    private final ArticleOpensearchRepository articleOpensearchRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
         ConsumerKeyDto key = readRecordKey(consumerRecord.key());
         ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
+        log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto);
 
         Article article = Article.from(key, consumerValueDto);
-        articleRepository.save(article);
+        articleOpensearchRepository.save(article);
 
         return null;
     }

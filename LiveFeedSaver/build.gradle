@@ -8,8 +8,10 @@ dependencies {
     implementation 'org.opensearch.client:spring-data-opensearch:1.2.0'
     implementation 'org.opensearch.client:spring-data-opensearch-starter:1.2.0'
     implementation 'org.opensearch.client:opensearch-rest-client-sniffer:2.8.0'
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(":LiveFeedCommon")
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
 //    implementation 'software.amazon.awssdk:aws-sdk-java-pom:2.20.68'
 //    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")

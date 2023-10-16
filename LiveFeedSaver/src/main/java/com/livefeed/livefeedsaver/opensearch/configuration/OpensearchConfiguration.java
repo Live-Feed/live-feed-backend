@@ -11,12 +11,14 @@ import org.opensearch.spring.boot.autoconfigure.RestClientBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 @Configuration
+@EnableElasticsearchRepositories(basePackages = {"com.livefeed.livefeedsaver.opensearch"})
 public class OpensearchConfiguration {
 
     @Profile("local")
@@ -45,18 +47,5 @@ public class OpensearchConfiguration {
     public Sniffer sniffer() {
         return null;
     }
-
-//    @Bean
-//    public ClientConfiguration clientConfiguration() {
-//        return ClientConfiguration.builder()
-//                .connectedToLocalhost()
-//                .withBasicAuth("admin", "admin")
-//                .build();
-//    }
-
-//    @Bean
-//    public RestClientBuilder restClientBuilder() {
-//
-//    }
 
 }
