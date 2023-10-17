@@ -8,7 +8,7 @@ import com.livefeed.livefeedcommon.kafka.exception.ConsumerRecordValueParsingExc
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
-import com.livefeed.livefeedsaver.opensearch.entity.Article;
+import com.livefeed.livefeedsaver.opensearch.entity.OpensearchArticle;
 import com.livefeed.livefeedsaver.opensearch.repository.ArticleOpensearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +34,14 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
         ConsumerKeyDto key = readRecordKey(consumerRecord.key());
         ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
-        log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto);
+        log.info("kafka consumerRecord key = {}, articleTitle = {}", key, consumerValueDto.articleTitle());
 
-        Article article = Article.from(key, consumerValueDto);
-        articleOpensearchRepository.save(article);
+        // opensearch 저장
+        OpensearchArticle opensearchArticle = OpensearchArticle.from(key, consumerValueDto);
+        articleOpensearchRepository.save(opensearchArticle);
+
+        // rds 저장 -> 트랜잭션 분리
+
 
         return null;
     }

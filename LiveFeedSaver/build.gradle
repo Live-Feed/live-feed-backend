@@ -12,6 +12,7 @@ dependencies {
     implementation project(":LiveFeedCommon")
 
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.h2database:h2'
 
 //    implementation 'software.amazon.awssdk:aws-sdk-java-pom:2.20.68'
 //    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")

@@ -14,7 +14,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "articles")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article {
+public class OpensearchArticle {
 
     @Id
     private String id;
@@ -47,7 +47,7 @@ public class Article {
     private String bodyHtml;
 
     @Builder
-    private Article(String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
+    private OpensearchArticle(String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
         this.type = type;
         this.articleTitle = articleTitle;
         this.publicationTime = publicationTime;
@@ -59,8 +59,8 @@ public class Article {
         this.bodyHtml = bodyHtml;
     }
 
-    public static Article from(ConsumerKeyDto key, ConsumerValueDto value) {
-        return Article.builder()
+    public static OpensearchArticle from(ConsumerKeyDto key, ConsumerValueDto value) {
+        return OpensearchArticle.builder()
                 .type(key.theme().name())
                 .articleTitle(value.articleTitle())
                 .publicationTime(value.publicationTime())

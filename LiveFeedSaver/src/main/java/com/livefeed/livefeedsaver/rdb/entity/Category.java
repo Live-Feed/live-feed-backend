@@ -8,6 +8,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -26,6 +30,22 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private Theme theme;
+
+    @CreatedDate
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime updatedAt;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted;
+
+    @PrePersist
+    public void setDeleteFalse() {
+        this.isDeleted = Boolean.FALSE;
+    }
 
     @Builder
     private Category(Service service, Platform platform, Theme theme) {
