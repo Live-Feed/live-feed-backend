@@ -10,6 +10,7 @@ import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedsaver.opensearch.entity.OpensearchArticle;
 import com.livefeed.livefeedsaver.opensearch.repository.ArticleOpensearchRepository;
+import com.livefeed.livefeedsaver.rdb.service.RdbSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -29,6 +30,7 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
     private final ObjectMapper objectMapper;
     private final ArticleOpensearchRepository articleOpensearchRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final RdbSaveService rdbSaveService;
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
@@ -40,9 +42,9 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         OpensearchArticle opensearchArticle = OpensearchArticle.from(key, consumerValueDto);
         articleOpensearchRepository.save(opensearchArticle);
 
+        // TODO: 10/18/23 DB에 저장하다 에러가 발생하면 opensearch와 데이터 정합성 맞춰야함
         // rds 저장 -> 트랜잭션 분리
-
-
+        rdbSaveService.saveArticle(key, consumerValueDto);
         return null;
     }
 

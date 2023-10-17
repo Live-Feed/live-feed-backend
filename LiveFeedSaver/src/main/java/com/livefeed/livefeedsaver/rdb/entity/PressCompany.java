@@ -2,10 +2,12 @@ package com.livefeed.livefeedsaver.rdb.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
 public class PressCompany {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,5 +40,16 @@ public class PressCompany {
     @PrePersist
     public void setDeleteFalse() {
         this.isDeleted = Boolean.FALSE;
+    }
+
+    @Builder
+    private PressCompany(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public static PressCompany of(String companyName) {
+        return PressCompany.builder()
+                .companyName(companyName)
+                .build();
     }
 }
