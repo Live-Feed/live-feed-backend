@@ -26,10 +26,10 @@ public class RdbSaveService {
     public Article saveArticle(ConsumerKeyDto key, ConsumerValueDto value) {
 
         Category category = categoryRepository.findByServiceAndPlatformAndTheme(key.service(), key.platform(), key.theme())
-                .orElse(categoryRepository.save(Category.from(key)));
+                .orElseGet(() -> categoryRepository.save(Category.from(key)));
 
         PressCompany pressCompany = pressCompanyRepository.findByCompanyName(value.pressCompanyName())
-                .orElse(pressCompanyRepository.save(PressCompany.of(value.pressCompanyName())));
+                .orElseGet(() -> pressCompanyRepository.save(PressCompany.of(value.pressCompanyName())));
 
         Article article = Article.from(pressCompany, category, value);
         return articleRepository.save(article);

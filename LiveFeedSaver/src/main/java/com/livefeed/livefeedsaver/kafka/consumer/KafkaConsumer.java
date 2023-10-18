@@ -10,6 +10,7 @@ import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedsaver.opensearch.entity.OpensearchArticle;
 import com.livefeed.livefeedsaver.opensearch.repository.ArticleOpensearchRepository;
+import com.livefeed.livefeedsaver.rdb.entity.Article;
 import com.livefeed.livefeedsaver.rdb.service.RdbSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,13 +39,13 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
         log.info("kafka consumerRecord key = {}, articleTitle = {}", key, consumerValueDto.articleTitle());
 
+        // rds 저장 -> 트랜잭션 분리
+        Article article = rdbSaveService.saveArticle(key, consumerValueDto);
+
         // opensearch 저장
-        OpensearchArticle opensearchArticle = OpensearchArticle.from(key, consumerValueDto);
+        OpensearchArticle opensearchArticle = OpensearchArticle.from(article, key, consumerValueDto);
         articleOpensearchRepository.save(opensearchArticle);
 
-        // TODO: 10/18/23 DB에 저장하다 에러가 발생하면 opensearch와 데이터 정합성 맞춰야함
-        // rds 저장 -> 트랜잭션 분리
-        rdbSaveService.saveArticle(key, consumerValueDto);
         return null;
     }
 

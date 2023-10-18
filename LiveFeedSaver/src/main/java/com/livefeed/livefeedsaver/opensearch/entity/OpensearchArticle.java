@@ -2,6 +2,7 @@ package com.livefeed.livefeedsaver.opensearch.entity;
 
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedsaver.rdb.entity.Article;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 public class OpensearchArticle {
 
     @Id
-    private String id;
+    private Long id;
 
     @Field(type = FieldType.Text)
     private String type;
@@ -47,7 +48,8 @@ public class OpensearchArticle {
     private String bodyHtml;
 
     @Builder
-    private OpensearchArticle(String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
+    private OpensearchArticle(Long id, String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
+        this.id = id;
         this.type = type;
         this.articleTitle = articleTitle;
         this.publicationTime = publicationTime;
@@ -59,8 +61,9 @@ public class OpensearchArticle {
         this.bodyHtml = bodyHtml;
     }
 
-    public static OpensearchArticle from(ConsumerKeyDto key, ConsumerValueDto value) {
+    public static OpensearchArticle from(Article article, ConsumerKeyDto key, ConsumerValueDto value) {
         return OpensearchArticle.builder()
+                .id(article.getId())
                 .type(key.theme().name())
                 .articleTitle(value.articleTitle())
                 .publicationTime(value.publicationTime())

@@ -25,7 +25,7 @@ public class CustomKafkaListener {
     public void consume(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             try {
-                ProducerRecord<Object, Object> producerRecord = consumerTemplate.processRecord(record);
+                consumerTemplate.processRecord(record);
             } catch (Exception exception) {
                 log.error("[exception when saving article] error = ", exception);
                 consumerTemplate.sendDlqTopic(kafkaTopic, record);
