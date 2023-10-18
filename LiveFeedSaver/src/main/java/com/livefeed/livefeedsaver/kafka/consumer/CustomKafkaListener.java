@@ -1,14 +1,12 @@
 package com.livefeed.livefeedsaver.kafka.consumer;
 
 import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
-import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 

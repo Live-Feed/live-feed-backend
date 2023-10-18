@@ -39,13 +39,10 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
         log.info("kafka consumerRecord key = {}, articleTitle = {}", key, consumerValueDto.articleTitle());
 
-        // rds 저장 -> 트랜잭션 분리
         Article article = rdbSaveService.saveArticle(key, consumerValueDto);
 
-        // opensearch 저장
         OpensearchArticle opensearchArticle = OpensearchArticle.from(article, key, consumerValueDto);
         articleOpensearchRepository.save(opensearchArticle);
-
         return null;
     }
 
