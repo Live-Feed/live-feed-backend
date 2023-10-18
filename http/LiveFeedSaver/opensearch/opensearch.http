@@ -1,0 +1,161 @@
+### opensearch 인증 테스트 -> admin:admin 계정을 이용
+GET https://localhost:9200
+Authorization: Basic YWRtaW46YWRtaW4=
+
+
+### my-index 이름의 index 생성(테스트용 인덱스)
+# my-index 이름의 index 생성(테스트용 인덱스)
+PUT https://localhost:9200/my-index
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}
+
+### 생성된 my-index 확인
+GET https://localhost:9200/my-index
+Authorization: Basic YWRtaW46YWRtaW4=
+
+### 데이터 넣기 -> id를 따로 정하지 않으면 임의로 elasticsearch에서 정함
+POST https://localhost:9200/my-index/_doc
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "name": "Jeong jinmook",
+  "message": "테스트 메시지 입니다."
+}
+
+### 위에서 저장한 데이터 확인 -> 위에서 저장 성공했을때 받은 id 경로에 추가
+GET https://localhost:9200/my-index/_doc/8nhLxooBLFWFchu1Ec6x
+Authorization: Basic YWRtaW46YWRtaW4=
+
+### 전체 데이터 수정 -> PUT은 전체를 수정할때 사용
+PUT https://localhost:9200/my-index/_doc/8nhLxooBLFWFchu1Ec6x
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "doc": {
+    "message": "PUT을 통해 수정하면 전체 컬럼을 업데이트 하기 때문에 message 속성만 남습니다."
+  }
+}
+
+### bulk 데이터 인서트 -> line에러 때문에 직접 opensearch dashboards -> dev tools에 가서 작성
+POST https://localhost:9200/my-index/_bulk
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{"index": {"_id": 1}}
+{"name": "테스트1", "message": "The quick brown fox"}
+{"index": {"_id": 2}}
+{"name": "테스트2", "message": "The quick brown fox jumps over the lazy dog"}
+{"index": {"_id": 3}}
+{"name": "테스트3", "message": "The quick brown fox jumps over the quick dog"}
+{"index": {"_id": 4}}
+{"name": "테스트4", "message": "Brown fox brown dog"}
+{"index": {"_id": 5}}
+{"name": "테스트5", "message": "Lazy jumping dog"}
+
+### 인덱스의 모든 도큐먼트 검색
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+### match 쿼리 작성 -> match 쿼리는 여러 필드를 지원하지 않는다. 단어별 기본 OR 조건 이용
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "query": {
+    "match": {
+      "message": "dog"
+    }
+  }
+}
+
+### operator를 이용해 AND 조건으로 변경 가능
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "query": {
+    "match": {
+      "message": {
+        "query": "fox dog",
+        "operator": "and"  // "or"
+      }
+    }
+  }
+}
+
+### match_phrase쿼리는 문장 전체를 검색합니다.
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "query": {
+    "match_phrase": {
+      "message": "the lazy dog"
+    }
+  }
+}
+
+### brown과 dog 사이에 다른 단어가 들어가도 됩니다. slop을 통해 사이 단어 개수를 지정할 수 있습니다.
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "query": {
+    "match_phrase": {
+      "message": {
+        "query": "Brown dog",
+        "slop": 5
+      }
+    }
+  }
+}
+
+
+### bool 쿼리
+GET https://localhost:9200/my-index/_search
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "테스트1"
+          }
+        },
+        {
+          "match_phrase": {
+            "message": "brown fox"
+          }
+        }
+      ]
+    }
+  }
+}
+
+### my-index 인덱스 삭제
+DELETE https://localhost:9200/my-index
+Content-Type: application/json
+Authorization: Basic YWRtaW46YWRtaW4=
+
+
+
+
+
+
