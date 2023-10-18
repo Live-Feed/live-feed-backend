@@ -20,7 +20,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomKafkaListener {
 
-//    private final KafkaConsumerTemplate<String, String> consumerTemplate;
     private final KafkaConsumer kafkaConsumer;
     private final KafkaProducerTemplate<Object, Object> producerTemplate;
     private final KafkaTopic kafkaTopic = KafkaTopic.LIVEFEED_URL;
@@ -29,7 +28,6 @@ public class CustomKafkaListener {
     public void consume(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             try {
-//                ProducerRecord<Object, Object> producerRecord = consumerTemplate.processRecord(record);
                 ProducerRecord<Object, Object> producerRecord = kafkaConsumer.processRecord(record);
                 if (producerRecord != null) {
                     producerTemplate.sendMessage(producerRecord);
