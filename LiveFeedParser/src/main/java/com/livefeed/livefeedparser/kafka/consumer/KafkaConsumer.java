@@ -10,6 +10,7 @@ import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
 import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedparser.parser.ParserProvider;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
+import com.livefeed.livefeedparser.redis.operations.RedisOperations;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -29,6 +30,7 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
     private final ObjectMapper objectMapper;
     private final ParserProvider parserProvider;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final RedisOperations<String, Boolean> redisOperations;
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
@@ -36,7 +38,9 @@ public class KafkaConsumer implements KafkaConsumerTemplate<String, String> {
         ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
         log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto.url());
 
-        // TODO: 2023/09/15 redis에서 이미 확인한 url인지 확인하는 로직 필요
+        if (redisOperations.isDuplicate(consumerValueDto.url(), true)) {
+            return null;
+        }
 
         ParseResultDto parseResultDto = parserProvider.parseWebPage(key, consumerValueDto.url());
         return new ProducerRecord<>(KafkaTopic.LIVEFEED_HTML.getTopic(), key, parseResultDto);

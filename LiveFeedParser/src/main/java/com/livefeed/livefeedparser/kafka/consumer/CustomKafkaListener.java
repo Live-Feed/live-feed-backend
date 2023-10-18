@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +27,9 @@ public class CustomKafkaListener {
         for (ConsumerRecord<String, String> record : records) {
             try {
                 ProducerRecord<Object, Object> producerRecord = consumerTemplate.processRecord(record);
-                producerTemplate.sendMessage(producerRecord);
+                if (producerRecord != null) {
+                    producerTemplate.sendMessage(producerRecord);
+                }
             } catch (Exception exception) {
                 log.error("[exception when url topic consuming] error = ", exception);
                 consumerTemplate.sendDlqTopic(kafkaTopic, record);
