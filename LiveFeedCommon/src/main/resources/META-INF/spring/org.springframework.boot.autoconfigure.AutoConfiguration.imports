@@ -1,1 +1,2 @@
 com.livefeed.livefeedcommon.kafka.configuration.KafkaProducerAutoConfiguration
+com.livefeed.livefeedcommon.core.configuration.CoreAutoConfiguration

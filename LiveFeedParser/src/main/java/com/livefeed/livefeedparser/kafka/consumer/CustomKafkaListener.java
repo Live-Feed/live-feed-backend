@@ -1,10 +1,7 @@
 package com.livefeed.livefeedparser.kafka.consumer;
 
-import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
 import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerValueDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

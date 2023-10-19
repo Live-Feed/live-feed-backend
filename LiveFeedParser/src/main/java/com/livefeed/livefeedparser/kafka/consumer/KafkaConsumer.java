@@ -2,9 +2,10 @@ package com.livefeed.livefeedparser.kafka.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livefeed.livefeedcommon.kafka.consumer.AbstractKafkaConsumer;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicValue;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerValueDto;
 import com.livefeed.livefeedparser.parser.ParserProvider;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import com.livefeed.livefeedparser.redis.operations.RedisOperations;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class KafkaConsumer extends AbstractKafkaConsumer<ConsumerKeyDto, ConsumerValueDto> {
+public class KafkaConsumer extends AbstractKafkaConsumer<UrlTopicKey, UrlTopicValue> {
 
     private final ParserProvider parserProvider;
     private final RedisOperations<String, Boolean> redisOperations;
@@ -31,8 +32,8 @@ public class KafkaConsumer extends AbstractKafkaConsumer<ConsumerKeyDto, Consume
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
-        ConsumerKeyDto key = readRecordKey(consumerRecord.key());
-        ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
+        UrlTopicKey key = readRecordKey(consumerRecord.key());
+        UrlTopicValue consumerValueDto = readRecordValue(consumerRecord.value());
         log.info("kafka consumerRecord key = {}, value = {}", key, consumerValueDto.url());
 
         if (redisOperations.isDuplicate(consumerValueDto.url(), true)) {

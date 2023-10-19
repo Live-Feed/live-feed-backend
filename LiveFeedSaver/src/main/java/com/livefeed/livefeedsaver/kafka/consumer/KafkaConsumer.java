@@ -2,8 +2,8 @@ package com.livefeed.livefeedsaver.kafka.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.livefeed.livefeedcommon.kafka.consumer.AbstractKafkaConsumer;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import com.livefeed.livefeedsaver.opensearch.entity.OpensearchArticle;
 import com.livefeed.livefeedsaver.opensearch.repository.ArticleOpensearchRepository;
 import com.livefeed.livefeedsaver.rdb.entity.Article;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class KafkaConsumer extends AbstractKafkaConsumer<ConsumerKeyDto, ConsumerValueDto> {
+public class KafkaConsumer extends AbstractKafkaConsumer<HtmlTopicKey, HtmlTopicValue> {
 
     private final ArticleOpensearchRepository articleOpensearchRepository;
     private final RdbSaveService rdbSaveService;
@@ -31,8 +31,8 @@ public class KafkaConsumer extends AbstractKafkaConsumer<ConsumerKeyDto, Consume
 
     @Override
     public ProducerRecord<Object, Object> processRecord(ConsumerRecord<String, String> consumerRecord) {
-        ConsumerKeyDto key = readRecordKey(consumerRecord.key());
-        ConsumerValueDto consumerValueDto = readRecordValue(consumerRecord.value());
+        HtmlTopicKey key = readRecordKey(consumerRecord.key());
+        HtmlTopicValue consumerValueDto = readRecordValue(consumerRecord.value());
         log.info("kafka consumerRecord key = {}, articleTitle = {}", key, consumerValueDto.articleTitle());
 
         Article article = rdbSaveService.saveArticle(key, consumerValueDto);

@@ -1,9 +1,9 @@
 package com.livefeed.livefeedsaver.rdb.entity;
 
-import com.livefeed.livefeedsaver.common.dto.Platform;
-import com.livefeed.livefeedsaver.common.dto.Service;
-import com.livefeed.livefeedsaver.common.dto.Theme;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Service;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -55,7 +55,7 @@ public class Category {
         this.theme = theme;
     }
 
-    public static Category from(ConsumerKeyDto key) {
+    public static Category from(HtmlTopicKey key) {
         return Category.builder()
                 .service(key.service())
                 .platform(key.platform())

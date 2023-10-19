@@ -1,6 +1,6 @@
 package com.livefeed.livefeedsaver.rdb.entity;
 
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -51,7 +51,7 @@ public class Article {
         this.publicationTime = publicationTime;
     }
 
-    public static Article from(PressCompany pressCompany, Category category, ConsumerValueDto value) {
+    public static Article from(PressCompany pressCompany, Category category, HtmlTopicValue value) {
         return Article.builder()
                 .pressCompany(pressCompany)
                 .category(category)

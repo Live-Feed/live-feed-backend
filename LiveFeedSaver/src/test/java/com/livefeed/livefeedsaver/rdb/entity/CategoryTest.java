@@ -1,9 +1,9 @@
 package com.livefeed.livefeedsaver.rdb.entity;
 
-import com.livefeed.livefeedsaver.common.dto.Platform;
-import com.livefeed.livefeedsaver.common.dto.Service;
-import com.livefeed.livefeedsaver.common.dto.Theme;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Service;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ class CategoryTest {
     void checkIsDeleted() {
         // given
         // when
-        Category category = Category.from(new ConsumerKeyDto(Service.ARTICLE, Platform.NAVER, Theme.SPORTS));
+        Category category = Category.from(new HtmlTopicKey(Service.ARTICLE, Platform.NAVER, Theme.SPORTS));
 
         // then
         assertThat(category.isDeleted()).isFalse();

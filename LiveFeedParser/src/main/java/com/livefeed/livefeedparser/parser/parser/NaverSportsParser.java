@@ -1,8 +1,8 @@
 package com.livefeed.livefeedparser.parser.parser;
 
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedparser.kafka.consumer.dto.Platform;
-import com.livefeed.livefeedparser.kafka.consumer.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedparser.parser.dto.BodyDto;
 import com.livefeed.livefeedparser.parser.dto.HeaderDto;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class NaverSportsParser extends Parser {
     }
 
     @Override
-    public boolean support(ConsumerKeyDto key) {
+    public boolean support(UrlTopicKey key) {
         return key.platform() == platform && key.theme() == theme;
     }
 

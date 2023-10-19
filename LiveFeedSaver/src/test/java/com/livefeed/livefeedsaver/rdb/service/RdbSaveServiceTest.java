@@ -1,10 +1,10 @@
 package com.livefeed.livefeedsaver.rdb.service;
 
-import com.livefeed.livefeedsaver.common.dto.Platform;
-import com.livefeed.livefeedsaver.common.dto.Service;
-import com.livefeed.livefeedsaver.common.dto.Theme;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Service;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import com.livefeed.livefeedsaver.rdb.entity.Article;
 import com.livefeed.livefeedsaver.rdb.entity.Category;
 import com.livefeed.livefeedsaver.rdb.entity.PressCompany;
@@ -37,13 +37,13 @@ class RdbSaveServiceTest {
     @Autowired
     private PressCompanyRepository pressCompanyRepository;
 
-    private ConsumerKeyDto key;
-    private ConsumerValueDto value;
+    private HtmlTopicKey key;
+    private HtmlTopicValue value;
 
     @BeforeEach
     void setKeyValue() {
-        key = new ConsumerKeyDto(Service.ARTICLE, Platform.NAVER, Theme.SPORTS);
-        value = new ConsumerValueDto("title", "publication time", "동아일보", "기자이름", "기자 이메일", "원본 url", "header html", "body html");
+        key = new HtmlTopicKey(Service.ARTICLE, Platform.NAVER, Theme.SPORTS);
+        value = new HtmlTopicValue("title", "publication time", "동아일보", "기자이름", "기자 이메일", "원본 url", "header html", "body html");
         rdbSaveService = new RdbSaveService(pressCompanyRepository, categoryRepository, articleRepository);
     }
     

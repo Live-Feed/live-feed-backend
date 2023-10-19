@@ -1,7 +1,7 @@
 package com.livefeed.livefeedsaver.rdb.service;
 
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import com.livefeed.livefeedsaver.rdb.entity.Article;
 import com.livefeed.livefeedsaver.rdb.entity.Category;
 import com.livefeed.livefeedsaver.rdb.entity.PressCompany;
@@ -22,7 +22,7 @@ public class RdbSaveService {
     private final ArticleRepository articleRepository;
 
     @Transactional
-    public Article saveArticle(ConsumerKeyDto key, ConsumerValueDto value) {
+    public Article saveArticle(HtmlTopicKey key, HtmlTopicValue value) {
 
         Category category = categoryRepository.findByServiceAndPlatformAndTheme(key.service(), key.platform(), key.theme())
                 .orElseGet(() -> categoryRepository.save(Category.from(key)));

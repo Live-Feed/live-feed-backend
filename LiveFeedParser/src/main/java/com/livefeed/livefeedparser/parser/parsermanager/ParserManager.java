@@ -1,9 +1,9 @@
 package com.livefeed.livefeedparser.parser.parsermanager;
 
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 
 public interface ParserManager {
 
-    ParseResultDto parseWebPage(ConsumerKeyDto keyDto, String url);
+    ParseResultDto parseWebPage(UrlTopicKey keyDto, String url);
 }

@@ -2,7 +2,6 @@ package com.livefeed.livefeedcommon.kafka.producer;
 
 
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public interface KafkaProducerTemplate<K, V> {
