@@ -1,6 +1,5 @@
 package com.livefeed.livefeedsaver.kafka.consumer;
 
-import com.livefeed.livefeedcommon.kafka.consumer.KafkaConsumerTemplate;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +15,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CustomKafkaListener {
 
-    private final KafkaConsumerTemplate<String, String> consumerTemplate;
+    private final KafkaConsumer kafkaConsumer;
     private final KafkaTopic kafkaTopic = KafkaTopic.LIVEFEED_HTML;
 
     @KafkaListener(topics = "#{__listener.kafkaTopic.getTopic()}", groupId = "${spring.application.name}")
     public void consume(ConsumerRecords<String, String> records) {
         for (ConsumerRecord<String, String> record : records) {
             try {
-                consumerTemplate.processRecord(record);
+                kafkaConsumer.processRecord(record);
             } catch (Exception exception) {
                 log.error("[exception when saving article] error = ", exception);
-                consumerTemplate.sendDlqTopic(kafkaTopic, record);
+                kafkaConsumer.sendDlqTopic(kafkaTopic, record);
             }
         }
     }

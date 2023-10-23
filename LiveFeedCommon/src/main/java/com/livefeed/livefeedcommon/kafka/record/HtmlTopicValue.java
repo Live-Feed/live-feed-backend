@@ -1,6 +1,6 @@
-package com.livefeed.livefeedsaver.kafka.consumer.dto;
+package com.livefeed.livefeedcommon.kafka.record;
 
-public record ConsumerValueDto(
+public record HtmlTopicValue(
         String articleTitle,
         String publicationTime,
         String pressCompanyName,

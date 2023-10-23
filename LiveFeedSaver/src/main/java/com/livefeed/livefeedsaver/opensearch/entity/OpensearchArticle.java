@@ -1,7 +1,7 @@
 package com.livefeed.livefeedsaver.opensearch.entity;
 
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerKeyDto;
-import com.livefeed.livefeedsaver.kafka.consumer.dto.ConsumerValueDto;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import com.livefeed.livefeedsaver.rdb.entity.Article;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -61,7 +61,7 @@ public class OpensearchArticle {
         this.bodyHtml = bodyHtml;
     }
 
-    public static OpensearchArticle from(Article article, ConsumerKeyDto key, ConsumerValueDto value) {
+    public static OpensearchArticle from(Article article, HtmlTopicKey key, HtmlTopicValue value) {
         return OpensearchArticle.builder()
                 .id(article.getId())
                 .type(key.theme().name())

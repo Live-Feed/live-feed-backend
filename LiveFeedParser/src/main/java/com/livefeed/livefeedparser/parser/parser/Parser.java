@@ -1,6 +1,6 @@
 package com.livefeed.livefeedparser.parser.parser;
 
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedparser.parser.dto.BodyDto;
 import com.livefeed.livefeedparser.parser.dto.HeaderDto;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
@@ -40,7 +40,7 @@ public abstract class Parser {
 
     abstract protected BodyDto parseBody(WebDriver driver);
 
-    abstract public boolean support(ConsumerKeyDto key);
+    abstract public boolean support(UrlTopicKey key);
 
 
 }

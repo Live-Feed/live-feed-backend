@@ -1,6 +1,6 @@
 package com.livefeed.livefeedparser.parser;
 
-import com.livefeed.livefeedparser.kafka.consumer.dto.ConsumerKeyDto;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedparser.parser.dto.ParseResultDto;
 import com.livefeed.livefeedparser.parser.parsermanager.ParserManager;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ParserProvider {
 
     private final ParserManager parserManager;
 
-    public ParseResultDto parseWebPage(ConsumerKeyDto key, String url) {
+    public ParseResultDto parseWebPage(UrlTopicKey key, String url) {
         return parserManager.parseWebPage(key, url);
     }
 }

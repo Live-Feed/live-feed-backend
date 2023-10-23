@@ -1,18 +1,14 @@
 package com.livefeed.livefeedsaver.rdb.repository;
 
-import com.livefeed.livefeedsaver.common.dto.Platform;
-import com.livefeed.livefeedsaver.common.dto.Service;
-import com.livefeed.livefeedsaver.common.dto.Theme;
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Service;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
 import com.livefeed.livefeedsaver.rdb.entity.Category;
-import lombok.RequiredArgsConstructor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Profile;
 
 import java.util.Optional;
 
