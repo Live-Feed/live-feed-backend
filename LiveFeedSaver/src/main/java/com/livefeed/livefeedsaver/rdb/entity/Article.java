@@ -30,6 +30,8 @@ public class Article {
 
     private String title;
 
+    private String originArticleUrl;
+
     private String contentHeader;
 
     private String contentBody;
@@ -41,10 +43,11 @@ public class Article {
     private LocalDateTime createdAt;
 
     @Builder
-    private Article(PressCompany pressCompany, Category category, String title, String contentHeader, String contentBody, String journalistName, String publicationTime) {
+    private Article(PressCompany pressCompany, Category category, String title, String originArticleUrl, String contentHeader, String contentBody, String journalistName, String publicationTime) {
         this.pressCompany = pressCompany;
         this.category = category;
         this.title = title;
+        this.originArticleUrl = originArticleUrl;
         this.contentHeader = contentHeader;
         this.contentBody = contentBody;
         this.journalistName = journalistName;
@@ -56,6 +59,7 @@ public class Article {
                 .pressCompany(pressCompany)
                 .category(category)
                 .title(value.articleTitle())
+                .originArticleUrl(value.originArticleUrl())
                 .contentHeader(value.headerHtml())
                 .contentBody(value.bodyHtml())
                 .journalistName(value.journalistName())

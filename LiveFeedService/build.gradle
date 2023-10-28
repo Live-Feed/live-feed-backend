@@ -1,5 +1,10 @@
 plugins {
     id 'java-library'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+}
+
+configurations {
+    asciidoctorExt
 }
 
 version = '0.0.1-SNAPSHOT'
@@ -14,5 +19,28 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     testImplementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
