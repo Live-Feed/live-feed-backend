@@ -14,6 +14,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
@@ -60,8 +61,10 @@ class ArticleDetailControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("message").value("해당하는 기사가 없습니다."))
                 .andDo(
                         MockMvcRestDocumentation.document("article-detail-error",
+                                Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                                Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                                 RequestDocumentation.pathParameters(
-                                        RequestDocumentation.parameterWithName("articleId").description("article Id")
+                                        RequestDocumentation.parameterWithName("articleId").description("뉴스 기사 Id")
                                 ),
                                 PayloadDocumentation.responseFields(
                                         PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
@@ -99,8 +102,10 @@ class ArticleDetailControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("data.contentBody").value("기사 본문 내용"))
                 .andDo(
                         MockMvcRestDocumentation.document("article-detail",
+                                Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                                Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                                 RequestDocumentation.pathParameters(
-                                        RequestDocumentation.parameterWithName("articleId").description("article Id")
+                                        RequestDocumentation.parameterWithName("articleId").description("뉴스 기사 Id")
                                 ),
                                 PayloadDocumentation.responseFields(
                                         PayloadDocumentation.fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공 여부"),
