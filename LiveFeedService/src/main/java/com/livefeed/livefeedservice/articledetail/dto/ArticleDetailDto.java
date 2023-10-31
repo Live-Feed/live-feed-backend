@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.detail.dto;
+package com.livefeed.livefeedservice.articledetail.dto;
 
 import com.livefeed.livefeedservice.rdb.entity.Article;
 

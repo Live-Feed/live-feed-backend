@@ -54,28 +54,51 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
   
-  opensearch:
-    image: opensearchproject/opensearch:latest
-    container_name: opensearch
+#  opensearch:
+#    image: opensearchproject/opensearch:latest
+#    container_name: opensearch
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    environment:
+#      TZ: Asia/Seoul
+#      discovery.type: single-node
+#      http.publish_host: localhost
+##      plugin.security.disabled: true
+#
+#  opensearch-dashboards:
+#    image: opensearchproject/opensearch-dashboards:latest
+#    container_name: opensearch-dashboards
+#    ports:
+#      - "5601:5601"
+#    expose:
+#      - "5601"
+#    environment:
+#      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
+#      TZ: Asia/Seoul
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.4
+    container_name: elasticsearch
     ports:
       - "9200:9200"
-      - "9300:9300"
     environment:
       TZ: Asia/Seoul
+      xpack.security.enabled: false
+      node.name: single-node
+      cluster.name: el-singlenode-c
       discovery.type: single-node
-      http.publish_host: localhost
-#      plugin.security.disabled: true
+#      http.publish_host: localhost
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
 
-  opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:latest
-    container_name: opensearch-dashboards
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.4
+    container_name: kibana
     ports:
       - "5601:5601"
-    expose:
-      - "5601"
     environment:
-      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
       TZ: Asia/Seoul
+      ELASTICSEARCH_HOST: '["https://elasticsearch:9200"]'
 
   mysql:
     image: mysql:latest

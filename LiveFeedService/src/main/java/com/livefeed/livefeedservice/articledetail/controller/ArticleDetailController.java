@@ -1,8 +1,8 @@
-package com.livefeed.livefeedservice.detail.controller;
+package com.livefeed.livefeedservice.articledetail.controller;
 
 import com.livefeed.livefeedservice.common.dto.SuccessResponse;
-import com.livefeed.livefeedservice.detail.dto.ArticleDetailDto;
-import com.livefeed.livefeedservice.detail.service.ArticleDetailService;
+import com.livefeed.livefeedservice.articledetail.dto.ArticleDetailDto;
+import com.livefeed.livefeedservice.articledetail.service.ArticleDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

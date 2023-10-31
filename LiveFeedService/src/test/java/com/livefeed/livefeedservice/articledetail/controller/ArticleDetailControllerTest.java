@@ -1,7 +1,7 @@
-package com.livefeed.livefeedservice.detail.controller;
+package com.livefeed.livefeedservice.articledetail.controller;
 
-import com.livefeed.livefeedservice.detail.dto.ArticleDetailDto;
-import com.livefeed.livefeedservice.detail.service.ArticleDetailService;
+import com.livefeed.livefeedservice.articledetail.dto.ArticleDetailDto;
+import com.livefeed.livefeedservice.articledetail.service.ArticleDetailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

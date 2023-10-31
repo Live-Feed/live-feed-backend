@@ -1,4 +1,4 @@
-package com.livefeed.livefeedsaver.opensearch.entity;
+package com.livefeed.livefeedsaver.elasticsearch.entity;
 
 import com.livefeed.livefeedcommon.kafka.record.HtmlTopicKey;
 import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
@@ -15,7 +15,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "articles")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OpensearchArticle {
+public class ElasticsearchArticle {
 
     @Id
     private Long id;
@@ -48,7 +48,7 @@ public class OpensearchArticle {
     private String bodyHtml;
 
     @Builder
-    private OpensearchArticle(Long id, String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
+    private ElasticsearchArticle(Long id, String type, String articleTitle, String publicationTime, String pressCompanyName, String journalistName, String journalistEmail, String originArticleUrl, String headerHtml, String bodyHtml) {
         this.id = id;
         this.type = type;
         this.articleTitle = articleTitle;
@@ -61,8 +61,8 @@ public class OpensearchArticle {
         this.bodyHtml = bodyHtml;
     }
 
-    public static OpensearchArticle from(Article article, HtmlTopicKey key, HtmlTopicValue value) {
-        return OpensearchArticle.builder()
+    public static ElasticsearchArticle from(Article article, HtmlTopicKey key, HtmlTopicValue value) {
+        return ElasticsearchArticle.builder()
                 .id(article.getId())
                 .type(key.theme().name())
                 .articleTitle(value.articleTitle())

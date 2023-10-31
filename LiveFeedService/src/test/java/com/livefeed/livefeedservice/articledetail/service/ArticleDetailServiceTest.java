@@ -1,6 +1,6 @@
-package com.livefeed.livefeedservice.detail.service;
+package com.livefeed.livefeedservice.articledetail.service;
 
-import com.livefeed.livefeedservice.detail.dto.ArticleDetailDto;
+import com.livefeed.livefeedservice.articledetail.dto.ArticleDetailDto;
 import com.livefeed.livefeedservice.rdb.dto.Platform;
 import com.livefeed.livefeedservice.rdb.dto.Service;
 import com.livefeed.livefeedservice.rdb.dto.Theme;
