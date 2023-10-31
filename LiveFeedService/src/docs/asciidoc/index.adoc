@@ -1,0 +1,17 @@
+= REST Docs 문서 만들기
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Article-API]]
+== Article API 명세서
+
+[[Article-상세-조회]]
+=== Article 상세 조회 성공
+operation::article-detail[snippets='http-request,path-parameters,http-response,response-fields']
+
+=== Article 상세 조회 실패
+operation::article-detail-error[snippets='http-response,response-fields']

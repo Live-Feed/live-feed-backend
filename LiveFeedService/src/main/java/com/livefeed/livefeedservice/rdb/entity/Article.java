@@ -1,6 +1,5 @@
-package com.livefeed.livefeedsaver.rdb.entity;
+package com.livefeed.livefeedservice.rdb.entity;
 
-import com.livefeed.livefeedcommon.kafka.record.HtmlTopicValue;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,18 +51,5 @@ public class Article {
         this.contentBody = contentBody;
         this.journalistName = journalistName;
         this.publicationTime = publicationTime;
-    }
-
-    public static Article from(PressCompany pressCompany, Category category, HtmlTopicValue value) {
-        return Article.builder()
-                .pressCompany(pressCompany)
-                .category(category)
-                .title(value.articleTitle())
-                .originArticleUrl(value.originArticleUrl())
-                .contentHeader(value.headerHtml())
-                .contentBody(value.bodyHtml())
-                .journalistName(value.journalistName())
-                .publicationTime(value.publicationTime())
-                .build();
     }
 }
