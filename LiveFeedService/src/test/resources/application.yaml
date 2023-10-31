@@ -18,3 +18,6 @@ decorator:
     p6spy:
       enable-logging: true
       multiline: true
+logging:
+  level:
+    org.springframework.data.elasticsearch.client: DEBUG
