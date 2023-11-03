@@ -1,6 +1,7 @@
 package com.livefeed.livefeedcrawler.batch;
 
-import com.livefeed.livefeedcrawler.common.NewsPage;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
+import com.livefeed.livefeedcrawler.common.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -8,8 +9,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 @Slf4j
 @Component
@@ -20,12 +19,11 @@ public class CrawlJobLauncher {
     private final Job googleNewsCrawlJob;
     private final Job naverNewsCrawlJob;
 
-    private void runCrawlJob(Job crawlJob, String pageUrl, NewsPage.Platform platform, NewsPage.Theme theme) {
+    private void runCrawlJob(Job crawlJob, String pageUrl, UrlTopicKey urlTopicKey) {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("pageUrl", pageUrl)
-                .addString("platform", platform.name())
-                .addString("theme", theme.name())
-                .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .addJobParameter("urlTopicKey", urlTopicKey, UrlTopicKey.class)
+                .addLocalDateTime("date", LocalDateTime.now())
                 .toJobParameters();
 
         try {
@@ -36,14 +34,20 @@ public class CrawlJobLauncher {
     }
 
     public void runGoogleSportsNewsCrawlJob() {
-        for (String pageUrl : NewsPage.GOOGLE_SPORTS_NEWS.getUrls()) {
-            runCrawlJob(googleNewsCrawlJob, pageUrl, NewsPage.Platform.GOOGLE, NewsPage.Theme.SPORTS);
+        Page page = Page.GOOGLE_SPORTS_NEWS;
+        UrlTopicKey urlTopicKey = new UrlTopicKey(page.getService(), page.getPlatform(), page.getTheme());
+
+        for (String pageUrl : page.getUrls()) {
+            runCrawlJob(googleNewsCrawlJob, pageUrl, urlTopicKey);
         }
     }
 
     public void runNaverSportsNewsCrawlJob() {
-        for (String pageUrl : NewsPage.NAVER_SPORTS_NEWS.getUrls()) {
-            runCrawlJob(naverNewsCrawlJob, pageUrl, NewsPage.Platform.NAVER, NewsPage.Theme.SPORTS);
+        Page page = Page.NAVER_SPORTS_NEWS;
+        UrlTopicKey urlTopicKey = new UrlTopicKey(page.getService(), page.getPlatform(), page.getTheme());
+
+        for (String pageUrl : page.getUrls()) {
+            runCrawlJob(naverNewsCrawlJob, pageUrl, urlTopicKey);
         }
     }
 }
