@@ -5,6 +5,7 @@ import java.util.List;
 public record ArticleListDto(
         List<ArticleDto> articles,
         boolean isLast,
-        long lastArticleId
+        long lastId,
+        String pit
 ) {
 }

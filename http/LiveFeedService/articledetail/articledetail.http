@@ -1,3 +1,6 @@
 ### 기사 상세 내용 전달하는 api
 GET http://localhost:8084/api/detail/articles/1
 
+### 기사 목록을 전달하는 api
+GET http://localhost:8084/api/list/articles?keyword=테스트,게임&type=타이틀&size=5&sort=id-desc
+

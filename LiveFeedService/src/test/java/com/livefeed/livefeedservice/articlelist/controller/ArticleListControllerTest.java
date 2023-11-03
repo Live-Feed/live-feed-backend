@@ -2,8 +2,6 @@ package com.livefeed.livefeedservice.articlelist.controller;
 
 import com.livefeed.livefeedservice.articledetail.service.ArticleDetailService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(RestDocumentationExtension.class)
 @WebMvcTest
@@ -33,5 +30,4 @@ class ArticleListControllerTest {
                 .alwaysDo(MockMvcResultHandlers.print())
                 .build();
     }
-
 }
