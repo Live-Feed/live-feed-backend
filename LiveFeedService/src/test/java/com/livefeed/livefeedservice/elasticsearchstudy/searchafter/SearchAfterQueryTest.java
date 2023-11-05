@@ -24,6 +24,7 @@ import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.*;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,7 @@ public class SearchAfterQueryTest {
     void dynamicQuery() {
         // given
         List<String> types = List.of("title", "content");
-        List<String> keywords = List.of("data", "analyse");
+        List<String> keywords = List.of("analyse", "Elasticsearch");
         // when
         NativeQueryBuilder builder = NativeQuery.builder();
 
@@ -61,11 +62,14 @@ public class SearchAfterQueryTest {
 
         NativeQuery query = builder
                 .withQuery(Query.of(b -> b.bool(bool -> bool.should(queryList))))
+                .withMaxResults(5)
+                .withExplain(true)
                 .build();
 
         SearchHits<IndexName> searchHits = elasticsearchOperations.search(query, IndexName.class);
         // then
         for (SearchHit<IndexName> searchHit : searchHits) {
+            log.info("explain = {}", searchHit.getExplanation().getDetails().get(0).getDescription());
             log.info("search info = {}", searchHit.getSortValues());
             log.info("search = {}", searchHit.getContent());
         }
@@ -76,7 +80,7 @@ public class SearchAfterQueryTest {
     void makePIT() throws IOException {
         // given
         OpenPointInTimeResponse pit = elasticsearchClient.openPointInTime(b -> b.index("index_name")
-                .keepAlive(Time.of(builder -> builder.time("1m"))));
+                .keepAlive(Time.of(builder -> builder.time("5m"))));
 
         // then
         String id = pit.id();
@@ -87,16 +91,22 @@ public class SearchAfterQueryTest {
     @DisplayName("search after 쿼리 테스트")
     void searchAfter() {
         // given
-        String pitId = "3eaGBAEKaW5kZXhfbmFtZRZJVFdJS0x0TVE5LUtWTDcwV1drdWlRABZaaXhVWnNla1JjYVgwOFJDcTZoV1dRAAAAAAAAAIekFm5Kc3EycHpuU2NhYkJncWZzUlVtV1EAARZJVFdJS0x0TVE5LUtWTDcwV1drdWlRAAA=";
+        String pitId = "3eaGBAEKaW5kZXhfbmFtZRZPNGhocTZBY1M4MnJtV1haVzFxWTJnABZ4WjFNTlFsQlN2eUJTdjBWWlprTXBRAAAAAAAAAkb6Fnl1eFhHTGNQVENHSWFPMzdDMGF0NFEAARZPNGhocTZBY1M4MnJtV1haVzFxWTJnAAA=";
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q.match(t -> t.field("title").query("data")))
                 .withSort(SortOptionsBuilders.field(builder -> builder.field("id").order(SortOrder.Desc)))
-                .withSearchAfter(List.of(34))
+                .withSearchAfter(List.of(25))
                 .withMaxResults(3)
+//                .withPointInTime(new org.springframework.data.elasticsearch.core.query.Query.PointInTime(pitId, Duration.ofMinutes(5)))
 //                .withPointInTime(new Query.PointInTime(pitId, Duration.ofMinutes(1)))
                 .build();
 
         SearchHits<IndexName> search = elasticsearchOperations.search(query, IndexName.class);
+
+        String pointInTimeId = search.getPointInTimeId();
+
+        log.info("pitId = {}", pointInTimeId);
+
         List<SearchHit<IndexName>> searchHits = search.getSearchHits();
 
         for (SearchHit<IndexName> searchHit : searchHits) {

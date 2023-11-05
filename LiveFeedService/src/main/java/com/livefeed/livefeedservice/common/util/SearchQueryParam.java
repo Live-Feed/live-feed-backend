@@ -1,29 +1,32 @@
 package com.livefeed.livefeedservice.common.util;
 
+import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-public record SearchQueryParam(
-        List<String> type,
-        List<String> keywords,
-        int size,
-        Sort sort,
-        Long lastId,
-        String pit
-) {
+@Getter
+public class SearchQueryParam {
+    private List<String> type;
+    private List<String> keywords;
+    private int size;
+    private Sort sort;
+    private Long lastId;
+    private String pit;
+
+    private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Long lastId, String pit) {
+        this.type = type;
+        this.keywords = keywords;
+        this.size = size;
+        this.sort = sort;
+        this.lastId = lastId;
+        this.pit = pit;
+    }
 
     public static SearchQueryParam makeParam(List<String> type, List<String> keywords, int size,
                                              List<String> sorts, Long lastId, String pit) {
         Sort targetSort  = makeSort(sorts);
-
-        return new SearchQueryParam(
-                type, keywords,
-                size,
-                targetSort,
-                lastId,
-                pit
-        );
+        return new SearchQueryParam(type, keywords, size, targetSort, lastId, pit);
     }
 
     private static Sort makeSort(List<String> sorts) {
@@ -43,5 +46,12 @@ public record SearchQueryParam(
         }).toList();
 
         return Sort.by(orders);
+    }
+
+    public void setInitialPit(String pit) {
+        if (pit == null && pit.isBlank()) {
+            throw new IllegalArgumentException("정확한 pit 값이 입력되지 않았습니다.");
+        }
+        this.pit = pit;
     }
 }
