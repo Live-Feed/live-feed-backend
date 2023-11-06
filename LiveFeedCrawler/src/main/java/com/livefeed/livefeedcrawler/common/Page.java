@@ -1,5 +1,8 @@
 package com.livefeed.livefeedcrawler.common;
 
+import com.livefeed.livefeedcommon.kafka.dto.Platform;
+import com.livefeed.livefeedcommon.kafka.dto.Service;
+import com.livefeed.livefeedcommon.kafka.dto.Theme;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,25 +10,15 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public enum NewsPage {
+public enum Page {
 
-    GOOGLE_SPORTS_NEWS(Platform.GOOGLE, Theme.SPORTS, List.of(GoogleNewsPage.SPORTS.url)),
-    NAVER_SPORTS_NEWS(Platform.NAVER, Theme.SPORTS, NaverNewsPage.SPORTS.urls);
+    GOOGLE_SPORTS_NEWS(Service.ARTICLE, Platform.GOOGLE, Theme.SPORTS, List.of(GoogleNewsPage.SPORTS.url)),
+    NAVER_SPORTS_NEWS(Service.ARTICLE, Platform.NAVER, Theme.SPORTS, NaverNewsPage.SPORTS.urls);
 
+    private final Service service;
     private final Platform platform;
     private final Theme theme;
     private final List<String> urls;
-
-    @RequiredArgsConstructor
-    public enum Platform {
-        GOOGLE,
-        NAVER
-    }
-
-    @RequiredArgsConstructor
-    public enum Theme {
-        SPORTS
-    }
 
     @RequiredArgsConstructor
     private enum GoogleNewsPage {
