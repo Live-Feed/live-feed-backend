@@ -8,4 +8,10 @@ public record ArticleListDto(
         long lastId,
         String pit
 ) {
+
+    public static ArticleListDto of(List<ArticleDto> articles, boolean isLast, long lastId, String pit) {
+        return new ArticleListDto(
+                articles, isLast, lastId, pit
+        );
+    }
 }

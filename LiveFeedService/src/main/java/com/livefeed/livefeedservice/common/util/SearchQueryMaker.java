@@ -27,6 +27,7 @@ public class SearchQueryMaker {
         makeSortQuery(nativeQueryBuilder, searchQueryParam.getSort());
         makeSearchAfterQuery(nativeQueryBuilder, searchQueryParam.getLastId());
         makePitQuery(nativeQueryBuilder, searchQueryParam.getPit());
+        makeExplainQuery(nativeQueryBuilder);
 
         return nativeQueryBuilder.build();
     }
@@ -62,5 +63,9 @@ public class SearchQueryMaker {
         if (pit != null) {
             nativeQueryBuilder.withPointInTime(new PointInTime(pit, Duration.ofMinutes(PIT_DURATION_MINUTES)));
         }
+    }
+
+    private void makeExplainQuery(NativeQueryBuilder nativeQueryBuilder) {
+        nativeQueryBuilder.withExplain(true);
     }
 }

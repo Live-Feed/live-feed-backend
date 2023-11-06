@@ -6,6 +6,7 @@ import co.elastic.clients.elasticsearch.core.OpenPointInTimeResponse;
 import com.livefeed.livefeedservice.common.exception.UnableToGetPitException;
 import com.livefeed.livefeedservice.common.util.SearchQueryMaker;
 import com.livefeed.livefeedservice.common.util.SearchQueryParam;
+import com.livefeed.livefeedservice.elasticsearch.entity.ElasticsearchArticle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -15,16 +16,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class NativeQueryElasticsearchOperations<T> implements SearchOperations<T> {
-
-    private T t;
+public class NativeQueryElasticsearchOperations implements SearchOperations {
 
     private final ElasticsearchOperations elasticsearchOperations;
     private final ElasticsearchClient elasticsearchClient;
     private final SearchQueryMaker searchQueryMaker;
 
     private final String PIT_EXIST_TIME = "5m";
-
 
     @Override
     public String getPit(String indexName) {
@@ -38,8 +36,8 @@ public class NativeQueryElasticsearchOperations<T> implements SearchOperations<T
     }
 
     @Override
-    public SearchHits<T> getSearchResult(SearchQueryParam searchQueryParam) {
+    public SearchHits<ElasticsearchArticle> getSearchResult(SearchQueryParam searchQueryParam) {
         NativeQuery nativeQuery = searchQueryMaker.makeArticleListQuery(searchQueryParam);
-        return elasticsearchOperations.search(nativeQuery, (Class<T>) t.getClass());
+        return elasticsearchOperations.search(nativeQuery, ElasticsearchArticle.class);
     }
 }
