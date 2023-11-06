@@ -2,11 +2,13 @@ package com.livefeed.livefeedservice.articledetail.controller;
 
 import com.livefeed.livefeedservice.articledetail.dto.ArticleDetailDto;
 import com.livefeed.livefeedservice.articledetail.service.ArticleDetailService;
+import com.livefeed.livefeedservice.articlelist.service.ArticleListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -27,7 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest
+@WebMvcTest(value = ArticleDetailController.class)
 class ArticleDetailControllerTest {
 
     private MockMvc mockMvc;

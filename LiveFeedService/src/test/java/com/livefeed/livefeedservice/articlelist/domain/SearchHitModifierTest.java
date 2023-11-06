@@ -59,7 +59,7 @@ class SearchHitModifierTest {
         assertThat(result).isEqualTo("https://imgnews.pstatic.net/image/311/2023/10/31/0001655895_001_20231031173201332.jpg?type=w647");
     }
 
-    @DisplayName("<b> 가 없고 100글자보다 작은 경우 경우 앞에서부터 전부 반환합니다.")
+    @DisplayName("<b> 가 없고 200글자보다 작은 경우 경우 앞에서부터 전부 반환합니다.")
     @Test
     void noBoldUnder100() {
         // given
@@ -70,7 +70,7 @@ class SearchHitModifierTest {
         assertThat(result).isEqualTo(text);
     }
 
-    @DisplayName("<b> 가 없고 100글자보다 큰 경우 앞에서부터 100글자만 반환합니다.")
+    @DisplayName("<b> 가 없고 200글자보다 큰 경우 앞에서부터 200글자만 반환합니다.")
     @Test
     void NoBoldOver100() {
         // given
@@ -78,6 +78,6 @@ class SearchHitModifierTest {
         // when
         String result = searchHitModifier.cutTextFromBodyText(text);
         // then
-        assertThat(result).isEqualTo(text.substring(0, 100) + " ...");
+        assertThat(result).isEqualTo(text);
     }
 }
