@@ -1,10 +1,12 @@
 package com.livefeed.livefeedcrawler.batch;
 
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedcrawler.batch.configuration.BatchTestConfiguration;
+import com.livefeed.livefeedcrawler.batch.configuration.CustomBatchConfiguration;
 import com.livefeed.livefeedcrawler.batch.configuration.NaverNewsCrawlJobConfiguration;
 import com.livefeed.livefeedcrawler.batch.reader.NaverNewsItemReader;
 import com.livefeed.livefeedcrawler.batch.writer.NewsItemWriter;
-import com.livefeed.livefeedcrawler.common.NewsPage;
+import com.livefeed.livefeedcrawler.common.Page;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,14 +21,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBatchTest
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9094", "port=9094" })
-@SpringBootTest(classes = {NaverNewsItemReader.class, NewsItemWriter.class, NaverNewsCrawlJobConfiguration.class, BatchTestConfiguration.class})
+@SpringBootTest(classes = {NaverNewsItemReader.class, NewsItemWriter.class, NaverNewsCrawlJobConfiguration.class,
+        BatchTestConfiguration.class, CustomBatchConfiguration.class})
 public class NaverNewsCrawlJobTest {
 
     @Autowired
@@ -98,17 +99,19 @@ public class NaverNewsCrawlJobTest {
 
         // when
         StepScopeTestUtils.doInStepScope(stepExecution, () -> {
-            writer.write(new Chunk<>(NewsPage.NAVER_SPORTS_NEWS.getUrls()));
+            writer.write(new Chunk<>(Page.NAVER_SPORTS_NEWS.getUrls()));
             return null;
         });
     }
 
     JobParameters createJobParameters() {
+        Page page = Page.NAVER_SPORTS_NEWS;
+        UrlTopicKey urlTopicKey = new UrlTopicKey(page.getService(), page.getPlatform(), page.getTheme());
+
         return new JobParametersBuilder()
-                .addString("pageUrl", NewsPage.NAVER_SPORTS_NEWS.getUrls().get(0))
-                .addString("platform", NewsPage.Platform.NAVER.name())
-                .addString("theme", NewsPage.Theme.SPORTS.name())
-                .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .addString("pageUrl", page.getUrls().get(0))
+                .addJobParameter("urlTopicKey", urlTopicKey, UrlTopicKey.class)
+                .addLocalDateTime("date", LocalDateTime.now())
                 .toJobParameters();
     }
 }

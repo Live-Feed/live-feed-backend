@@ -1,8 +1,9 @@
 package com.livefeed.livefeedcrawler.batch.writer;
 
 import com.livefeed.livefeedcommon.kafka.producer.KafkaProducerTemplate;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicValue;
 import com.livefeed.livefeedcommon.kafka.topic.KafkaTopic;
-import com.livefeed.livefeedcrawler.common.NewsKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.Chunk;
@@ -15,19 +16,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NewsItemWriter implements ItemWriter<String> {
 
-    @Value("#{jobParameters[platform]}")
-    private String platform;
+    @Value("#{jobParameters[urlTopicKey]}")
+    private UrlTopicKey urlTopicKey;
 
-    @Value("#{jobParameters[theme]}")
-    private String theme;
-
-    private final KafkaProducerTemplate<NewsKey, String> kafkaProducer;
+    private final KafkaProducerTemplate<UrlTopicKey, UrlTopicValue> kafkaProducer;
 
     @Override
     public void write(Chunk<? extends String> chunk) {
-        NewsKey newsKey = NewsKey.of(platform, theme);
         for (String articleUrl : chunk.getItems()) {
-            kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, newsKey, articleUrl);
+            kafkaProducer.sendMessage(KafkaTopic.LIVEFEED_URL, urlTopicKey, new UrlTopicValue(articleUrl));
         }
     }
 }

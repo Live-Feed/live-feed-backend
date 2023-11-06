@@ -1,10 +1,12 @@
 package com.livefeed.livefeedcrawler.batch;
 
+import com.livefeed.livefeedcommon.kafka.record.UrlTopicKey;
 import com.livefeed.livefeedcrawler.batch.configuration.BatchTestConfiguration;
+import com.livefeed.livefeedcrawler.batch.configuration.CustomBatchConfiguration;
 import com.livefeed.livefeedcrawler.batch.configuration.GoogleNewsCrawlJobConfiguration;
 import com.livefeed.livefeedcrawler.batch.reader.GoogleNewsItemReader;
 import com.livefeed.livefeedcrawler.batch.writer.NewsItemWriter;
-import com.livefeed.livefeedcrawler.common.NewsPage;
+import com.livefeed.livefeedcrawler.common.Page;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,15 +21,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Disabled
 @SpringBatchTest
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9094", "port=9094" })
-@SpringBootTest(classes = {GoogleNewsItemReader.class, NewsItemWriter.class, GoogleNewsCrawlJobConfiguration.class, BatchTestConfiguration.class})
+@SpringBootTest(classes = {GoogleNewsItemReader.class, NewsItemWriter.class, GoogleNewsCrawlJobConfiguration.class,
+        BatchTestConfiguration.class, CustomBatchConfiguration.class})
 public class GoogleNewsCrawlJobTest {
 
     @Autowired
@@ -96,17 +97,19 @@ public class GoogleNewsCrawlJobTest {
 
         // when
         StepScopeTestUtils.doInStepScope(stepExecution, () -> {
-            writer.write(new Chunk<>(NewsPage.GOOGLE_SPORTS_NEWS.getUrls()));
+            writer.write(new Chunk<>(Page.GOOGLE_SPORTS_NEWS.getUrls()));
             return null;
         });
     }
 
     JobParameters createJobParameters() {
+        Page page = Page.GOOGLE_SPORTS_NEWS;
+        UrlTopicKey urlTopicKey = new UrlTopicKey(page.getService(), page.getPlatform(), page.getTheme());
+
         return new JobParametersBuilder()
-                .addString("pageUrl", NewsPage.GOOGLE_SPORTS_NEWS.getUrls().get(0))
-                .addString("platform", NewsPage.Platform.GOOGLE.name())
-                .addString("theme", NewsPage.Theme.SPORTS.name())
-                .addDate("date", Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .addString("pageUrl", page.getUrls().get(0))
+                .addJobParameter("urlTopicKey", urlTopicKey, UrlTopicKey.class)
+                .addLocalDateTime("date", LocalDateTime.now())
                 .toJobParameters();
     }
 }

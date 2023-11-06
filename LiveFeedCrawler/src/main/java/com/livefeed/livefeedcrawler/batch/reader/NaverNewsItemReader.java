@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
-import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -24,14 +26,14 @@ public class NaverNewsItemReader extends AbstractPaginatedDataItemReader<String>
     private String pageUrl;
 
     @Value("#{jobParameters[date]}")
-    private Date date;
+    private LocalDateTime date;
 
     private int maxPage;
     private static final int PAGE_SIZE = 20;
     private static final int PAGINATION_SIZE = 10;
     private static final int MAX_PUBLICATION_TIME_DIFFERENCE_IN_MINUTES = 30;
-    private static final SimpleDateFormat searchDateFormat = new SimpleDateFormat("yyyyMMdd");
-    private static final SimpleDateFormat publicationTimeFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+    private static final DateTimeFormatter searchDateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
+    private static final DateTimeFormatter publicationTimeFormat = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
 
     public NaverNewsItemReader() {
         super();
@@ -123,9 +125,9 @@ public class NaverNewsItemReader extends AbstractPaginatedDataItemReader<String>
         String publicationTime = articleElement.findElement(By.cssSelector(".time")).getText();
 
         try {
-            Date publicationDate = publicationTimeFormat.parse(publicationTime);
-            long timeDifference = (date.getTime() - publicationDate.getTime()) / (1000 * 60);
-            if (timeDifference > MAX_PUBLICATION_TIME_DIFFERENCE_IN_MINUTES) {
+            LocalDateTime publicationDate = LocalDateTime.parse(publicationTime, publicationTimeFormat);
+            Duration timeDifference = Duration.between(publicationDate, date);
+            if (timeDifference.toMinutes() > MAX_PUBLICATION_TIME_DIFFERENCE_IN_MINUTES) {
                 return true;
             }
         } catch (Exception e) {

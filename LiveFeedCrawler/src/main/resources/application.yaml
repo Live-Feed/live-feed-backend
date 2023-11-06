@@ -1,3 +1,29 @@
 spring:
   profiles:
     default: local
+
+  kafka:
+    bootstrap-servers: localhost:9093
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/live_feed
+    username: root
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+
+server:
+  port: 8081
+
+custom:
+  kafka:
+    producer:
+      is-enabled: true
