@@ -27,10 +27,9 @@ class SearchHitModifierTest {
         // given
         String explain = "weight(content:elasticsearch in 0) [PerFieldSimilarity], result of:";
         // when
-        Pair<String, String> pair = searchHitModifier.extractTypeAndWord(explain);
+        String searchedWord = searchHitModifier.extractSearchedWord(explain);
         // then
-        assertThat(pair.getFirst()).isEqualTo("content");
-        assertThat(pair.getSecond()).isEqualTo("elasticsearch");
+        assertThat(searchedWord).isEqualTo("elasticsearch");
     }
 
     @Test

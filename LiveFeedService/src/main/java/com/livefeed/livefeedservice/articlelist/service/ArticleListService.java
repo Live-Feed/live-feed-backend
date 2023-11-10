@@ -24,7 +24,6 @@ public class ArticleListService {
     private final SearchHitModifier searchHitModifier;
 
     public ArticleListDto getArticleList(SearchQueryParam searchQueryParam) {
-
         // pit가 설정이 안되어 있는 경우 pit를 먼저 가져온다.
         if (searchQueryParam.getPit() == null) {
             searchQueryParam.setInitialPit(nativeQueryElasticsearchRepository.getPit("articles"));
@@ -33,26 +32,30 @@ public class ArticleListService {
         SearchHits<ElasticsearchArticle> searchResult = nativeQueryElasticsearchRepository.getSearchResult(searchQueryParam);
         String pit = searchResult.getPointInTimeId();
 
+
+        // TODO: 11/7/23 서치 쿼리인지 아닌지에 따라 로직이 바뀌어야 한다.
+
         List<ArticleDto> articleList = searchResult.getSearchHits().stream().map(search -> {
 
-            Explanation explanation = search.getExplanation();
 
-            String description = explanation.getDescription().startsWith("weight")
-                    ? explanation.getDescription()
-                    : explanation.getDetails().get(0).getDescription();
-
-
-            Pair<String, String> typeAndWord = searchHitModifier.extractTypeAndWord(description);
 
             String articleTitle = searchHitModifier.extractTextFromHtml(search.getContent().getArticleTitle());
             String articleImg = searchHitModifier.extractFirstImgFromHtml(search.getContent().getBodyHtml());
             String articleBody = searchHitModifier.extractTextFromHtml(search.getContent().getBodyHtml());
 
-            if (typeAndWord.getFirst().equals("articleTitle")) {
-                articleTitle = searchHitModifier.boldingWord(typeAndWord.getSecond(), articleTitle);
-            } else {
-                articleBody = searchHitModifier.boldingWord(typeAndWord.getSecond(), articleBody);
+            Explanation explanation = search.getExplanation();
+
+            if (explanation != null) {
+                String description = explanation.getDescription().startsWith("weight")
+                        ? explanation.getDescription()
+                        : explanation.getDetails().get(0).getDescription();
+
+                String searchedWord = searchHitModifier.extractSearchedWord(description);
+
+                articleTitle = searchHitModifier.boldingWord(searchedWord, articleTitle);
+                articleBody = searchHitModifier.boldingWord(searchedWord, articleBody);
             }
+
             articleBody = searchHitModifier.cutTextFromBodyText(articleBody);
 
             return new ArticleDto(
@@ -68,7 +71,7 @@ public class ArticleListService {
         return ArticleListDto.of(
                 articleList,
                 articleList.size() < searchQueryParam.getSize(),
-                articleList.get(articleList.size() - 1).articleId(),
+                articleList.size() > 0 ? articleList.get(articleList.size() - 1).articleId() : null,
                 pit
         );
     }

@@ -43,17 +43,15 @@ public class SearchHitModifier {
     }
 
     // explain 을 통해 어떤 항목에 어떤 단어가 검색되었는지 추출하는 메서드 pair<타입, 단어> 형태
-    public Pair<String, String> extractTypeAndWord(String explain) {
-        log.info("explain = {}", explain);
+    public String extractSearchedWord(String explain) {
         int firstIndex = explain.indexOf("(");
         int lastIndex = explain.indexOf(" ");
 
-        String[] split = explain.substring(firstIndex + 1, lastIndex).split(":");
-
-        return Pair.of(split[0], split[1]);
+        return explain.substring(firstIndex + 1, lastIndex).split(":")[1];
     }
 
     // 찾은 단어를 볼드 형식으로 변경해주는 메서드
+    // TODO: 11/10/23 대소 비교 후 원본 단어 그대로 수정하도록 변경해야됨
     public String boldingWord(String word, String text) {
         String replaceText = "<b>" + word + "</b>";
         return text.replaceAll(word, replaceText);

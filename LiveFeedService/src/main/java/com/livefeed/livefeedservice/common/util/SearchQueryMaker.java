@@ -22,12 +22,16 @@ public class SearchQueryMaker {
     public NativeQuery makeArticleListQuery(SearchQueryParam searchQueryParam) {
 
         NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
-        makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
+
+        if (searchQueryParam.getType() != null) {
+            makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
+            makeExplainQuery(nativeQueryBuilder);
+        }
+
         makeQuerySize(nativeQueryBuilder, searchQueryParam.getSize());
         makeSortQuery(nativeQueryBuilder, searchQueryParam.getSort());
         makeSearchAfterQuery(nativeQueryBuilder, searchQueryParam.getLastId());
         makePitQuery(nativeQueryBuilder, searchQueryParam.getPit());
-        makeExplainQuery(nativeQueryBuilder);
 
         return nativeQueryBuilder.build();
     }
@@ -35,6 +39,10 @@ public class SearchQueryMaker {
 
     private void makeShouldQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types, List<String> keywords) {
         List<Query> queryList = new ArrayList<>();
+
+        if (keywords == null) {
+            return;
+        }
 
         for (String type : types) {
             for (String keyword : keywords) {

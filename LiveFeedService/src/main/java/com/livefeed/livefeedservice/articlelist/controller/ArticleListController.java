@@ -23,19 +23,13 @@ public class ArticleListController {
 
     @GetMapping("/articles")
     public SuccessResponse<ArticleListDto> getArticleList(
-            @RequestParam(value = "type", required = false, defaultValue = "title") List<String> type,
+            @RequestParam(value = "type", required = false) List<String> type,
             @RequestParam(value = "keyword", required = false) List<String> keywords,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestParam(value = "sort", required = false, defaultValue = "id-desc") List<String> sorts,
             @RequestParam(value = "lastId", required = false) Long lastArticleId,
             @RequestParam(value = "pit", required = false) String pit
             ) {
-        log.info("keywords = {}", keywords);
-        log.info("type = {}", type);
-        log.info("size = {}", size);
-        log.info("sorts = {}", sorts);
-        log.info("lastArticleId = {}", lastArticleId);
-        log.info("pit = {}" ,pit);
 
         SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, sorts, lastArticleId, pit);
         ArticleListDto data = articleListService.getArticleList(searchQueryParam);
