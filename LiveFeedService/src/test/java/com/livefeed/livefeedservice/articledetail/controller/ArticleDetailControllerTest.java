@@ -2,13 +2,11 @@ package com.livefeed.livefeedservice.articledetail.controller;
 
 import com.livefeed.livefeedservice.articledetail.dto.ArticleDetailDto;
 import com.livefeed.livefeedservice.articledetail.service.ArticleDetailService;
-import com.livefeed.livefeedservice.articlelist.service.ArticleListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -33,6 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 class ArticleDetailControllerTest {
 
     private MockMvc mockMvc;
+    private final String url = "/api/detail/articles/{articleId}";
 
     @MockBean
     private ArticleDetailService articleDetailService;
@@ -51,7 +50,6 @@ class ArticleDetailControllerTest {
         // given
         Long articleId = 100L;
         Mockito.doThrow(new IllegalArgumentException("해당하는 기사가 없습니다.")).when(articleDetailService).findArticleDetail(articleId);
-        String url = "/api/detail/articles/{articleId}";
         // when
         ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get(url, "100")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -84,7 +82,6 @@ class ArticleDetailControllerTest {
         Long articleId = 1L;
         ArticleDetailDto data = getArticleDetailDto();
         Mockito.doReturn(data).when(articleDetailService).findArticleDetail(articleId);
-        String url = "/api/detail/articles/{articleId}";
         // when
         ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get(url, articleId)
                 .contentType(MediaType.APPLICATION_JSON));

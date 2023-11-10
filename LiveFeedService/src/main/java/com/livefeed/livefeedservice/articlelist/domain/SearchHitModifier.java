@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -51,9 +53,25 @@ public class SearchHitModifier {
     }
 
     // 찾은 단어를 볼드 형식으로 변경해주는 메서드
-    // TODO: 11/10/23 대소 비교 후 원본 단어 그대로 수정하도록 변경해야됨
     public String boldingWord(String word, String text) {
-        String replaceText = "<b>" + word + "</b>";
-        return text.replaceAll(word, replaceText);
+        String regex = "\\b" + Pattern.quote(word) + "\\b";
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(text);
+
+        return matcher.replaceAll("<b>$0</b>");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

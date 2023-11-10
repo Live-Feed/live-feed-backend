@@ -2,7 +2,6 @@ package com.livefeed.livefeedservice.articlelist.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.util.Pair;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -79,4 +78,17 @@ class SearchHitModifierTest {
         // then
         assertThat(result).isEqualTo(text);
     }
+
+    @Test
+    @DisplayName("키워드와 텍스트를 입력받아 해당 키워드를 bold 처리해줍니다.")
+    void boldingWord() {
+        // given
+        String text = "이것은 특정 문자열입니다. 특정 문자열의 다른 예시도 특정 문자열입니다.";
+        String keyword = "특정";
+        // when
+        String result = searchHitModifier.boldingWord(keyword, text);
+        // then
+        assertThat(result).isEqualTo("이것은 <b>특정</b> 문자열입니다. <b>특정</b> 문자열의 다른 예시도 <b>특정</b> 문자열입니다.");
+    }
+
 }

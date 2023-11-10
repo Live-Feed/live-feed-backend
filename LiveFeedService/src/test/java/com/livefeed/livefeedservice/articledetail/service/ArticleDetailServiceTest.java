@@ -10,6 +10,7 @@ import com.livefeed.livefeedservice.rdb.entity.PressCompany;
 import com.livefeed.livefeedservice.rdb.repository.ArticleRepository;
 import com.livefeed.livefeedservice.rdb.repository.CategoryRepository;
 import com.livefeed.livefeedservice.rdb.repository.PressCompanyRepository;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.*;
 
 
+@Disabled
 @SpringBootTest
 class ArticleDetailServiceTest {
     

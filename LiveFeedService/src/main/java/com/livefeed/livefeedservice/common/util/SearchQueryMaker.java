@@ -23,7 +23,7 @@ public class SearchQueryMaker {
 
         NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
 
-        if (searchQueryParam.getType() != null) {
+        if (isShouldSearchQuery(searchQueryParam)) {
             makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
             makeExplainQuery(nativeQueryBuilder);
         }
@@ -34,6 +34,10 @@ public class SearchQueryMaker {
         makePitQuery(nativeQueryBuilder, searchQueryParam.getPit());
 
         return nativeQueryBuilder.build();
+    }
+
+    private boolean isShouldSearchQuery(SearchQueryParam searchQueryParam) {
+        return searchQueryParam.getType() != null;
     }
 
 

@@ -31,9 +31,11 @@ public class ArticleListController {
             @RequestParam(value = "pit", required = false) String pit
             ) {
 
+        log.info("size = {}", size);
+        log.info("sorts = {}", sorts);
         SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, sorts, lastArticleId, pit);
         ArticleListDto data = articleListService.getArticleList(searchQueryParam);
 
-        return SuccessResponse.ok("기사 조회 성공했습니다.", data);
+        return SuccessResponse.ok("기사 목록 조회 성공했습니다.", data);
     }
 }
