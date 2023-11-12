@@ -9,6 +9,13 @@
 [[Article-API]]
 == Article API 명세서
 
+[[Article-목록-조회]]
+=== Article 목록 조회 성공
+operation::article-list[snippets='http-request,query-parameters,http-response,response-fields']
+
+=== Article 목록 조회 실패
+operation::article-list-error[snippets='http-response,response-fields']
+
 [[Article-상세-조회]]
 === Article 상세 조회 성공
 operation::article-detail[snippets='http-request,path-parameters,http-response,response-fields']

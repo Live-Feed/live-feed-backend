@@ -5,9 +5,7 @@ plugins {
 version = '0.0.1-SNAPSHOT'
 
 dependencies {
-    implementation 'org.opensearch.client:spring-data-opensearch:1.2.0'
-    implementation 'org.opensearch.client:spring-data-opensearch-starter:1.2.0'
-    implementation 'org.opensearch.client:opensearch-rest-client-sniffer:2.8.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(":LiveFeedCommon")
 
@@ -18,5 +16,4 @@ dependencies {
 //    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
 //    // Replace the following with the starter dependencies of specific modules you wish to use
 //    implementation 'io.awspring.cloud:spring-cloud-aws-starter'
-    testImplementation 'org.opensearch.client:spring-data-opensearch-test-autoconfigure:1.2.0'
 }

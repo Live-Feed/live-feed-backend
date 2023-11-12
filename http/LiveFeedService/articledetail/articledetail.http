@@ -1,3 +1,9 @@
 ### 기사 상세 내용 전달하는 api
 GET http://localhost:8084/api/detail/articles/1
 
+### 기사 목록을 전달하는 api
+GET http://localhost:8084/api/list/articles?type=bodyHtml,articleTitle&keyword=kt&size=3&sort=id-desc
+#GET http://localhost:8084/api/list/articles?type=articleTitle&keyword=페이커&size=4&sort=id-desc
+
+### search 쿼리가 아닌 api
+GET http://localhost:8084/api/list/articles?size=4&sort=id-desc
