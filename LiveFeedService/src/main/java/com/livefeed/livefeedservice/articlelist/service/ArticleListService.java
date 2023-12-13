@@ -32,6 +32,7 @@ public class ArticleListService {
             searchQueryParam.setFirstRequestPit(nativeQueryElasticsearchRepository.getPit(ARTICLE_INDEX_NAME));
         }
 
+        // TODO: 12/10/23 엘라스틱서치 내부에서 에러가 발생하는 경우도 체크할 필요가 있음
         SearchHits<ElasticsearchArticle> searchResult = nativeQueryElasticsearchRepository.getSearchResult(searchQueryParam);
         String pit = searchResult.getPointInTimeId();
 
@@ -46,7 +47,7 @@ public class ArticleListService {
     }
 
     private boolean isFirstSearchRequest(SearchQueryParam searchQueryParam) {
-        return searchQueryParam.getPit() == null;
+        return searchQueryParam.getPit() == null || searchQueryParam.getPit().isEmpty();
     }
 
     private List<ArticleDto> makeArticleDtoList(SearchHits<ElasticsearchArticle> searchResult) {

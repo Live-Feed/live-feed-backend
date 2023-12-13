@@ -31,8 +31,6 @@ public class ArticleListController {
             @RequestParam(value = "pit", required = false) String pit
             ) {
 
-        log.info("size = {}", size);
-        log.info("sorts = {}", sorts);
         SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, sorts, lastArticleId, pit);
         ArticleListDto data = articleListService.getArticleList(searchQueryParam);
 
