@@ -9,7 +9,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NaverNewsItemReaderTest {
+class NaverNewsUrlReaderTest {
 
     @DisplayName("headless로 브라우저 크롤링하는 테스트")
     @Test

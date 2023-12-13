@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch;
+package com.livefeed.livefeedbatch.configuration;
 
 import com.livefeed.livefeedbatch.urlcrawler.dto.Page;
 import lombok.RequiredArgsConstructor;

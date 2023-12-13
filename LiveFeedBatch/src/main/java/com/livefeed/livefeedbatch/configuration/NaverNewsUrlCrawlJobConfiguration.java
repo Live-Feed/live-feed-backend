@@ -1,7 +1,7 @@
-package com.livefeed.livefeedbatch.urlcrawler.configuration;
+package com.livefeed.livefeedbatch.configuration;
 
-import com.livefeed.livefeedbatch.urlcrawler.reader.NaverNewsItemReader;
-import com.livefeed.livefeedbatch.urlcrawler.writer.NewsItemWriter;
+import com.livefeed.livefeedbatch.urlcrawler.reader.NaverNewsUrlReader;
+import com.livefeed.livefeedbatch.urlcrawler.writer.NewsUrlWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -14,10 +14,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class NaverNewsCrawlJobConfiguration {
+public class NaverNewsUrlCrawlJobConfiguration {
     private static final int chunkSize = 20;
-    private final NaverNewsItemReader naverNewsItemReader;
-    private final NewsItemWriter newsItemWriter;
+    private final NaverNewsUrlReader naverNewsUrlReader;
+    private final NewsUrlWriter newsUrlWriter;
 
     @Bean
     public Job naverNewsCrawlJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
@@ -27,10 +27,10 @@ public class NaverNewsCrawlJobConfiguration {
     }
 
     public Step naverNewsCrawlStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
-        return new StepBuilder("naverNewsCrawlStep", jobRepository)
+        return new StepBuilder("naverNewsUrlCrawlStep", jobRepository)
                 .<String, String>chunk(chunkSize, transactionManager)
-                .reader(naverNewsItemReader)
-                .writer(newsItemWriter)
+                .reader(naverNewsUrlReader)
+                .writer(newsUrlWriter)
                 .build();
     }
 }

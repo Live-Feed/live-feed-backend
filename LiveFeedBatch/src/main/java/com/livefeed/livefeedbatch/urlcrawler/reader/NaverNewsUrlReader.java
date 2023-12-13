@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 @StepScope
 @Component
-public class NaverNewsItemReader extends AbstractPaginatedDataItemReader<String> {
+public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> {
 
     @Value("#{jobParameters[pageUrl]}")
     private String pageUrl;
@@ -38,10 +38,10 @@ public class NaverNewsItemReader extends AbstractPaginatedDataItemReader<String>
     private static final DateTimeFormatter searchDateFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
     private static final DateTimeFormatter publicationTimeFormat = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
 
-    public NaverNewsItemReader() {
+    public NaverNewsUrlReader() {
         super();
         setPageSize(PAGE_SIZE);
-        setExecutionContextName(ClassUtils.getShortName(NaverNewsItemReader.class));
+        setExecutionContextName(ClassUtils.getShortName(NaverNewsUrlReader.class));
     }
 
     @Override

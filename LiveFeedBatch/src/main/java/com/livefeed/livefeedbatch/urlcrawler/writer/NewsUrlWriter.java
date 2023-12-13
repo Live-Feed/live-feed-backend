@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @StepScope
 @RequiredArgsConstructor
-public class NewsItemWriter implements ItemWriter<String> {
+public class NewsUrlWriter implements ItemWriter<String> {
 
     @Override
     public void write(Chunk<? extends String> chunk) {
