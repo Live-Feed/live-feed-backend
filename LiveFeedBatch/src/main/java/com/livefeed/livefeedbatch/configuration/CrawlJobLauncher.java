@@ -1,6 +1,6 @@
 package com.livefeed.livefeedbatch.configuration;
 
-import com.livefeed.livefeedbatch.urlcrawler.dto.Page;
+import com.livefeed.livefeedbatch.batch.common.dto.keydto.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionContext;

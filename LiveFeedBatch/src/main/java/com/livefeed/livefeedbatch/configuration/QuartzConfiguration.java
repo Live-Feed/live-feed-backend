@@ -1,6 +1,5 @@
 package com.livefeed.livefeedbatch.configuration;
 
-import com.livefeed.livefeedbatch.configuration.CrawlJobLauncher;
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
