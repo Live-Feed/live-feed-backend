@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.contentcrawler.dto;
+package com.livefeed.livefeedbatch.contentcrawler.parser.dto;
 
 public record HeaderDto(
         String html,

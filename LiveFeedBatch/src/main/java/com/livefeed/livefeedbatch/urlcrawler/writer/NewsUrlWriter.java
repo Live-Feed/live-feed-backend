@@ -17,6 +17,7 @@ public class NewsUrlWriter implements ItemWriter<String> {
     public void write(Chunk<? extends String> chunk) {
         for (String articleUrl : chunk.getItems()) {
             log.info("articleUrl = {}", articleUrl);
+            // TODO: 12/15/23 희원 : 다음 스탭으로 UrlInfo 값과 articleUrl 값을 넘겨주어야 합니다.
         }
     }
 }
