@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.configuration;
+package com.livefeed.livefeedbatch.batch.configuration;
 
 import com.livefeed.livefeedbatch.batch.common.dto.ItemDto;
 import com.livefeed.livefeedbatch.batch.processor.NaverNewsContentProcessor;

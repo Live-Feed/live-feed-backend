@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.configuration;
+package com.livefeed.livefeedbatch.batch.configuration;
 
 import org.quartz.*;
 import org.springframework.context.annotation.Bean;

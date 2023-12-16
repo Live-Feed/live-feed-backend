@@ -13,5 +13,5 @@ public record UrlInfo(
         Service service,
         Platform platform,
         Theme theme
-) implements ItemDtoInterface {
+) {
 }

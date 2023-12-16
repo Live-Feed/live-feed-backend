@@ -1,11 +1,5 @@
 package com.livefeed.livefeedbatch.batch.reader;
 
-import com.livefeed.livefeedbatch.batch.common.dto.ItemDto;
-import com.livefeed.livefeedbatch.batch.common.dto.keydto.Platform;
-import com.livefeed.livefeedbatch.batch.common.dto.keydto.Service;
-import com.livefeed.livefeedbatch.batch.common.dto.keydto.Theme;
-import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
-import com.livefeed.livefeedbatch.batch.common.dto.wrtiervaluedto.WriterValue;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
