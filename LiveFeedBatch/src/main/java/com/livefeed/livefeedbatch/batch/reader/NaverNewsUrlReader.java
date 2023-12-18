@@ -64,7 +64,6 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             driver.quit();
         }
 
-        // TODO: 12/15/23 희원 : step 설정 때문에 processor를 2개 만들어서 한 개는 ItemDto로 변환하는 작업을 진행했는데 iterator로 넘겨도 상관없나...??
         return articleUrls.iterator();
     }
 
