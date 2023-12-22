@@ -9,6 +9,7 @@ name: LiveFeedBatch Module CI
 
 on:
   pull_request:
+    types: [opened, reopened, closed]
   push:
     branches:
       - "LF-35/batch-modify"
@@ -17,7 +18,7 @@ on:
 
 jobs:
   test:
-#    if: github.event.pull_request.opened == true
+    if: github.event.pull_request.opened == true
     runs-on: ubuntu-latest
     environment: batch
 
