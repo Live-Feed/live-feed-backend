@@ -8,11 +8,7 @@
 name: LiveFeedBatch Module CI
 
 on:
-  push:
-    branches:
-      - 'LF-*'
   pull_request:
-    types: [opened, closed, reopened]
     branches:
       - 'LF-*'
     paths:
