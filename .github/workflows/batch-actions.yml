@@ -9,10 +9,6 @@ name: LiveFeedBatch Module CI
 
 on:
   pull_request:
-    branches:
-      - "LF-*"
-    paths:
-      - "LiveFeedBatch/**"
   push:
     branches:
       - "LF-35/batch-modify"
