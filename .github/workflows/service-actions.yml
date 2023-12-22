@@ -11,7 +11,7 @@ on:
   pull_request:
     types: [opened, reopened, closed]
     branches:
-      - 'LF-33/service-ci'
+      - 'main'
     paths:
       - 'LiveFeedService/**'
 
@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew :LiveFeedService:test
 
   build:
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment: service
 
