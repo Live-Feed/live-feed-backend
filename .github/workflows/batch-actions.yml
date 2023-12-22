@@ -11,7 +11,7 @@ on:
   pull_request:
     types: [opened, reopened, closed]
     branches:
-      - 'LF-35/batch-modify'
+      - 'main'
     paths:
       - 'LiveFeedBatch/**'
 
