@@ -35,7 +35,7 @@ jobs:
         run: ./gradlew :LiveFeedBatch:test
 
   build:
-    if: github.event.pull_request.merged == true
+#    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment: crawler
 
@@ -83,7 +83,7 @@ jobs:
         with:
           context: ./LiveFeedBatch
           push: true
-          tags: $REGISTRY/$IMAGE_NAME:$APP_VERSION
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
           platforms: |
             linux/amd64
             linux/arm64
