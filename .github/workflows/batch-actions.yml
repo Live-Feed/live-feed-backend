@@ -8,14 +8,11 @@
 name: LiveFeedCrawler Module CI
 
 on:
-  push:
-    branches:
-      - 'LF-*'
-    paths:
-      - "LiveFeedBatch/**"
   pull_request:
     types:
       - opened
+      - closed
+      - edited
     branches:
       - 'LF-*'
     paths:
