@@ -8,20 +8,20 @@
 name: LiveFeedBatch Module CI
 
 on:
-  push:
-    branches:
-      - batch-ci
-    paths:
-      - "LiveFeedBatch/**"
-#  pull_request:
-#    types:
-#      - opened
-#      - closed
-#      - edited
+#  push:
 #    branches:
-#      - 'LF-*'
+#      - batch-ci
 #    paths:
 #      - "LiveFeedBatch/**"
+  pull_request:
+    types:
+      - opened
+      - closed
+      - edited
+    branches:
+      - 'batch-ci'
+    paths:
+      - "LiveFeedBatch/**"
 
 jobs:
   test:
