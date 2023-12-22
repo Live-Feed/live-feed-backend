@@ -8,13 +8,8 @@
 name: LiveFeedBatch Module CI
 
 on:
-#  push:
-#    branches:
-#      - batch-ci
-#    paths:
-#      - "LiveFeedBatch/**"
   pull_request:
-    types: [opened, closed, edited]
+    types: [opened, closed]
     branches:
       - 'batch-ci'
     paths:
@@ -68,7 +63,7 @@ jobs:
           echo "APP_VERSION=$(./gradlew :LiveFeedBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
 
       - name: Execute Gradle build
-        run: ./gradlew :LiveFeedCrawler:clean :LiveFeedCrawler:bootJar
+        run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
 
       - name: Docker image build
         run: |
