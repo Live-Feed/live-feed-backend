@@ -37,7 +37,7 @@ jobs:
   build:
 #    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    environment: crawler
+    environment: batch
 
     env:
       REGISTRY: ${{ secrets.REGISTRY }}
