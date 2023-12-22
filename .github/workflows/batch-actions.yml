@@ -18,7 +18,7 @@ on:
 
 jobs:
   test:
-    if: github.event.pull_request.opened == true
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened' }}
     runs-on: ubuntu-latest
     environment: batch
 
