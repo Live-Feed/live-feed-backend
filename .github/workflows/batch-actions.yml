@@ -14,10 +14,7 @@ on:
 #    paths:
 #      - "LiveFeedBatch/**"
   pull_request:
-    types:
-      - opened
-      - closed
-      - edited
+    types: [opened, closed, edited]
     branches:
       - 'batch-ci'
     paths:
