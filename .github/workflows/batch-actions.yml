@@ -10,15 +10,14 @@ name: LiveFeedBatch Module CI
 on:
   pull_request:
     types: [opened, reopened, closed]
-  push:
     branches:
-      - "LF-35/batch-modify"
+      - 'LF-35/batch-modify'
     paths:
-      - "LiveFeedBatch/**"
+      - 'LiveFeedBatch/**'
 
 jobs:
   test:
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened' }}
+    if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
     runs-on: ubuntu-latest
     environment: batch
 
