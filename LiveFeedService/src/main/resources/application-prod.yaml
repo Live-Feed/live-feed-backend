@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+
+  datasource:
+    url: ${APP_DATABASE_URL}
+    username: ${APP_DATABASE_USER}
+    password: ${APP_DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+elasticsearch:
+  config:
+    host-and-port: ${ELASTICSEARCH_URL}
+
+server:
+  port: ${APPLICATION_PORT}
