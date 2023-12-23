@@ -21,7 +21,7 @@ public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
     @Value("${elasticsearch.config.user}")
     private String user;
 
-    @Value("{elasticsearch.config.password}")
+    @Value("${elasticsearch.config.password}")
     private String password;
 
     private final Environment environment;
