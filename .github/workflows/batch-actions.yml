@@ -1,0 +1,89 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: LiveFeedBatch Module CI
+
+on:
+  pull_request:
+    types: [opened, reopened, closed]
+    branches:
+      - 'main'
+    paths:
+      - 'LiveFeedBatch/**'
+
+jobs:
+  test:
+    if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
+    runs-on: ubuntu-latest
+    environment: batch
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Gradle Test
+        run: ./gradlew :LiveFeedBatch:test
+
+  build:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    environment: batch
+
+    env:
+      REGISTRY: ${{ secrets.REGISTRY }}
+      IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
+      USERNAME: ${{ secrets.USERNAME }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Extract version variable
+        run: |
+          echo "APP_VERSION=$(./gradlew :LiveFeedBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
+
+      - name: Execute Gradle build
+        run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container registry
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.USERNAME }}
+          password: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+
+      - name: Image build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: ./LiveFeedBatch
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
+          platforms: |
+            linux/amd64
+            linux/arm64

@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME}
+
+  datasource:
+    app:
+      url: ${APP_DATABASE_URL}
+      username: ${APP_DATABASE_USER}
+      password: ${APP_DATABASE_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+    batch:
+      url: ${BATCH_DATABASE_URL}
+      username: ${BATCH_DATABASE_USER}
+      password: ${BATCH_DATABASE_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+    elasticsearch:
+      repositories:
+        enabled: false
+
+elasticsearch:
+  config:
+    host-and-port: ${ELASTICSEARCH_URL}
+
+server:
+  port: ${APPLICATION_PORT}
