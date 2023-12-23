@@ -21,6 +21,8 @@ spring:
 elasticsearch:
   config:
     host-and-port: ${ELASTICSEARCH_URL}
+    user: ${ELASTICSEARCH_USER}
+    password: ${ELASTICSEARCH_PASSWORD}
 
 server:
   port: ${APPLICATION_PORT}
