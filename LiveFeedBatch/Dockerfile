@@ -8,10 +8,7 @@ RUN chmod a+x /app
 
 COPY build/libs/*.jar live-feed-batch.jar
 
-RUN apt install -y \
-    chromium-common=112.0.5615.49-0ubuntu0.18.04.1 \
-    chromium=112.0.5615.49-0ubuntu0.18.04.1 \
-    chromium-driver=112.0.5615.49-0ubuntu0.18.04.1
+RUN apk add --no-cache chromium chromium-chromedriver
 
 RUN cp /usr/bin/chromedriver /usr/local/bin/
 
