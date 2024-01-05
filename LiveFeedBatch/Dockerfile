@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk
+FROM amazoncorretto:17
 
 WORKDIR /app
 
@@ -8,7 +8,14 @@ RUN chmod a+x /app
 
 COPY build/libs/*.jar live-feed-batch.jar
 
-RUN apk add --no-cache chromium chromium-chromedriver
+RUN dnf install -y wget
+
+RUN wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/aarch64/os/Packages/c/chromium-common-120.0.6099.129-1.fc40.aarch64.rpm \
+    dnf localinstall chromium-common-120.0.6099.129-1.fc40.aarch64.rpm \
+    wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/aarch64/os/Packages/c/chromium-120.0.6099.129-1.fc40.aarch64.rpm \
+    dnf localinstall chromium-120.0.6099.129-1.fc40.aarch64.rpm \
+    wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/aarch64/os/Packages/c/chromedriver-120.0.6099.129-1.fc40.aarch64.rpm \
+    dnf localinstall chromedriver-120.0.6099.129-1.fc40.aarch64.rpm
 
 RUN cp /usr/bin/chromedriver /usr/local/bin/
 
