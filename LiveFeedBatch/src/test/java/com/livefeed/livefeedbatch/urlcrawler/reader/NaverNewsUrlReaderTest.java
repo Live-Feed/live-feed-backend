@@ -1,13 +1,9 @@
 package com.livefeed.livefeedbatch.urlcrawler.reader;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class NaverNewsUrlReaderTest {
 
@@ -15,10 +11,7 @@ class NaverNewsUrlReaderTest {
     @Test
     void headless() throws InterruptedException {
         // given
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
-        WebDriver driver = new ChromeDriver(chromeOptions);
+        WebDriver driver = ChromeDriverProvider.getDriver();
         // when
         driver.get("https://naver.com");
         // then
