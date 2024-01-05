@@ -8,6 +8,7 @@ RUN chmod a+x /app
 
 COPY build/libs/*.jar live-feed-batch.jar
 
+RUN dnf install wget
 RUN wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/aarch64/os/Packages/c/chromium-common-120.0.6099.129-1.fc40.aarch64.rpm
 RUN dnf localinstall chromium-common-120.0.6099.129-1.fc40.aarch64.rpm
 RUN wget https://rpmfind.net/linux/fedora/linux/development/rawhide/Everything/aarch64/os/Packages/c/chromium-120.0.6099.129-1.fc40.aarch64.rpm
