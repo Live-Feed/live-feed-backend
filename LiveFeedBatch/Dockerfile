@@ -9,8 +9,10 @@ RUN chmod a+x /app
 COPY build/libs/*.jar live-feed-batch.jar
 
 RUN apt-get update && \
-    apt-get install -y wget unzip && \
+    apt-get install -y wget unzip snapd && \
     apt-get install -y chromium-driver
+
+RUN snap install chromium
 
 #RUN apt-get install -y chromium-common=112.0.5615.49-0ubuntu0.18.04.1 && \
 #    apt-get install -y chromium=112.0.5615.49-0ubuntu0.18.04.1 && \
