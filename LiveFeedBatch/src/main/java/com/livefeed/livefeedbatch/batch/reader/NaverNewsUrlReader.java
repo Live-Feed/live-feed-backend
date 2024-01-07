@@ -44,6 +44,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
 
     @Override
     protected Iterator<String> doPageRead() {
+        log.info("start doPageRead method");
         if (page > maxPage) {
             return null;
         }
@@ -117,6 +118,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             }
 
             String articleUrl = articleElement.findElement(By.cssSelector(".title")).getAttribute("href");
+            log.info("articleUrl = {}", articleUrl);
             articleUrls.add(articleUrl);
         }
     }
