@@ -86,7 +86,8 @@ jobs:
         with:
           context: ./LiveFeedBatch
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
+#          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:1.0.0
           platforms: |
             linux/amd64
             linux/arm64
