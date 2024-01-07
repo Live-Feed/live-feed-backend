@@ -15,6 +15,7 @@ public class ChromeDriverProvider {
     private static final ChromeOptions chromeOptions = setChromeOptions();
 
     public static WebDriver getDriver() {
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
                 .usingDriverExecutable(new File(driverPath))
                 .usingPort(16000)
@@ -41,6 +42,7 @@ public class ChromeDriverProvider {
 
     private static ChromeOptions setChromeOptions() {
         return new ChromeOptions()
-                .addArguments("headless");
+                .addArguments("headless")
+                .setBinary("/usr/bin/chromium-browser");
     }
 }
