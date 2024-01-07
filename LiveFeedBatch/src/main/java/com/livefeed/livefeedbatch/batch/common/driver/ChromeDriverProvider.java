@@ -36,7 +36,7 @@ public class ChromeDriverProvider {
         if (osName.contains("mac")) {
             return "/opt/homebrew/bin/chromedriver";
         } else {
-            return "/usr/local/bin/chromedriver";
+            return "/usr/bin/chromium-driver";
         }
     }
 
