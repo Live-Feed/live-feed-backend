@@ -52,21 +52,21 @@ jobs:
       packages: write
 
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v3.5.2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3.11.0
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
-      - name: Extract version variable
-        run: |
-          echo "APP_VERSION=$(./gradlew :LiveFeedBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
-
-      - name: Execute Gradle build
-        run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
+#      - name: Checkout branch
+#        uses: actions/checkout@v3.5.2
+#
+#      - name: Set up JDK 17
+#        uses: actions/setup-java@v3.11.0
+#        with:
+#          distribution: 'zulu'
+#          java-version: '17'
+#
+#      - name: Extract version variable
+#        run: |
+#          echo "APP_VERSION=$(./gradlew :LiveFeedBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
+#
+#      - name: Execute Gradle build
+#        run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
