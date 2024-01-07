@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
 }
 
-version = '0.1.10π'
+version = '0.1.10'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-batch'
