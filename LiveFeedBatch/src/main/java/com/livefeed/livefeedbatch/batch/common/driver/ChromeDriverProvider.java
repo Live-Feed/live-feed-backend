@@ -26,6 +26,7 @@ public class ChromeDriverProvider {
             log.error(e.getMessage(), e);
         }
 
+        chromeOptions.setBinary("/usr/bin/chromium-browser");
         return new ChromeDriver(chromeDriverService, chromeOptions);
     }
 
