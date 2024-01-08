@@ -13,7 +13,7 @@ COPY build/libs/*.jar live-feed-batch.jar
 
 RUN apt-get update && apt-get install -y sudo && \
     sudo apt-get install -y software-properties-common snapd && \
-    sudo add-apt-repository universe \
+    sudo add-apt-repository universe
 
 RUN sudo apt-get update && sudo apt-get install -yqq daemonize dbus-user-session fontconfig \
     sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target \
