@@ -11,7 +11,7 @@ COPY build/libs/*.jar live-feed-batch.jar
 #RUN apt-get update && \
 #    apt-get install -y wget unzip chromium-driver
 
-RUN add-apt-repository universe && apt-get update && apt-get install -y \
+RUN sudo apt-get install software-properties-common && sudo add-apt-repository universe && apt-get update && apt-get install -y \
     chromium-browser \
     chromium-chromedriver
 
