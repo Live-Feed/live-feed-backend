@@ -12,10 +12,9 @@ COPY build/libs/*.jar live-feed-batch.jar
 #    apt-get install -y wget unzip chromium-driver
 
 RUN apt-get update && apt-get install -y sudo && \
-    sudo apt-get install -y software-properties-common && sudo add-apt-repository universe && apt-get install snapd && \
-    apt-get update && snap install chromium && apt-get install -y \
-    chromium-browser \
-    chromium-chromedriver
+    sudo apt-get install -y software-properties-common snapd && \
+    sudo add-apt-repository universe && apt-get update && \
+    snap install chromium && apt-get install -y chromium-browser chromium-chromedriver
 
 #RUN CHROMEDRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
 #    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
