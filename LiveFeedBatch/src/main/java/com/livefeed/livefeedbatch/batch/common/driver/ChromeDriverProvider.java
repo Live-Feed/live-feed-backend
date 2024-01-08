@@ -15,7 +15,7 @@ public class ChromeDriverProvider {
     private static final ChromeOptions chromeOptions = setChromeOptions();
 
     public static WebDriver getDriver() {
-        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        System.setProperty("webdriver.chrome.driver", driverPath);
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
                 .usingDriverExecutable(new File(driverPath))
                 .usingPort(16000)
@@ -36,7 +36,7 @@ public class ChromeDriverProvider {
         if (osName.contains("mac")) {
             return "/opt/homebrew/bin/chromedriver";
         } else {
-            return "/usr/local/bin/chromedriver";
+            return "/usr/bin/chromedriver";
         }
     }
 
