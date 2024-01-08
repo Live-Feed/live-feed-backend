@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y sudo && \
 
 RUN sudo apt-get update && sudo apt-get install -yqq daemonize dbus-user-session fontconfig && \
     sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target && \
-    exec sudo nsenter -t $(pidof systemd) -a su - $LOGNAME
+    exec sudo nsenter -t $(pidof systemd) -m -p su - $LOGNAME
 
 RUN apt-get update && sudo snap install chromium && apt-get install -y chromium-browser chromium-chromedriver
 
