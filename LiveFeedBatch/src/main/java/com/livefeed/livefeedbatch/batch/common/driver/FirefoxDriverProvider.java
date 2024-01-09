@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 
 @Slf4j
 public class FirefoxDriverProvider {
@@ -28,8 +29,11 @@ public class FirefoxDriverProvider {
     }
 
     private static FirefoxOptions setFirefoxOptions() {
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setPreference("layers.acceleration.disabled", true);
+
         return new FirefoxOptions()
                 .addArguments("--headless")
-                .addArguments("--disable-gpu");
+                .setProfile(profile);
     }
 }
