@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jammy
+FROM eclipse-temurin:17-focal
 
 WORKDIR /app
 
@@ -8,31 +8,24 @@ RUN chmod a+x /app
 
 COPY build/libs/*.jar live-feed-batch.jar
 
-#RUN apt-get update && \
-#    apt-get install -y wget unzip chromium-driver
-
 RUN apt-get update && apt-get install -y sudo && \
-    sudo apt-get install -y software-properties-common snapd && \
-    sudo add-apt-repository universe
+    sudo apt-get install -y software-properties-common && \
+    sudo add-apt-repository universe ppa:mozillateam/ppa \
 
-RUN sudo apt-get update && sudo apt-get install -yqq daemonize dbus-user-session fontconfig && \
-    sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target && \
-    exec sudo nsenter -t $(pidof systemd) -m -p su - $LOGNAME
+RUN echo ' \
+    Package: * \
+    Pin: release o=LP-PPA-mozillateam \
+    Pin-Priority: 1001 \
+    \
+    Package: firefox \
+    Pin: version 1:1snap1-0ubuntu2 \
+    Pin-Priority: -1 \
+    ' | sudo tee /etc/apt/preferences.d/mozilla-firefox
 
-RUN apt-get update && sudo snap install chromium && apt-get install -y chromium-browser chromium-chromedriver
+RUN sudo apt-get update && sudo apt-get install -y firefox firefox-geckodriver
 
-#RUN CHROMEDRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-#    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-#    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-#    rm /tmp/chromedriver.zip && \
-#    chmod +x /usr/local/bin/chromedriver
+RUN echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
 
-#RUN CHROMEDRIVER_VERSION=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
-#    wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
-#    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-#    rm /tmp/chromedriver.zip && \
-#    chmod +x /usr/local/bin/chromedriver
-
-RUN cp /usr/bin/chromedriver /usr/local/bin/
+RUN cp /usr/bin/geckodriver /usr/local/bin/
 
 ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]

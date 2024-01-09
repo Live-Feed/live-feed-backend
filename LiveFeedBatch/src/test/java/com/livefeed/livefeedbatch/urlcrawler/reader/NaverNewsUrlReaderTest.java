@@ -1,6 +1,6 @@
 package com.livefeed.livefeedbatch.urlcrawler.reader;
 
-import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
+import com.livefeed.livefeedbatch.batch.common.driver.FirefoxDriverProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +11,7 @@ class NaverNewsUrlReaderTest {
     @Test
     void headless() throws InterruptedException {
         // given
-        WebDriver driver = ChromeDriverProvider.getDriver();
+        WebDriver driver = FirefoxDriverProvider.getDriver();
         // when
         driver.get("https://naver.com");
         // then
