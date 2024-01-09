@@ -29,6 +29,7 @@ public class FirefoxDriverProvider {
 
     private static FirefoxOptions setFirefoxOptions() {
         return new FirefoxOptions()
-                .addArguments("--headless");
+                .addArguments("--headless")
+                .addArguments("--disable-gpu");
     }
 }
