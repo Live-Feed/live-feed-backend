@@ -10,7 +10,7 @@ COPY build/libs/*.jar live-feed-batch.jar
 
 RUN apt-get update && apt-get install -y sudo && \
     sudo apt-get install -y software-properties-common && \
-    sudo add-apt-repository security \
+    sudo add-apt-repository security
 
 RUN sudo apt-get update && sudo apt-get install -y firefox firefox-geckodriver
 
