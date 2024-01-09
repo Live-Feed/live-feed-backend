@@ -31,6 +31,7 @@ public class FirefoxDriverProvider {
     private static FirefoxOptions setFirefoxOptions() {
         FirefoxProfile profile = new FirefoxProfile();
         profile.setPreference("layers.acceleration.disabled", true);
+        profile.setPreference("webgl.disabled", true);
 
         return new FirefoxOptions()
                 .addArguments("--headless")
