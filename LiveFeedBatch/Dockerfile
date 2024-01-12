@@ -7,8 +7,8 @@ ENV JAVA_VERSION=17 \
     PATH=${PATH}:${JAVA_HOME}/bin \
     active_profile=prod
 
-RUN microdnf install -y java-17-openjdk-devel \
-    && microdnf clean all
+RUN dnf install -y java-17-openjdk-devel && \
+    dnf clean all
 
 RUN chmod a+x /app
 
