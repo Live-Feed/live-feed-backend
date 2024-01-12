@@ -4,12 +4,11 @@ WORKDIR /app
 
 ENV JAVA_VERSION=17 \
     JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk \
-    PATH=${PATH}:${JAVA_HOME}/bin \
+    PATH=${JAVA_HOME}/bin:${PATH} \
     active_profile=prod
 
 RUN dnf install -y java-17-openjdk-devel && \
-    dnf clean all && \
-    alternatives --set java ${JAVA_HOME}/bin/java
+    dnf clean all
 
 RUN chmod a+x /app
 
