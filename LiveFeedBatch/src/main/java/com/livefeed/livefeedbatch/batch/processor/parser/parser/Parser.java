@@ -1,6 +1,6 @@
 package com.livefeed.livefeedbatch.batch.processor.parser.parser;
 
-import com.livefeed.livefeedbatch.batch.common.driver.FirefoxDriverProvider;
+import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.BodyDto;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.HeaderDto;
@@ -15,7 +15,7 @@ public abstract class Parser {
     protected final String OUTER_HTML = "outerHTML";
 
     public ParseResultDto parseWebPage(String url) {
-        WebDriver driver = FirefoxDriverProvider.getDriver();
+        WebDriver driver = ChromeDriverProvider.getDriver();
 
         try {
             driver.get(url);

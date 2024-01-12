@@ -1,6 +1,6 @@
 package com.livefeed.livefeedbatch.batch.reader;
 
-import com.livefeed.livefeedbatch.batch.common.driver.FirefoxDriverProvider;
+import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -49,7 +49,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             return null;
         }
 
-        WebDriver driver = FirefoxDriverProvider.getDriver();
+        WebDriver driver = ChromeDriverProvider.getDriver();
         List<String> articleUrls = new ArrayList<>();
 
         try {
@@ -66,7 +66,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
 
     @Override
     protected void doOpen() {
-        WebDriver driver = FirefoxDriverProvider.getDriver();
+        WebDriver driver = ChromeDriverProvider.getDriver();
 
         try {
             setMaxPage(driver);
