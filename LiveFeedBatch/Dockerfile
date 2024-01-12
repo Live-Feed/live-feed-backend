@@ -8,7 +8,8 @@ ENV JAVA_VERSION=17 \
     active_profile=prod
 
 RUN dnf install -y java-17-openjdk-devel && \
-    dnf clean all
+    dnf clean all && \
+    alternatives --set java ${JAVA_HOME}/bin/java
 
 RUN chmod a+x /app
 
