@@ -1,8 +1,14 @@
-FROM eclipse-temurin:17-centos7
+FROM oraclelinux:8.9
 
 WORKDIR /app
 
-ENV active_profile=prod
+ENV JAVA_VERSION=17 \
+    JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk \
+    PATH=${PATH}:${JAVA_HOME}/bin \
+    active_profile=prod
+
+RUN microdnf install -y java-17-openjdk-devel \
+    && microdnf clean all
 
 RUN chmod a+x /app
 
