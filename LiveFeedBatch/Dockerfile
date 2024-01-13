@@ -21,6 +21,7 @@ RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d713
 # 환경 변수 설정
 ENV JAVA_HOME=/opt/jdk-17.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
+ENV active_profile=prod
 
 # 실행 명령어
 #CMD ["java", "--version"]
