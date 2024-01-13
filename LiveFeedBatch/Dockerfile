@@ -29,10 +29,10 @@ CMD ["java", "-version"]
 #
 #RUN java --version
 
-WORKDIR /app
-
-RUN chmod a+x /app
-
-COPY build/libs/*.jar live-feed-batch.jar
-
-ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
+#WORKDIR /app
+#
+#RUN chmod a+x /app
+#
+#COPY build/libs/*.jar live-feed-batch.jar
+#
+#ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
