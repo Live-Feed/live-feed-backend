@@ -14,29 +14,25 @@ FROM oraclelinux:8.9
 RUN yum install -y tar gzip wget
 
 # OpenJDK 17 다운로드 및 설치
-RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
-RUN tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt
-RUN rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
+RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
+    tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt && \
+    rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 
 # 환경 변수 설정
-ENV JAVA_HOME=/opt/jdk-17
+ENV JAVA_HOME=/opt/jdk-17.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 
-RUN source ~/.bashrc
-
-RUN java --version
-
 # 실행 명령어
-#CMD ["java", "-version"]
+#CMD ["java", "--version"]
 
 #RUN source /etc/profile.d/jdk.sh
 #
 #RUN java --version
 
-#WORKDIR /app
-#
-#RUN chmod a+x /app
-#
-#COPY build/libs/*.jar live-feed-batch.jar
-#
-#ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
+WORKDIR /app
+
+RUN chmod a+x /app
+
+COPY build/libs/*.jar live-feed-batch.jar
+
+ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
