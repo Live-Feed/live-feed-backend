@@ -22,8 +22,12 @@ RUN rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 ENV JAVA_HOME=/opt/jdk-17
 ENV PATH=$PATH:$JAVA_HOME/bin
 
+RUN source ~/.bashrc
+
+RUN java --version
+
 # 실행 명령어
-CMD ["java", "-version"]
+#CMD ["java", "-version"]
 
 #RUN source /etc/profile.d/jdk.sh
 #

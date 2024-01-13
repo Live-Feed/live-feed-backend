@@ -90,5 +90,5 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           platforms: |
-            linux/amd64
+#            linux/amd64
             linux/arm64
