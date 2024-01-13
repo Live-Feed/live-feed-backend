@@ -10,7 +10,7 @@ FROM oraclelinux:8.9
 #RUN dnf install -y java-17-openjdk-devel && \
 #    dnf clean all
 
-
+RUN yum install tee
 
 RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
 RUN tar xvf openjdk-17.0.2_linux-aarch64_bin.tar.gz
