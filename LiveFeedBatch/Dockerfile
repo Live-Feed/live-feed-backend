@@ -10,24 +10,33 @@ FROM oraclelinux:8.9
 #RUN dnf install -y java-17-openjdk-devel && \
 #    dnf clean all
 
-RUN yum install tee
+# 시스템 업데이트 및 필요한 패키지 설치
+RUN microdnf update -y && microdnf install -y \
+    curl \
+    tar \
+    gzip \
+    && microdnf clean all
 
-RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
-RUN tar xvf openjdk-17.0.2_linux-aarch64_bin.tar.gz
-RUN mv jdk-17.0.2/ /opt/jdk-17/
-RUN sudo tee /etc/profile.d/jdk.sh <<EOF && \
-    export JAVA_HOME=/opt/jdk-17 && \
-    export PATH=\$PATH:\$JAVA_HOME/bin && \
-    EOF
+# OpenJDK 17 다운로드 및 설치
+RUN curl -O https://download.java.net/java/early_access/alpine/11/binaries/openjdk-17-ea+11_linux-aarch64_bin.tar.gz \
+    && tar -zxvf openjdk-17-ea+11_linux-aarch64_bin.tar.gz -C /opt \
+    && rm openjdk-17-ea+11_linux-aarch64_bin.tar.gz
 
-RUN source /etc/profile.d/jdk.sh
+# 환경 변수 설정
+ENV JAVA_HOME=/opt/jdk-17
+ENV PATH=$PATH:$JAVA_HOME/bin
 
-RUN java --version
+# 실행 명령어
+CMD ["java", "-version"]
 
-WORKDIR /app
-
-RUN chmod a+x /app
-
-COPY build/libs/*.jar live-feed-batch.jar
-
-ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
+#RUN source /etc/profile.d/jdk.sh
+#
+#RUN java --version
+#
+#WORKDIR /app
+#
+#RUN chmod a+x /app
+#
+#COPY build/libs/*.jar live-feed-batch.jar
+#
+#ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
