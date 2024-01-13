@@ -11,11 +11,7 @@ FROM oraclelinux:8.9
 #    dnf clean all
 
 # 시스템 업데이트 및 필요한 패키지 설치
-RUN microdnf update -y && microdnf install -y \
-    curl \
-    tar \
-    gzip \
-    && microdnf clean all
+RUN yum update -y && yum install -y curl tar gzip
 
 # OpenJDK 17 다운로드 및 설치
 RUN curl -O https://download.java.net/java/early_access/alpine/11/binaries/openjdk-17-ea+11_linux-aarch64_bin.tar.gz \
