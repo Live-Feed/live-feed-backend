@@ -16,6 +16,7 @@ public class ChromeDriverProvider {
 
     public static WebDriver getDriver() {
         System.setProperty("webdriver.chrome.driver", driverPath);
+        System.setProperty("webdriver.chrome.whitelistedIps", "");
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
                 .usingDriverExecutable(new File(driverPath))
                 .usingPort(16000)
