@@ -11,7 +11,7 @@ FROM seleniarm/standalone-chromium
 #    dnf clean all
 
 # 시스템 업데이트 및 필요한 패키지 설치
-RUN yum install -y tar gzip wget
+RUN apt-get install -y tar gzip wget
 
 # OpenJDK 17 다운로드 및 설치
 RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
