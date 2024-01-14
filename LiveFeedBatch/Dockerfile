@@ -23,6 +23,8 @@ ENV JAVA_HOME=/opt/jdk-17.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 ENV active_profile=prod
 
+RUN export LD_LIBRARY_PATH=/app/usr/bin:$LD_LIBRARY_PATH
+
 # 실행 명령어
 #CMD ["java", "--version"]
 
