@@ -15,7 +15,7 @@ public class ChromeDriverProvider {
     private static final ChromeOptions chromeOptions = setChromeOptions();
 
     public static WebDriver getDriver() {
-        System.setProperty("webdriver.chrome.driver", driverPath);
+//        System.setProperty("webdriver.chrome.driver", driverPath);
         System.setProperty("webdriver.chrome.whitelistedIps", "");
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
 //                .usingDriverExecutable(new File(driverPath))
@@ -37,13 +37,13 @@ public class ChromeDriverProvider {
         if (osName.contains("mac")) {
             return "/opt/homebrew/bin/chromedriver";
         } else {
-//            return "/app/usr/bin/chromedriver";
-            return "/usr/local/bin";
+            return "/app/usr/bin/chromedriver";
+//            return "/usr/local/bin";
         }
     }
 
     private static ChromeOptions setChromeOptions() {
         return new ChromeOptions()
-                .addArguments("headless");
+                .addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions", "--disable-infobars");
     }
 }
