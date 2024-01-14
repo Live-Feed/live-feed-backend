@@ -22,8 +22,7 @@ RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d713
 ENV JAVA_HOME=/opt/jdk-17.0.2
 ENV PATH=$PATH:$JAVA_HOME/bin
 ENV active_profile=prod
-
-RUN export LD_LIBRARY_PATH=/app/usr/bin:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/path/to/your/library:$LD_LIBRARY_PATH
 
 # 실행 명령어
 #CMD ["java", "--version"]
