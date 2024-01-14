@@ -14,7 +14,7 @@ FROM seleniarm/standalone-chromium
 #RUN apt-get install -y tar gzip wget
 
 # OpenJDK 17 다운로드 및 설치
-RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
+RUN sduo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
 RUN sudo tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt
 #RUN rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 
