@@ -18,7 +18,7 @@ public class ChromeDriverProvider {
         System.setProperty("webdriver.chrome.driver", driverPath);
         System.setProperty("webdriver.chrome.whitelistedIps", "");
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
-                .usingDriverExecutable(new File(driverPath))
+//                .usingDriverExecutable(new File(driverPath))
                 .usingPort(16000)
                 .build();
 
@@ -37,7 +37,8 @@ public class ChromeDriverProvider {
         if (osName.contains("mac")) {
             return "/opt/homebrew/bin/chromedriver";
         } else {
-            return "/app/usr/bin/chromedriver";
+//            return "/app/usr/bin/chromedriver";
+            return "/usr/local/bin";
         }
     }
 
