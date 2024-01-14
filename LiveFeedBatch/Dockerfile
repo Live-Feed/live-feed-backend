@@ -31,7 +31,8 @@ ENV active_profile=prod
 #RUN java --version
 
 WORKDIR /app
-RUN export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/app/usr/bin
+
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/usr/bin
 
 RUN chmod a+x /app
 
