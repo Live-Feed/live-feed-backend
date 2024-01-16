@@ -1,4 +1,4 @@
-FROM seleniarm/standalone-chromium
+FROM oraclelinux:8.9
 
 
 
@@ -11,12 +11,12 @@ FROM seleniarm/standalone-chromium
 #    dnf clean all
 
 # 시스템 업데이트 및 필요한 패키지 설치
-#RUN apt-get install -y tar gzip wget
+RUN yum install -y tar gzip wget
 
 # OpenJDK 17 다운로드 및 설치
-RUN sudo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz
-RUN sudo tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt
-#RUN rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
+RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
+    tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt && \
+    rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 
 # 환경 변수 설정
 ENV JAVA_HOME=/opt/jdk-17.0.2
@@ -32,11 +32,10 @@ ENV active_profile=prod
 
 WORKDIR /app
 
-#ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/usr/bin
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/app/usr/bin
 
 RUN chmod a+x /app
 
 COPY build/libs/*.jar live-feed-batch.jar
 
-#ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
-CMD ["bash"]
+ENTRYPOINT ["java", "-jar", "/app/live-feed-batch.jar", "--spring.profiles.active=${active_profile}"]
