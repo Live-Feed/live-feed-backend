@@ -44,6 +44,6 @@ public class ChromeDriverProvider {
 
     private static ChromeOptions setChromeOptions() {
         return new ChromeOptions()
-                .addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions", "--disable-infobars");
+                .addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions", "--disable-infobars", "--single-process");
     }
 }
