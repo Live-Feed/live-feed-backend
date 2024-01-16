@@ -45,6 +45,7 @@ public class ChromeDriverProvider {
     private static ChromeOptions setChromeOptions() {
         return new ChromeOptions()
                 .addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions",
-                        "--incognito", "--disable-setuid-sandbox", "--disable-infobars", "--single-process", "--remote-debugging-port=9222");
+                        "--incognito", "--disable-setuid-sandbox", "--disable-infobars", "--single-process", "--remote-debugging-port=9222")
+                .setBinary("/app/usr/bin/chromium-browser");
     }
 }
