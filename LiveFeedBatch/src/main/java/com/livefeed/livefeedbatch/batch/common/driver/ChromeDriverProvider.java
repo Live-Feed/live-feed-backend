@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
+import java.util.Collections;
 
 @Slf4j
 public class ChromeDriverProvider {
@@ -46,6 +47,8 @@ public class ChromeDriverProvider {
         return new ChromeOptions()
                 .addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions",
                         "--incognito", "--disable-setuid-sandbox", "--disable-infobars", "--single-process", "--remote-debugging-port=9222")
+                .setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"))
+                .setExperimentalOption("useAutomationExtension", false)
                 .setBinary("/app/usr/bin/chromium-browser");
     }
 }
