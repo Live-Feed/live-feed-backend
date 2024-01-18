@@ -32,14 +32,19 @@ ENV active_profile=prod
 RUN wget https://rpmfind.net/linux/opensuse/ports/aarch64/tumbleweed/repo/oss/aarch64/libminizip1-1.3-1.1.aarch64.rpm && \
     wget https://rpmfind.net/linux/epel/8/Everything/aarch64/Packages/n/nss-mdns-0.14.1-9.el8.aarch64.rpm && \
     wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromium-common-120.0.6099.216-1.el8.aarch64.rpm && \
-    wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
-    wget https://rpmfind.net/linux/openmandriva/cooker/repository/aarch64/main/release/chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
+    wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromedriver-120.0.6099.216-1.el8.aarch64.rpm
 
-RUN dnf localinstall libminizip1-1.3-1.1.aarch64.rpm && \
-    dnf localinstall nss-mdns-0.14.1-9.el8.aarch64.rpm && \
-    dnf localinstall chromium-common-120.0.6099.216-1.el8.aarch64.rpm && \
-    dnf localinstall chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
-    dnf localinstall chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
+RUN wget https://rpmfind.net/linux/openmandriva/cooker/repository/aarch64/main/release/chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
+
+RUN dnf localinstall libminizip1-1.3-1.1.aarch64.rpm
+
+RUN dnf localinstall nss-mdns-0.14.1-9.el8.aarch64.rpm
+
+RUN dnf localinstall chromium-common-120.0.6099.216-1.el8.aarch64.rpm
+
+RUN dnf localinstall chromedriver-120.0.6099.216-1.el8.aarch64.rpm
+
+RUN dnf localinstall chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
 
 WORKDIR /app
 
