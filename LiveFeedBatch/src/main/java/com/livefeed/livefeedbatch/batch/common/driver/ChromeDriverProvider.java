@@ -38,7 +38,8 @@ public class ChromeDriverProvider {
         if (osName.contains("mac")) {
             return "/opt/homebrew/bin/chromedriver";
         } else {
-            return "/app/usr/bin/chromedriver";
+            return "/usr/bin/chromedriver";
+//            return "/app/usr/bin/chromedriver";
 //            return "/usr/local/bin";
         }
     }
@@ -47,8 +48,7 @@ public class ChromeDriverProvider {
         return new ChromeOptions()
                 .addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions",
                         "--incognito", "--disable-setuid-sandbox", "--disable-infobars", "--single-process", "--remote-debugging-port=9222")
-                .setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"))
-                .setExperimentalOption("useAutomationExtension", false)
-                .setBinary("/app/usr/bin/chromium-browser");
+                .setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+//                .setBinary("/usr/lib64/chromium-browser");
     }
 }
