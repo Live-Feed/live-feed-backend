@@ -35,11 +35,11 @@ RUN wget https://rpmfind.net/linux/opensuse/ports/aarch64/tumbleweed/repo/oss/aa
     wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
     wget https://rpmfind.net/linux/openmandriva/cooker/repository/aarch64/main/release/chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
 
-RUN sudo dnf localinstall libminizip1-1.3-1.1.aarch64.rpm && \
-    sudo dnf localinstall nss-mdns-0.14.1-9.el8.aarch64.rpm && \
-    sudo dnf localinstall chromium-common-120.0.6099.216-1.el8.aarch64.rpm && \
-    sudo dnf localinstall chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
-    sudo dnf localinstall chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
+RUN dnf localinstall libminizip1-1.3-1.1.aarch64.rpm && \
+    dnf localinstall nss-mdns-0.14.1-9.el8.aarch64.rpm && \
+    dnf localinstall chromium-common-120.0.6099.216-1.el8.aarch64.rpm && \
+    dnf localinstall chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
+    dnf localinstall chromium-browser-120.0.6099.216-1-omv2490.aarch64.rpm
 
 WORKDIR /app
 
