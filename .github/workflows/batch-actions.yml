@@ -68,11 +68,11 @@ jobs:
       - name: Execute Gradle build
         run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Docker image build
+        run: |
+          cd ./LiveFeedBatch
+          docker build -t $REGISTRY/$IMAGE_NAME:$APP_VERSION .
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
 
       - name: Login to Container registry
         uses: docker/login-action@v2.1.0
@@ -81,13 +81,5 @@ jobs:
           username: ${{ env.USERNAME }}
           password: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
 
-      - name: Image build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: ./LiveFeedBatch
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          platforms: |
-            linux/arm64
+      - name: Docker image push to container registry
+        run : docker push $REGISTRY/$IMAGE_NAME:$APP_VERSION
