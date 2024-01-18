@@ -12,13 +12,13 @@ FROM oraclelinux:8.9
 RUN yum install -y tar gzip wget
 
 # OpenJDK 17 다운로드 및 설치
-RUN wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
-    tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt && \
-    rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
+RUN #wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
+#    tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt && \
+#    rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 
 # 환경 변수 설정
-ENV JAVA_HOME=/opt/jdk-17.0.2
-ENV PATH=$PATH:$JAVA_HOME/bin
+#ENV JAVA_HOME=/opt/jdk-17.0.2
+#ENV PATH=$PATH:$JAVA_HOME/bin
 ENV active_profile=prod
 
 # 실행 명령어
@@ -28,7 +28,7 @@ ENV active_profile=prod
 #
 #RUN java --version
 
-RUN dnf install -y sudo && \
+RUN dnf install -y sudo libminizip && \
     wget https://rpmfind.net/linux/epel/8/Everything/aarch64/Packages/n/nss-mdns-0.14.1-9.el8.aarch64.rpm && \
     wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromium-common-120.0.6099.216-1.el8.aarch64.rpm && \
     wget https://rpmfind.net/linux/epel/testing/8/Everything/aarch64/Packages/c/chromedriver-120.0.6099.216-1.el8.aarch64.rpm && \
