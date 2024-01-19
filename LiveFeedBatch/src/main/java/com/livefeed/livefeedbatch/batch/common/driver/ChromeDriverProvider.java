@@ -16,11 +16,9 @@ public class ChromeDriverProvider {
     private static final ChromeOptions chromeOptions = setChromeOptions();
 
     public static WebDriver getDriver() {
-        System.setProperty("webdriver.chrome.driver", driverPath);
-//        System.setProperty("webdriver.chrome.whitelistedIps", "");
+        System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, driverPath);
         ChromeDriverService chromeDriverService = new ChromeDriverService.Builder()
                 .usingDriverExecutable(new File(driverPath))
-//                .usingPort(16000)
                 .build();
 
         try {
@@ -39,8 +37,6 @@ public class ChromeDriverProvider {
             return "/opt/homebrew/bin/chromedriver";
         } else {
             return "/usr/bin/chromedriver";
-//            return "/app/usr/bin/chromedriver";
-//            return "/usr/local/bin";
         }
     }
 
@@ -49,6 +45,5 @@ public class ChromeDriverProvider {
                 .addArguments("--no-sandbox", "--headless", "--disable-dev-shm-usage", "--disable-gpu", "--disable-extensions",
                         "--incognito", "--disable-setuid-sandbox", "--disable-infobars", "--single-process", "--remote-debugging-port=9222")
                 .setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
-//                .setBinary("/usr/lib64/chromium-browser");
     }
 }
