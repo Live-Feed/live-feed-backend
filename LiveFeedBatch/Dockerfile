@@ -1,6 +1,6 @@
 FROM oraclelinux:8.9
 
-# OpenJDK 17 다운로드 및 설치
+# OpenJDK 17 설치
 RUN yum install -y tar gzip wget && \
     wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-aarch64_bin.tar.gz && \
     tar -zxvf openjdk-17.0.2_linux-aarch64_bin.tar.gz -C /opt && \

@@ -85,7 +85,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     private void openPage(WebDriver driver, int page) {
         String queryParameter = "?date=" + searchDateFormat.format(date) + "&isphoto=N&page=" + (page + 1);
         driver.get(pageUrl + queryParameter);
-        log.info("driver get page: {}", pageUrl + queryParameter);
+        log.info("openPage: {}", pageUrl + queryParameter);
     }
 
     private void setMaxPage(WebDriver driver) {
@@ -130,7 +130,6 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
         try {
             LocalDateTime publicationDate = LocalDateTime.parse(publicationTime, publicationTimeFormat);
             Duration timeDifference = Duration.between(publicationDate, date);
-            log.info("date: {}, publicationDate: {}, timeDifference: {}", date, publicationDate, timeDifference.toMinutes());
             if (timeDifference.toMinutes() > MAX_PUBLICATION_TIME_DIFFERENCE_IN_MINUTES) {
                 return true;
             }
