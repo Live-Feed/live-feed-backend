@@ -66,6 +66,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
 
     @Override
     protected void doOpen() {
+        log.info("start doOpen method");
         WebDriver driver = ChromeDriverProvider.getDriver();
 
         try {
@@ -84,11 +85,14 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     }
 
     private void openPage(WebDriver driver, int page) {
+        log.info("start openPage method");
         String queryParameter = "?date=" + searchDateFormat.format(date) + "&isphoto=N&page=" + (page + 1);
         driver.get(pageUrl + queryParameter);
+        log.info("driver get page: {}", pageUrl + queryParameter);
     }
 
     private void setMaxPage(WebDriver driver) {
+        log.info("start setMaxPage method");
         openPage(driver, maxPage);
 
         WebElement paginateElement = driver.findElement(By.cssSelector(".paginate"));
@@ -110,6 +114,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     }
 
     private void readArticles(WebDriver driver, List<String> articleUrls) {
+        log.info("start readArticles method");
         List<WebElement> articleList = driver.findElements(By.cssSelector(".news_list .text"));
 
         for (WebElement articleElement : articleList) {
@@ -125,22 +130,26 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     }
 
     private boolean isArticleOverTimeLimit(WebElement articleElement) {
+        log.info("start isArticleOverTimeLimit method");
         String publicationTime = articleElement.findElement(By.cssSelector(".time")).getText();
 
         try {
             LocalDateTime publicationDate = LocalDateTime.parse(publicationTime, publicationTimeFormat);
             Duration timeDifference = Duration.between(publicationDate, date);
             if (timeDifference.toMinutes() > MAX_PUBLICATION_TIME_DIFFERENCE_IN_MINUTES) {
+                log.info("isArticleOverTimeLimit: {}", "true");
                 return true;
             }
         } catch (Exception e) {
             log.error(e. getMessage(), e);
         }
 
+        log.info("isArticleOverTimeLimit: {}", "false");
         return false;
     }
 
     private void complete() {
+        log.info("start complete method");
         maxPage = 0;
     }
 }
