@@ -7,10 +7,10 @@ RUN yum install -y tar gzip wget && \
     rm openjdk-17.0.2_linux-aarch64_bin.tar.gz
 
 # 환경 변수 설정
-ENV JAVA_HOME=/opt/jdk-17.0.2 \
-    PATH=$PATH:$JAVA_HOME/bin \
-    TZ=Asia/Seoul \
-    active_profile=prod
+ENV JAVA_HOME=/opt/jdk-17.0.2
+ENV PATH=$PATH:$JAVA_HOME/bin
+ENV TZ=Asia/Seoul
+ENV active_profile=prod
 
 # 시간대 설정
 RUN dnf install -y tzdata && \
