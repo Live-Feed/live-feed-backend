@@ -1,12 +1,10 @@
 package com.livefeed.livefeedbatch.batch.reader;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.data.AbstractPaginatedDataItemReader;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,9 +48,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             return null;
         }
 
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
-        WebDriver driver = new ChromeDriver(chromeOptions);
+        WebDriver driver = ChromeDriverProvider.getDriver();
         List<String> articleUrls = new ArrayList<>();
 
         try {
@@ -69,13 +65,11 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
 
     @Override
     protected void doOpen() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("headless");
-        WebDriver driver = new ChromeDriver(chromeOptions);
+        WebDriver driver = ChromeDriverProvider.getDriver();
 
         try {
             setMaxPage(driver);
+            log.info("setMaxPage: {}", maxPage);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
@@ -91,6 +85,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     private void openPage(WebDriver driver, int page) {
         String queryParameter = "?date=" + searchDateFormat.format(date) + "&isphoto=N&page=" + (page + 1);
         driver.get(pageUrl + queryParameter);
+        log.info("openPage: {}", pageUrl + queryParameter);
     }
 
     private void setMaxPage(WebDriver driver) {
@@ -124,6 +119,7 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             }
 
             String articleUrl = articleElement.findElement(By.cssSelector(".title")).getAttribute("href");
+            log.info("articleUrl: {}", articleUrl);
             articleUrls.add(articleUrl);
         }
     }
