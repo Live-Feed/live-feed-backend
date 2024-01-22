@@ -75,4 +75,16 @@ class NameAndEmailParserTest {
         assertThat(result.getFirst()).isEqualTo("홍길동 기자");
         assertThat(result.getSecond()).isEqualTo("hong@example.com");
     }
+
+    @Test
+    @DisplayName("홍길동기자 (이메일) 형식의 패턴을 찾는지 확인하는 테스트")
+    void findPattern6() {
+        // given
+        String text = "홍길동기자 (hong@example.com)";
+        // when
+        Pair<String, String> result = nameAndEmailParser.extractNameAndEmail(text);
+        // then
+        assertThat(result.getFirst()).isEqualTo("홍길동기자");
+        assertThat(result.getSecond()).isEqualTo("hong@example.com");
+    }
 }
