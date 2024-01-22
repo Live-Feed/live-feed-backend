@@ -59,7 +59,6 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
         } finally {
             driver.quit();
         }
-
         return articleUrls.iterator();
     }
 
@@ -85,7 +84,6 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
     private void openPage(WebDriver driver, int page) {
         String queryParameter = "?date=" + searchDateFormat.format(date) + "&isphoto=N&page=" + (page + 1);
         driver.get(pageUrl + queryParameter);
-        log.info("openPage: {}", pageUrl + queryParameter);
     }
 
     private void setMaxPage(WebDriver driver) {
@@ -119,7 +117,6 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
             }
 
             String articleUrl = articleElement.findElement(By.cssSelector(".title")).getAttribute("href");
-            log.info("articleUrl: {}", articleUrl);
             articleUrls.add(articleUrl);
         }
     }

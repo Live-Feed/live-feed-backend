@@ -19,8 +19,11 @@ public class ArticleParserManager implements ParserManager {
 
     @Override
     public ParseResultDto parseWebPage(UrlInfo key, String url) {
-        Parser parser = parserList.stream().filter(p -> p.support(key))
-                .findFirst().orElseThrow(() -> new NoMatchingParserException("해당하는 파서가 존재하지 않습니다."));
+        log.info("parseWebPage method url = {}", url);
+        Parser parser = parserList.stream()
+                .filter(p -> p.support(key))
+                .findFirst()
+                .orElseThrow(() -> new NoMatchingParserException("해당하는 파서가 존재하지 않습니다."));
 
         return parser.parseWebPage(url);
     }

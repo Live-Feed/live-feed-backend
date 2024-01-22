@@ -23,7 +23,7 @@ public class NaverNewsContentProcessor implements ItemProcessor<String, ItemDto>
     private final RedisOperations<String, Boolean> redisOperations;
 
     @Override
-    public ItemDto process(String url) throws Exception {
+    public ItemDto process(String url) {
         if (redisOperations.isDuplicate(url, true)) {
             return null;
         }
