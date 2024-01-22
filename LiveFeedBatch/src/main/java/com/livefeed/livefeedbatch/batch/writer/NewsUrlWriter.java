@@ -30,7 +30,7 @@ public class NewsUrlWriter implements ItemWriter<ItemDto> {
         for (ItemDto item : items) {
             UrlInfo key = item.urlInfo();
             ParseResultDto value = (ParseResultDto) item.itemDtoInterface().getValue();
-            log.info("kafka consumerRecord key = {}, articleTitle = {}", key, value.articleTitle());
+            log.info("kafka consumerRecord key = {}, articleValue = {}", key, value);
             Article article = rdbSaveService.saveArticle(key, value);
 
             ElasticsearchArticle elasticsearchArticle = ElasticsearchArticle.from(article, key, value);
