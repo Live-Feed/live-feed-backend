@@ -10,58 +10,50 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class NaverSportsParser extends Parser {
 
     private final Platform platform = Platform.NAVER;
     private final Theme theme = Theme.SPORTS;
 
-    private final List<Header> headers = List.of(Header.values());
-    private final List<Body> bodies = List.of(Body.values());
+    private static final Header header = Header.SPORTS;
+    private static final Body body = Body.SPORTS;
+
+
+    private final NameAndEmailParser nameAndEmailParser;
 
     @Override
     protected HeaderDto parseHeader(WebDriver driver) {
-        for (Header header : headers) {
-            try {
-                WebElement webElement = driver.findElement(By.cssSelector(header.innerHtml));
+        WebElement webElement = driver.findElement(By.cssSelector(header.innerHtml));
 
-                String html = webElement.getAttribute(OUTER_HTML);
-                String articleTitle = webElement.findElement(By.cssSelector(header.articleTitle)).getText();
-                String pressCompanyName = webElement.findElement(By.cssSelector(header.pressCompanyName)).getAttribute("alt");
-                String publicationTime = webElement.findElement(By.cssSelector(header.publicationTime)).getText();
-                String originArticleUrl = webElement.findElement(By.cssSelector(header.originArticleUrl)).getAttribute("href");
+        String html = webElement.getAttribute(OUTER_HTML);
+        String articleTitle = webElement.findElement(By.cssSelector(header.articleTitle)).getText();
+        String pressCompanyName = webElement.findElement(By.cssSelector(header.pressCompanyName)).getAttribute("alt");
+        String publicationTime = webElement.findElement(By.cssSelector(header.publicationTime)).getText();
+        String originArticleUrl = webElement.findElement(By.cssSelector(header.originArticleUrl)).getAttribute("href");
 
-                return HeaderDto.of(html, articleTitle, pressCompanyName, publicationTime, originArticleUrl);
-            } catch (Exception e) {
-                log.warn("맞지 않은 형식의 Header cssSelector 입니다. header = {}", header);
-            }
-        }
-        return null;
+        return HeaderDto.of(html, articleTitle, pressCompanyName, publicationTime, originArticleUrl);
     }
 
     @Override
     protected BodyDto parseBody(WebDriver driver) {
-        for (Body body : bodies) {
-            try {
-                WebElement webElement = driver.findElement(By.cssSelector(body.innerHtml));
+        WebElement webElement = driver.findElement(By.cssSelector(body.innerHtml));
 
-                String htmlTemp = webElement.getAttribute(OUTER_HTML);
-                String html = getHtml(htmlTemp);
-                String journalistName = webElement.findElement(By.cssSelector(body.journalistName)).getText().split(" ")[0];
-                String[] journalistEmailArray = webElement.findElement(By.cssSelector(body.journalistEmail)).getText().split(" ");
-                String journalistEmail = journalistEmailArray[journalistEmailArray.length - 1];
+        String htmlTemp = webElement.getAttribute(OUTER_HTML);
+        String html = getHtml(htmlTemp);
+        String journalistNameAndEmail = webElement.findElement(By.cssSelector(body.journalistNameAndEmail)).getText();
+        Pair<String, String> nameEmailPair = nameAndEmailParser.extractNameAndEmail(journalistNameAndEmail);
 
-                return BodyDto.of(html, journalistName, journalistEmail);
-            } catch (Exception e) {
-                log.warn("맞지 않은 형식의 Body cssSelector 입니다. body = {}", body);
-            }
+        if (nameEmailPair == null) {
+            throw new IllegalArgumentException("이름과 메일을 제대로 파싱하지 못했습니다. journalistNameAndEmail = " + journalistNameAndEmail);
         }
-        return null;
+
+        return BodyDto.of(html, nameEmailPair.getFirst(), nameEmailPair.getSecond());
     }
 
     @Override
@@ -76,8 +68,7 @@ public class NaverSportsParser extends Parser {
 
     @RequiredArgsConstructor
     private enum Header {
-        SPORTS("div.news_headline", "span#pressLogo img", "h4.title", "div.info span:nth-child(1)", "div.info a"),
-        TEMP(null, null, null, null, null);
+        SPORTS("div.news_headline", "span#pressLogo img", "h4.title", "div.info span:nth-child(1)", "div.info a");
 
         private final String innerHtml;
         private final String pressCompanyName;
@@ -88,13 +79,10 @@ public class NaverSportsParser extends Parser {
 
     @RequiredArgsConstructor
     private enum Body {
-        SPORTS("div#newsEndContents", "p.byline", "p.byline"),
-        TEMP(null, null, null);
+        SPORTS("div#newsEndContents", "p.byline");
 
-        // TODO: 12/15/23 진묵 : journalistName과 journalistEmail을 타입 매칭 목록을 통해 진행하도록 수정하는게 좋아보임
         private final String innerHtml;
-        private final String journalistName;
-        private final String journalistEmail;
+        private final String journalistNameAndEmail;
     }
 
 }

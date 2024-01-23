@@ -18,8 +18,7 @@ public abstract class Parser {
         WebDriver driver = ChromeDriverProvider.getDriver();
 
         try {
-            driver.get(url);
-            return parse(driver);
+            return parse(url, driver);
         } catch (Exception e) {
             log.error("파싱 도중 에러가 발생했습니다. ", e);
             throw new ParsingException(e.getMessage());
@@ -28,10 +27,11 @@ public abstract class Parser {
         }
     }
 
-    private ParseResultDto parse(WebDriver driver) {
+    private ParseResultDto parse(String url, WebDriver driver) {
+        driver.get(url);
         HeaderDto headerDto = parseHeader(driver);
         BodyDto bodyDto = parseBody(driver);
-        return ParseResultDto.from(headerDto, bodyDto);
+        return ParseResultDto.from(url, headerDto, bodyDto);
     }
 
     abstract protected HeaderDto parseHeader(WebDriver driver);

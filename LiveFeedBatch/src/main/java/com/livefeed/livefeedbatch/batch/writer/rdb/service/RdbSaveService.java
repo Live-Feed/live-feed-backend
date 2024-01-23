@@ -21,7 +21,6 @@ public class RdbSaveService {
     private final CategoryRepository categoryRepository;
     private final ArticleRepository articleRepository;
 
-    @Transactional
     public Article saveArticle(UrlInfo key, ParseResultDto value) {
 
         Category category = categoryRepository.findByServiceAndPlatformAndTheme(key.service(), key.platform(), key.theme())

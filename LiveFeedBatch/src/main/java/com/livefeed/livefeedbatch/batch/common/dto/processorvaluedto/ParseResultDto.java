@@ -3,6 +3,7 @@ package com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto;
 import com.livefeed.livefeedbatch.batch.common.dto.ItemDtoInterface;
 
 public record ParseResultDto(
+        String url,
         String articleTitle,
         String publicationTime,
         String pressCompanyName,
@@ -13,7 +14,7 @@ public record ParseResultDto(
         String bodyHtml
 ) implements ItemDtoInterface<ParseResultDto> {
 
-    public static ParseResultDto from(HeaderDto header, BodyDto body) {
+    public static ParseResultDto from(String url, HeaderDto header, BodyDto body) {
         String articleTitle = header.articleTitle();
         String publicationTime = header.publicationTime();
         String pressCompanyName = header.pressCompanyName();
@@ -23,7 +24,7 @@ public record ParseResultDto(
         String headerHtml = replaceTabAndEnterToBlank(header.html());
         String bodyHtml = replaceTabAndEnterToBlank(body.html());
 
-        return new ParseResultDto(articleTitle, publicationTime, pressCompanyName, journalistName, journalistEmail, originArticleUrl, headerHtml, bodyHtml);
+        return new ParseResultDto(url, articleTitle, publicationTime, pressCompanyName, journalistName, journalistEmail, originArticleUrl, headerHtml, bodyHtml);
     }
 
     private static String replaceTabAndEnterToBlank(String html) {
