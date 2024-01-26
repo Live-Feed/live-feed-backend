@@ -19,13 +19,15 @@ public class NameAndEmailParser {
             Matcher matcher = pattern.matcher(input);
 
             if (matcher.find()) {
+                System.out.println(matcher.group(1));
+                System.out.println(matcher.group(2));
                 String name = addSuffix(matcher.group(1).trim()); // 이름 추출
                 String email = matcher.group(2) != null ? matcher.group(2) : matcher.group(3); // 이메일 추출
 
                 return Pair.of(name, email);
             }
         }
-        return null;
+        return Pair.of(addSuffix(input.trim()), "");
     }
 
     private String addSuffix(String name) {
