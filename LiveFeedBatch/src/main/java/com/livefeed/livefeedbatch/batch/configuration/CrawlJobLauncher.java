@@ -4,8 +4,8 @@ import com.livefeed.livefeedbatch.batch.common.dto.keydto.Page;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -23,9 +23,8 @@ public class CrawlJobLauncher extends QuartzJobBean {
     private final Job naverNewsCrawlJob;
     private final JobLauncher jobLauncher;
 
-
     @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    protected void executeInternal(JobExecutionContext context) {
         Page page = Page.NAVER_SPORTS_NEWS;
         UrlInfo urlInfo = new UrlInfo(page.getService(), page.getPlatform(), page.getTheme());
 

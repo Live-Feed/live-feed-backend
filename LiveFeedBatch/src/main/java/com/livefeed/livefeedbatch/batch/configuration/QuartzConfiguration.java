@@ -1,6 +1,7 @@
 package com.livefeed.livefeedbatch.batch.configuration;
 
 import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +19,7 @@ public class QuartzConfiguration {
 
     @Bean
     public Trigger jobTrigger() {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/2 * * * ?")
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/1 * * * ?")
                 .inTimeZone(TimeZone.getDefault());
 
         return TriggerBuilder.newTrigger()
@@ -26,4 +27,13 @@ public class QuartzConfiguration {
                 .withSchedule(cronScheduleBuilder)
                 .build();
     }
+
+//    @Bean
+//    public Scheduler scheduler() throws SchedulerException {
+//        StdSchedulerFactory stdSchedulerFactory = new StdSchedulerFactory();
+//        Scheduler scheduler = stdSchedulerFactory.getScheduler();
+//
+//        scheduler.scheduleJob(quartzJobDetail(), jobTrigger());
+//        return scheduler;
+//    }
 }
