@@ -8,9 +8,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.converter.*;
+import org.springframework.batch.core.converter.LocalDateTimeToStringConverter;
+import org.springframework.batch.core.converter.StringToLocalDateTimeConverter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.quartz.QuartzDataSourceScriptDatabaseInitializer;
 import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,8 @@ import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
+
+import static org.hibernate.internal.util.collections.CollectionHelper.asProperties;
 
 @Configuration
 @EnableBatchProcessing(dataSourceRef = "batchDataSource", conversionServiceRef = "batchConversionService")
@@ -51,7 +55,18 @@ public class BatchConfig {
     }
 
     @Bean
-    public SchedulerFactoryBean quartzScheduler(QuartzProperties properties, @Qualifier("batchDataSource") HikariDataSource dataSource) {
+    public QuartzDataSourceScriptDatabaseInitializer quartzDataSourceScriptDatabaseInitializer(
+            @Qualifier("batchDataSource") HikariDataSource dataSource,
+            QuartzProperties properties) {
+        return new QuartzDataSourceScriptDatabaseInitializer(dataSource, properties);
+    }
+
+    @Bean
+    public SchedulerFactoryBean quartzScheduler(QuartzProperties properties,
+                                                @Qualifier("batchDataSource") HikariDataSource dataSource,
+                                                JobDetail jobDetail,
+                                                Trigger trigger
+    ) {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         schedulerFactoryBean.setDataSource(dataSource);
         // 다른 Quartz 설정 추가
@@ -64,13 +79,11 @@ public class BatchConfig {
         schedulerFactoryBean.setStartupDelay((int) properties.getStartupDelay().getSeconds());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(properties.isWaitForJobsToCompleteOnShutdown());
         schedulerFactoryBean.setOverwriteExistingJobs(properties.isOverwriteExistingJobs());
-//        if (!properties.getProperties().isEmpty()) {
-//            schedulerFactoryBean.setQuartzProperties(asProperties(properties.getProperties()));
-//        }
-//        schedulerFactoryBean.setJobDetails(jobDetails.orderedStream().toArray(JobDetail[]::new));
-//        schedulerFactoryBean.setCalendars(calendars);
-//        schedulerFactoryBean.setTriggers(triggers.orderedStream().toArray(Trigger[]::new));
-//        customizers.orderedStream().forEach((customizer) -> customizer.customize(schedulerFactoryBean));
+        if (!properties.getProperties().isEmpty()) {
+            schedulerFactoryBean.setQuartzProperties(asProperties(properties.getProperties()));
+        }
+        schedulerFactoryBean.setJobDetails(jobDetail);
+        schedulerFactoryBean.setTriggers(trigger);
         return schedulerFactoryBean;
     }
 }
