@@ -28,3 +28,6 @@ RUN wget https://rpmfind.net/linux/opensuse/ports/aarch64/tumbleweed/repo/oss/aa
     dnf localinstall chromium-common-120.0.6099.224-1.el8.aarch64.rpm && \
     dnf localinstall chromedriver-120.0.6099.224-1.el8.aarch64.rpm && \
     dnf localinstall chromium-120.0.6099.224-1.el8.aarch64.rpm
+
+# nslookup 설치
+RUN dnf install -y bind-utils

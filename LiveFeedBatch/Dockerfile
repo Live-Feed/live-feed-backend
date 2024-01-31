@@ -1,4 +1,4 @@
-FROM ghcr.io/live-feed/live-feed-batch-base:0.0.1
+FROM ghcr.io/live-feed/live-feed-batch-base:0.0.2
 
 WORKDIR /app
 
