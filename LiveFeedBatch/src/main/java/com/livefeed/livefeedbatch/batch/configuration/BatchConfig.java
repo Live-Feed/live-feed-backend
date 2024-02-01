@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -55,13 +56,6 @@ public class BatchConfig {
     }
 
     @Bean
-    public QuartzDataSourceScriptDatabaseInitializer quartzDataSourceScriptDatabaseInitializer(
-            @Qualifier("batchDataSource") HikariDataSource dataSource,
-            QuartzProperties properties) {
-        return new QuartzDataSourceScriptDatabaseInitializer(dataSource, properties);
-    }
-
-    @Bean
     public SchedulerFactoryBean quartzScheduler(QuartzProperties properties,
                                                 @Qualifier("batchDataSource") HikariDataSource dataSource,
                                                 JobDetail jobDetail,
@@ -85,5 +79,15 @@ public class BatchConfig {
         schedulerFactoryBean.setJobDetails(jobDetail);
         schedulerFactoryBean.setTriggers(trigger);
         return schedulerFactoryBean;
+    }
+
+    // quartz 초기화 테이블 생성시에도 batchDataSource를 이용해야 하기 때문에 설정
+    // local 환경에만 필요하고 prod에서는 테이블을 미리 생성할것이기 때문에 필요 없습니다.
+    @Profile("local")
+    @Bean
+    public QuartzDataSourceScriptDatabaseInitializer quartzDataSourceScriptDatabaseInitializer(
+            @Qualifier("batchDataSource") HikariDataSource dataSource,
+            QuartzProperties properties) {
+        return new QuartzDataSourceScriptDatabaseInitializer(dataSource, properties);
     }
 }
