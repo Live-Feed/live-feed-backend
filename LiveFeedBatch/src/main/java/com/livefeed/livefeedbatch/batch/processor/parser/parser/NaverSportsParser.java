@@ -49,10 +49,6 @@ public class NaverSportsParser extends Parser {
         String journalistNameAndEmail = webElement.findElement(By.cssSelector(body.journalistNameAndEmail)).getText();
         Pair<String, String> nameEmailPair = nameAndEmailParser.extractNameAndEmail(journalistNameAndEmail);
 
-        if (nameEmailPair == null) {
-            throw new IllegalArgumentException("이름과 메일을 제대로 파싱하지 못했습니다. journalistNameAndEmail = " + journalistNameAndEmail);
-        }
-
         return BodyDto.of(html, nameEmailPair.getFirst(), nameEmailPair.getSecond());
     }
 

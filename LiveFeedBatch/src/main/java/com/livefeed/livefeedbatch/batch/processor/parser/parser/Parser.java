@@ -20,7 +20,7 @@ public abstract class Parser {
         try {
             return parse(url, driver);
         } catch (Exception e) {
-            log.error("파싱 도중 에러가 발생했습니다. ", e);
+            log.error("파싱 도중 에러가 발생했습니다. url = {}", url, e);
             throw new ParsingException(e.getMessage());
         } finally {
             driver.quit();

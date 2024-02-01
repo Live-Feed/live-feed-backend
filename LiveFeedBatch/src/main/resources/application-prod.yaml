@@ -15,6 +15,20 @@ spring:
       password: ${BATCH_DATABASE_PASSWORD}
       driver-class-name: com.mysql.cj.jdbc.Driver
 
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: ${QUARTZ_INSTANCE_NAME}
+            instanceId: ${QUARTZ_INSTANCE_ID}
+          jobStore:
+            isClustered: true
+            clusterCheckinInterval: 20000
+
   data:
     redis:
       repositories:
