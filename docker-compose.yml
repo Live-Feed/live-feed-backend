@@ -61,7 +61,8 @@ services:
       TZ: Asia/Seoul
     volumes:
       - ./config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-      - ./logs/service-module:/var/log/spring_service_log:ro
+#      - ./logs/service-module:/var/log/spring_service_log:ro
+      - ./logs/batch-module:/var/log/spring_batch_log:ro
     depends_on:
       - elasticsearch
 

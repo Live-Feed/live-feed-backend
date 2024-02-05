@@ -18,7 +18,7 @@ public class QuartzConfiguration {
 
     @Bean
     public Trigger jobTrigger() {
-        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/10 * * * ?")
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule("0 0/2 * * * ?")
                 .inTimeZone(TimeZone.getDefault());
 
         return TriggerBuilder.newTrigger()
