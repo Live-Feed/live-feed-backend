@@ -10,7 +10,6 @@ import com.livefeed.livefeedbatch.batch.writer.rdb.repository.CategoryRepository
 import com.livefeed.livefeedbatch.batch.writer.rdb.repository.PressCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Service

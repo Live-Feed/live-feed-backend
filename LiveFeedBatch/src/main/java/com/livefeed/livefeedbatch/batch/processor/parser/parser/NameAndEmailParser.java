@@ -1,5 +1,6 @@
 package com.livefeed.livefeedbatch.batch.processor.parser.parser;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Component
 public class NameAndEmailParser {
 
@@ -25,7 +27,9 @@ public class NameAndEmailParser {
                 return Pair.of(name, email);
             }
         }
-        return null;
+
+        log.warn("기자 이름과 이메일을 제대로 파싱하지 못했습니다.");
+        return Pair.of(addSuffix(input.trim()), "");
     }
 
     private String addSuffix(String name) {
