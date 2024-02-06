@@ -55,14 +55,15 @@ services:
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
   fluent-bit:
-    image: fluent/fluent-bit
+    image: bitnami/fluent-bit
     container_name: fluent-bit
     environment:
       TZ: Asia/Seoul
     volumes:
-      - ./config/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-#      - ./logs/service-module:/var/log/spring_service_log:ro
-      - ./logs/batch-module:/var/log/spring_batch_log:ro
+      - ./config/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
+#      - ./config/parsers.conf:/opt/bitnami/fluent-bit/conf/parsers.conf
+      - ./logs/service-module:/var/log/spring_service_log
+#      - ./logs/batch-module:/var/log/spring_batch_log:ro
     depends_on:
       - elasticsearch
 
