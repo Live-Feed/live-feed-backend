@@ -18,6 +18,13 @@ spring:
         show_sql: true
         format_sql: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ${PROMETHEUS_EXPOSURE_INCLUDE}
+        exclude: ${PROMETHEUS_EXPOSURE_EXCLUDE}
+
 elasticsearch:
   config:
     host-and-port: ${ELASTICSEARCH_URL}
