@@ -8,35 +8,34 @@
 name: LiveFeedBatch Module CI
 
 on:
-#  pull_request:
-#    types: [opened, reopened, closed]
-#    branches:
-#      - 'main'
-  push:
+  pull_request:
+    types: [opened, reopened, closed]
+    branches:
+      - 'main'
     paths:
       - 'LiveFeedBatch/**'
 
 jobs:
-#  test:
-#    if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
-#    runs-on: ubuntu-latest
-#    environment: batch
-#
-#    steps:
-#      - name: Checkout branch
-#        uses: actions/checkout@v3.5.2
-#
-#      - name: Set up JDK 17
-#        uses: actions/setup-java@v3.11.0
-#        with:
-#          distribution: 'zulu'
-#          java-version: '17'
-#
-#      - name: Gradle Test
-#        run: ./gradlew :LiveFeedBatch:test
+  test:
+    if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
+    runs-on: ubuntu-latest
+    environment: batch
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Gradle Test
+        run: ./gradlew :LiveFeedBatch:test
 
   build:
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     environment: batch
 
