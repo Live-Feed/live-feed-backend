@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class NewsUrlWriter implements ItemWriter<ItemDto> {
+public class NewsWriter implements ItemWriter<ItemDto> {
 
     private final DataSaver dataSaver;
 
