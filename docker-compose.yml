@@ -53,29 +53,16 @@ services:
       KAFKA_CLUSTERS_0_NAME: kafka
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-  
-#  opensearch:
-#    image: opensearchproject/opensearch:latest
-#    container_name: opensearch
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-#    environment:
-#      TZ: Asia/Seoul
-#      discovery.type: single-node
-#      http.publish_host: localhost
-##      plugin.security.disabled: true
-#
-#  opensearch-dashboards:
-#    image: opensearchproject/opensearch-dashboards:latest
-#    container_name: opensearch-dashboards
-#    ports:
-#      - "5601:5601"
-#    expose:
-#      - "5601"
-#    environment:
-#      OPENSEARCH_HOSTS: '["https://opensearch:9200"]'
-#      TZ: Asia/Seoul
+
+  fluent-bit:
+    image: bitnami/fluent-bit
+    container_name: fluent-bit
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - ./config/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
+    depends_on:
+      - elasticsearch
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.4
@@ -88,7 +75,6 @@ services:
       node.name: single-node
       cluster.name: el-singlenode-c
       discovery.type: single-node
-#      http.publish_host: localhost
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
 
   kibana:
@@ -113,3 +99,29 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     restart: always
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./config/prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+
+#  pushgateway:
+#    image: prom/pushgateway:v1.4.0
+#    container_name: pushgateway
+#    ports:
+#      - "9091:9091"
