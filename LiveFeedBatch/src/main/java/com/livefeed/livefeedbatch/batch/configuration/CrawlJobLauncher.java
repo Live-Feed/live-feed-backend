@@ -2,6 +2,7 @@ package com.livefeed.livefeedbatch.batch.configuration;
 
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.Page;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
+import com.livefeed.livefeedbatch.batch.writer.elasticsearch.configuration.ElasticsearchClientConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -20,14 +21,21 @@ import java.time.LocalDateTime;
 public class CrawlJobLauncher extends JobLauncherApplicationRunner {
 
     private final Job naverNewsCrawlJob;
+    private final ElasticsearchClientConfig elasticsearchClientConfig;
 
-    public CrawlJobLauncher(JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository, Job naverNewsCrawlJob) {
+    public CrawlJobLauncher(JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository, Job naverNewsCrawlJob, ElasticsearchClientConfig elasticsearchClientConfig) {
         super(jobLauncher, jobExplorer, jobRepository);
         this.naverNewsCrawlJob = naverNewsCrawlJob;
+        this.elasticsearchClientConfig = elasticsearchClientConfig;
     }
 
     @Override
     public void run(ApplicationArguments args) {
+        runNaverNewsCrawlJob();
+        elasticsearchClientConfig.close();
+    }
+
+    public void runNaverNewsCrawlJob() {
         Page page = Page.NAVER_SPORTS_NEWS;
         UrlInfo urlInfo = new UrlInfo(page.getService(), page.getPlatform(), page.getTheme());
 
