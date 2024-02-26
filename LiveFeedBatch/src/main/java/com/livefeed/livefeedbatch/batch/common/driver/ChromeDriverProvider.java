@@ -2,6 +2,7 @@ package com.livefeed.livefeedbatch.batch.common.driver;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -25,6 +26,7 @@ public class ChromeDriverProvider {
             chromeDriverService.start();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw new WebDriverException("Failed to get chromedriver.");
         }
 
         return new ChromeDriver(chromeDriverService, chromeOptions);

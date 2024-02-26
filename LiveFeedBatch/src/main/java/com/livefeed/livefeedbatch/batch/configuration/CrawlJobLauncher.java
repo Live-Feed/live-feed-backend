@@ -2,28 +2,40 @@ package com.livefeed.livefeedbatch.batch.configuration;
 
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.Page;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
-import lombok.RequiredArgsConstructor;
+import com.livefeed.livefeedbatch.batch.writer.elasticsearch.configuration.ElasticsearchClientConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionContext;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.autoconfigure.batch.JobLauncherApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class CrawlJobLauncher extends QuartzJobBean {
+public class CrawlJobLauncher extends JobLauncherApplicationRunner {
 
     private final Job naverNewsCrawlJob;
-    private final JobLauncher jobLauncher;
+    private final ElasticsearchClientConfig elasticsearchClientConfig;
+
+    public CrawlJobLauncher(JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository, Job naverNewsCrawlJob, ElasticsearchClientConfig elasticsearchClientConfig) {
+        super(jobLauncher, jobExplorer, jobRepository);
+        this.naverNewsCrawlJob = naverNewsCrawlJob;
+        this.elasticsearchClientConfig = elasticsearchClientConfig;
+    }
 
     @Override
-    protected void executeInternal(JobExecutionContext context) {
+    public void run(ApplicationArguments args) {
+        runNaverNewsCrawlJob();
+        elasticsearchClientConfig.close();
+    }
+
+    public void runNaverNewsCrawlJob() {
         Page page = Page.NAVER_SPORTS_NEWS;
         UrlInfo urlInfo = new UrlInfo(page.getService(), page.getPlatform(), page.getTheme());
 
@@ -35,7 +47,7 @@ public class CrawlJobLauncher extends QuartzJobBean {
                     .toJobParameters();
 
             try {
-                jobLauncher.run(naverNewsCrawlJob, jobParameters);
+                super.execute(naverNewsCrawlJob, jobParameters);
             } catch (Exception e) {
                 log.error("batch job run error", e);
                 throw new RuntimeException(e);

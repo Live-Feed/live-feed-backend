@@ -24,7 +24,7 @@ public class NaverNewsContentProcessor implements ItemProcessor<String, ItemDto>
 
     @Override
     public ItemDto process(String url) {
-        if (redisOperations.isDuplicate(url, true)) {
+        if (redisOperations.getOrSet(url, true)) {
             return null;
         }
         ParseResultDto parseResultDto = parserProvider.parseWebPage(urlInfo, url);

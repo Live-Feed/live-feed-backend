@@ -14,7 +14,7 @@ public class RedisOperations<K, V> {
 
     public static final int DEFAULT_EXPIRE_DAYS = 1;
 
-    public boolean isDuplicate(K key, V value) {
+    public boolean getOrSet(K key, V value) {
         return Optional.ofNullable(redisTemplate.opsForValue().get(key))
                 .map(existingValue -> true)
                 .orElseGet(() -> {
