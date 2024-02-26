@@ -9,11 +9,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.context.annotation.Profile;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Profile("local")
 @Configuration
 @Slf4j
 public class PushgatewayConfiguration {
@@ -43,7 +44,7 @@ public class PushgatewayConfiguration {
         Metrics.globalRegistry.add(prometheusMeterRegistry);
     }
 
-    @Scheduled(fixedRateString = "5000")
+//    @Scheduled(fixedRateString = "5000")
     public void pushMetrics() {
         try {
             pushGateway.pushAdd(collectorRegistry, prometheusJobName, groupingKey);

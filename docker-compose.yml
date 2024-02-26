@@ -120,8 +120,8 @@ services:
     ports:
       - "3000:3000"
 
-  pushgateway:
-    image: prom/pushgateway:v1.4.0
-    container_name: pushgateway
-    ports:
-      - "9091:9091"
+#  pushgateway:
+#    image: prom/pushgateway:v1.4.0
+#    container_name: pushgateway
+#    ports:
+#      - "9091:9091"
