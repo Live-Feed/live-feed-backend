@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.batch.writer.rdb.entity;
+package com.livefeed.livefeedbatch.batch.domain.entity;
 
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.ParseResultDto;
 import jakarta.persistence.*;

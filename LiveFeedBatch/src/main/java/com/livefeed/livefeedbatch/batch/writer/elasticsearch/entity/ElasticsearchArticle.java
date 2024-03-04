@@ -2,7 +2,7 @@ package com.livefeed.livefeedbatch.batch.writer.elasticsearch.entity;
 
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.ParseResultDto;
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.Article;
+import com.livefeed.livefeedbatch.batch.domain.entity.Article;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

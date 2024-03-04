@@ -1,6 +1,6 @@
-package com.livefeed.livefeedbatch.batch.writer.rdb.repository;
+package com.livefeed.livefeedbatch.batch.domain.repository;
 
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.PressCompany;
+import com.livefeed.livefeedbatch.batch.domain.entity.PressCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

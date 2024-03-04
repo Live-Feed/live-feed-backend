@@ -1,10 +1,10 @@
-package com.livefeed.livefeedbatch.batch.writer.rdb.repository;
+package com.livefeed.livefeedbatch.batch.domain.repository;
 
 
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.Platform;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.Service;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.Theme;
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.Category;
+import com.livefeed.livefeedbatch.batch.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
