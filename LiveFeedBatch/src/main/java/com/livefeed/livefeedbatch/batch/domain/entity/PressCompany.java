@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.batch.writer.rdb.entity;
+package com.livefeed.livefeedbatch.batch.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

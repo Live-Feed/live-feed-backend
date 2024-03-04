@@ -48,12 +48,4 @@ public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
     private boolean hasProdProfile(String[] activeProfiles) {
         return List.of(activeProfiles).contains("prod");
     }
-
-    public void close() {
-        try {
-            this.elasticsearchRestClient(clientConfiguration()).close();
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to close elasticsearch connection.");
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.batch.writer.rdb.configuration;
+package com.livefeed.livefeedbatch.batch.domain.configuration;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.livefeed.livefeedbatch.batch.writer.rdb"})
+@EnableJpaRepositories(basePackages = {"com.livefeed.livefeedbatch.batch"})
 public class JpaConfiguration {
 
     @Bean

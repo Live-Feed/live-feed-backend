@@ -2,12 +2,12 @@ package com.livefeed.livefeedbatch.batch.writer.rdb.service;
 
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.ParseResultDto;
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.Article;
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.Category;
-import com.livefeed.livefeedbatch.batch.writer.rdb.entity.PressCompany;
-import com.livefeed.livefeedbatch.batch.writer.rdb.repository.ArticleRepository;
-import com.livefeed.livefeedbatch.batch.writer.rdb.repository.CategoryRepository;
-import com.livefeed.livefeedbatch.batch.writer.rdb.repository.PressCompanyRepository;
+import com.livefeed.livefeedbatch.batch.domain.entity.Article;
+import com.livefeed.livefeedbatch.batch.domain.entity.Category;
+import com.livefeed.livefeedbatch.batch.domain.entity.PressCompany;
+import com.livefeed.livefeedbatch.batch.domain.repository.ArticleRepository;
+import com.livefeed.livefeedbatch.batch.domain.repository.CategoryRepository;
+import com.livefeed.livefeedbatch.batch.domain.repository.PressCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
