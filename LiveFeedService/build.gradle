@@ -7,7 +7,7 @@ configurations {
     asciidoctorExt
 }
 
-version = '0.1.2'
+version = '0.1.3-stage'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
