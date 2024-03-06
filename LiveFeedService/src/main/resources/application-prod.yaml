@@ -35,3 +35,6 @@ elasticsearch:
 
 server:
   port: ${APPLICATION_PORT}
+
+application:
+  allow-origin: ${ALLOW_ORIGIN}
