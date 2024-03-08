@@ -7,13 +7,13 @@ spring:
       url: ${APP_DATABASE_URL}
       username: ${APP_DATABASE_USER}
       password: ${APP_DATABASE_PASSWORD}
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: oracle.jdbc.OracleDriver
 
     batch:
       url: ${BATCH_DATABASE_URL}
       username: ${BATCH_DATABASE_USER}
       password: ${BATCH_DATABASE_PASSWORD}
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: oracle.jdbc.OracleDriver
 
   data:
     redis:
