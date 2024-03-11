@@ -19,11 +19,13 @@ spring:
         format_sql: true
 
 management:
+  server:
+    port: ${ACTUATOR_EXPOSURE_PORT}
   endpoints:
     web:
       exposure:
-        include: ${PROMETHEUS_EXPOSURE_INCLUDE}
-        exclude: ${PROMETHEUS_EXPOSURE_EXCLUDE}
+        include: ${ACTUATOR_EXPOSURE_INCLUDE}
+        exclude: ${ACTUATOR_EXPOSURE_EXCLUDE}
 
 elasticsearch:
   config:
@@ -33,3 +35,6 @@ elasticsearch:
 
 server:
   port: ${APPLICATION_PORT}
+
+application:
+  allow-origin: ${ALLOW_ORIGIN}

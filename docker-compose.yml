@@ -8,61 +8,61 @@ services:
     environment:
       TZ: Asia/Seoul
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    environment:
-      TZ: Asia/Seoul
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_INT_LIMIT: 5
-      ZOOKEEPER_SYNC_LIMIT: 2
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper
+#    container_name: zookeeper
+#    ports:
+#      - "2181:2181"
+#    environment:
+#      TZ: Asia/Seoul
+#      ZOOKEEPER_SERVER_ID: 1
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#      ZOOKEEPER_INT_LIMIT: 5
+#      ZOOKEEPER_SYNC_LIMIT: 2
+#
+#  kafka:
+#    image: confluentinc/cp-kafka
+#    container_name: kafka
+#    depends_on:
+#      - zookeeper
+#    restart: always
+#    ports:
+#      - "9092:9092"
+#      - "9093:9093"
+#    environment:
+#      TZ: Asia/Seoul
+#      KAFKA_BROKER_ID: 1
+#      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+#      KAFKA_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://kafka:9093
+#      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+#      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+#
+#  kafka-ui:
+#    image: provectuslabs/kafka-ui
+#    container_name: kafka-ui
+#    depends_on:
+#      - kafka
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      TZ: Asia/Seoul
+#      KAFKA_CLUSTERS_0_NAME: kafka
+#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+#      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
 
-  kafka:
-    image: confluentinc/cp-kafka
-    container_name: kafka
-    depends_on:
-      - zookeeper
-    restart: always
-    ports:
-      - "9092:9092"
-      - "9093:9093"
-    environment:
-      TZ: Asia/Seoul
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://kafka:9093
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9093
-      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui
-    container_name: kafka-ui
-    depends_on:
-      - kafka
-    ports:
-      - "8080:8080"
-    environment:
-      TZ: Asia/Seoul
-      KAFKA_CLUSTERS_0_NAME: kafka
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
-      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-
-  fluent-bit:
-    image: bitnami/fluent-bit
-    container_name: fluent-bit
-    environment:
-      TZ: Asia/Seoul
-    volumes:
-      - ./config/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
-    depends_on:
-      - elasticsearch
+#  fluent-bit:
+#    image: bitnami/fluent-bit
+#    container_name: fluent-bit
+#    environment:
+#      TZ: Asia/Seoul
+#    volumes:
+#      - ./config/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
+#    depends_on:
+#      - elasticsearch
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.10.4
@@ -98,6 +98,17 @@ services:
     command: 
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    restart: always
+
+  oracledb:
+    image: oracle/database:19.3.0-ee
+    container_name: oracledb
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PWD: password
+      ORACLE_CHARACTERSET: KO16KSC5601
+      TZ: Asia/Seoul
     restart: always
 
   prometheus:
