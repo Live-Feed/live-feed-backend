@@ -7,7 +7,7 @@ configurations {
     asciidoctorExt
 }
 
-version = '0.1.2'
+version = '0.1.3'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -16,6 +16,10 @@ dependencies {
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation 'org.jsoup:jsoup:1.16.2'
+    implementation ('com.oracle.database.jdbc:ojdbc11-production:21.1.0.0') {
+        exclude group: 'com.oracle.database.ha', module: 'simplefan'
+        exclude group: 'com.oracle.database.ha', module: 'ons'
+    }
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'com.h2database:h2'
