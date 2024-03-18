@@ -19,7 +19,7 @@ on:
 #      - 'LiveFeedService/**'
 
 jobs:
-  test:
+#  test:
 #    if: ${{ github.event.action == 'opened' || github.event.action == 'reopened' }}
 #    runs-on: ubuntu-latest
 #    environment: service
