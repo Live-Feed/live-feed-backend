@@ -21,9 +21,6 @@ dependencies {
         exclude group: 'com.oracle.database.ha', module: 'ons'
     }
 
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    runtimeOnly 'com.h2database:h2'
-
     testImplementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
