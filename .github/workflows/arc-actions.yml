@@ -1,6 +1,9 @@
 name: Actions Runner Controller
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - 'LF-57/cd-arc'
 
 jobs:
   Explore-GitHub-Actions:
