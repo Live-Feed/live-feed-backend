@@ -32,6 +32,7 @@ public class ArticleListController {
             ) {
 
         SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, sorts, lastArticleId, pit);
+        log.info("search article list controller, search param = {}", searchQueryParam);
         ArticleListDto data = articleListService.getArticleList(searchQueryParam);
 
         return SuccessResponse.ok("기사 목록 조회 성공했습니다.", data);

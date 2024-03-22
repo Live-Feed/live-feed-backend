@@ -38,3 +38,8 @@ server:
 
 application:
   allow-origin: ${ALLOW_ORIGIN}
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false

@@ -11,10 +11,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'io.prometheus:simpleclient_pushgateway'
-    implementation ('com.oracle.database.jdbc:ojdbc11-production:21.1.0.0') {
-        exclude group: 'com.oracle.database.ha', module: 'simplefan'
-        exclude group: 'com.oracle.database.ha', module: 'ons'
-    }
+//    implementation ('com.oracle.database.jdbc:ojdbc11-production:21.1.0.0') {
+//        exclude group: 'com.oracle.database.ha', module: 'simplefan'
+//        exclude group: 'com.oracle.database.ha', module: 'ons'
+//    }
+
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 
     testImplementation 'org.springframework.batch:spring-batch-test'
     testImplementation 'com.h2database:h2'

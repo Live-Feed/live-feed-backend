@@ -20,8 +20,8 @@ public class ArticleDetailController {
 
     @GetMapping("/articles/{articleId}")
     public SuccessResponse<ArticleDetailDto> getArticleDetail(@PathVariable("articleId") Long articleId) {
+        log.info("article detail controller, articleId = {}", articleId);
         ArticleDetailDto articleDetail = articleDetailService.findArticleDetail(articleId);
-
         return SuccessResponse.ok("기사 상세 조회 성공했습니다.", articleDetail);
     }
 }
