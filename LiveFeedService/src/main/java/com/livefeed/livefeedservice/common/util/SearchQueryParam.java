@@ -1,11 +1,13 @@
 package com.livefeed.livefeedservice.common.util;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
 @Getter
+@ToString
 public class SearchQueryParam {
     private List<String> type;
     private List<String> keywords;
