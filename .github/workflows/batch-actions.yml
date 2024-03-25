@@ -102,4 +102,4 @@ jobs:
         uses: azure/setup-kubectl@v3
 
       - name: Rolling update
-        run: kubectl set image cronjob/batch-cron-job batch-container=ghcr.io/live-feed/live-feed-batch:${{ env.APP_VERSION }} -n application
+        run: kubectl set image cronjob/batch-cron-job batch-container=ghcr.io/live-feed/live-feed-batch:$APP_VERSION -n application
