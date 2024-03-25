@@ -94,6 +94,8 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64
+    outputs:
+      APP_VERSION: ${{ env.APP_VERSION }}
 
   deploy:
     needs: build
@@ -104,4 +106,4 @@ jobs:
         uses: azure/setup-kubectl@v3
 
       - name: Rolling update
-        run: kubectl set image deployment/service-app service-app=ghcr.io/live-feed/live-feed-service:$APP_VERSION -n application
+        run: kubectl set image deployment/service-app service-app=ghcr.io/live-feed/live-feed-service:${{ needs.build.outputs.APP_VERSION }} -n application

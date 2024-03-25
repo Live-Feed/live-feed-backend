@@ -92,6 +92,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           platforms: |
             linux/arm64
+    outputs:
+      APP_VERSION: ${{ env.APP_VERSION }}
 
   deploy:
     needs: build
@@ -102,4 +104,5 @@ jobs:
         uses: azure/setup-kubectl@v3
 
       - name: Rolling update
-        run: kubectl set image cronjob/batch-cron-job batch-container=ghcr.io/live-feed/live-feed-batch:$APP_VERSION -n application
+        run: |
+          kubectl set image cronjob/batch-cron-job batch-container=ghcr.io/live-feed/live-feed-batch:${{ needs.build.outputs.APP_VERSION }} -n application
