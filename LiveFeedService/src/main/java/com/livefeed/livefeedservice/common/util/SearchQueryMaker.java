@@ -78,6 +78,6 @@ public class SearchQueryMaker {
     }
 
     private void makeExplainQuery(NativeQueryBuilder nativeQueryBuilder) {
-        nativeQueryBuilder.withExplain(true);
+        nativeQueryBuilder.withExplain(false);
     }
 }

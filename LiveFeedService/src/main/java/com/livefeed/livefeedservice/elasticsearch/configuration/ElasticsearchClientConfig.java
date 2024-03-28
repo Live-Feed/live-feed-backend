@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.util.List;
 
+@EnableElasticsearchRepositories(basePackages = "com.livefeed.livefeedservice.elasticsearch")
 @Configuration
 @RequiredArgsConstructor
 public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
