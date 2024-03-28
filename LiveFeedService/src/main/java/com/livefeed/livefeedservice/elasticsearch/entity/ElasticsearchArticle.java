@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "articles")
+@Document(indexName = "naver_articles", createIndex = false)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ElasticsearchArticle {

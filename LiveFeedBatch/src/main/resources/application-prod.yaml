@@ -8,12 +8,16 @@ spring:
       username: ${APP_DATABASE_USER}
       password: ${APP_DATABASE_PASSWORD}
       driver-class-name: oracle.jdbc.OracleDriver
+      configuration:
+        maximum-pool-size: ${APP_DATABASE_MAXIMUM_POOL_SIZE}
 
     batch:
       url: ${BATCH_DATABASE_URL}
       username: ${BATCH_DATABASE_USER}
       password: ${BATCH_DATABASE_PASSWORD}
       driver-class-name: oracle.jdbc.OracleDriver
+      configuration:
+        maximum-pool-size: ${BATCH_DATABASE_MAXIMUM_POOL_SIZE}
 
   data:
     redis:
