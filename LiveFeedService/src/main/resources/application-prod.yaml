@@ -39,7 +39,7 @@ server:
   port: ${APPLICATION_PORT}
 
 application:
-  allow-origin: ${ALLOW_ORIGIN}
+  allow-origins: ${ALLOW_ORIGINS}
 
 decorator:
   datasource:

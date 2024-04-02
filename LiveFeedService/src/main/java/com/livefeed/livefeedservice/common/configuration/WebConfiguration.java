@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 @Configuration
 public class WebConfiguration {
 
-    @Value("${application.allow-origin}")
-    private String origin;
+    @Value("${application.allow-origins}")
+    private List<String> origins;
 
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
@@ -18,7 +20,8 @@ public class WebConfiguration {
 
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins(origin);
+                String[] urls = origins.toArray(new String[0]);
+                registry.addMapping("/**").allowedOrigins(urls);
             }
         };
     }

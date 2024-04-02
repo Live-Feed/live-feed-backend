@@ -8,9 +8,6 @@
 name: LiveFeedService Module CI/CD
 
 on:
-  push:
-    paths:
-      - 'LiveFeedService/**'
   pull_request:
     types: [opened, reopened, closed]
     branches:
