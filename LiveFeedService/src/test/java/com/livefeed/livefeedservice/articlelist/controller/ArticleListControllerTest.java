@@ -3,7 +3,7 @@ package com.livefeed.livefeedservice.articlelist.controller;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleDto;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
 import com.livefeed.livefeedservice.articlelist.service.ArticleListService;
-import com.livefeed.livefeedservice.common.util.SearchQueryParam;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

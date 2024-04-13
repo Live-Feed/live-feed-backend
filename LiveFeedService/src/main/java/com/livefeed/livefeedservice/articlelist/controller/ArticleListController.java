@@ -3,7 +3,7 @@ package com.livefeed.livefeedservice.articlelist.controller;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
 import com.livefeed.livefeedservice.articlelist.service.ArticleListService;
 import com.livefeed.livefeedservice.common.dto.SuccessResponse;
-import com.livefeed.livefeedservice.common.util.SearchQueryParam;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

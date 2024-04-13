@@ -1,5 +1,7 @@
 package com.livefeed.livefeedservice.common.util;
 
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryMaker;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.ToString;

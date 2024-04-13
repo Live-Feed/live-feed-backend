@@ -1,5 +1,6 @@
 package com.livefeed.livefeedservice.common.util;
 
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
