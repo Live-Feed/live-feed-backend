@@ -15,23 +15,25 @@ public class SearchQueryParam {
     private Sort sort;
     private Long lastId;
     private String pit;
+    private boolean isRelatedQuery;
 
     private static final String ASC = "asc";
     private static final String DESC = "desc";
 
-    private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Long lastId, String pit) {
+    private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Long lastId, String pit, boolean isRelatedQuery) {
         this.type = type;
         this.keywords = keywords;
         this.size = size;
         this.sort = sort;
         this.lastId = lastId;
         this.pit = pit;
+        this.isRelatedQuery = isRelatedQuery;
     }
 
     public static SearchQueryParam makeParam(List<String> type, List<String> keywords, int size,
-                                             List<String> sorts, Long lastId, String pit) {
+                                             List<String> sorts, Long lastId, String pit, boolean isRelatedQuery) {
         Sort targetSort  = makeSort(sorts);
-        return new SearchQueryParam(type, keywords, size, targetSort, lastId, pit);
+        return new SearchQueryParam(type, keywords, size, targetSort, lastId, pit, isRelatedQuery);
     }
 
     private static Sort makeSort(List<String> sorts) {

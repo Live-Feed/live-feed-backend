@@ -22,7 +22,7 @@ class ArticleListServiceTest {
     @Test
     void getArticleList() {
         // given
-        SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(List.of("articleTitle", "bodyHtml"), List.of("SSG"), 3, List.of("id-desc"), null, null);
+        SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(List.of("articleTitle", "bodyHtml"), List.of("SSG"), 3, List.of("id-desc"), null, null, false);
         // when
         ArticleListDto articleList = articleListService.getArticleList(searchQueryParam);
         // then

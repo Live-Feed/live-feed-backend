@@ -22,7 +22,7 @@ class SearchQueryParamTest {
         Long lastId = null;
         String pit = null;
         // when
-        SearchQueryParam result = SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit);
+        SearchQueryParam result = SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit, false);
         // then
         assertThat(result.getSort()).isEqualTo(Sort.by(Sort.Order.desc("id"), Sort.Order.asc("title")));
         assertThat(result.getSort()).isNotEqualTo(Sort.by(Sort.Order.asc("title"), Sort.Order.desc("id")));
@@ -40,7 +40,7 @@ class SearchQueryParamTest {
         String pit = null;
         // when
         // then
-        assertThatThrownBy(() -> SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit))
+        assertThatThrownBy(() -> SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit, false))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("올바르지 않은 정렬 정보입니다.");
     }
