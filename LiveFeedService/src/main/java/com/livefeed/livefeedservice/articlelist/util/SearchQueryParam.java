@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.common.util;
+package com.livefeed.livefeedservice.articlelist.util;
 
 import lombok.Getter;
 import lombok.ToString;

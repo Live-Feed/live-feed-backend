@@ -5,7 +5,7 @@ import com.livefeed.livefeedservice.articlelist.dto.ArticleDto;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
 import com.livefeed.livefeedservice.articlelist.dto.ModifiedSearchResultDto;
 import com.livefeed.livefeedservice.articlelist.repository.NativeQueryElasticsearchOperations;
-import com.livefeed.livefeedservice.common.util.SearchQueryParam;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import com.livefeed.livefeedservice.elasticsearch.entity.ElasticsearchArticle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.core.document.Explanation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -65,26 +66,23 @@ public class ArticleListService {
     }
 
     private ModifiedSearchResultDto extractSearchResult(SearchHit<ElasticsearchArticle> search) {
-        String articleTitle = searchHitModifier.extractTextFromHtml(search.getContent().getArticleTitle());
-        String articleImg = searchHitModifier.extractFirstImgFromHtml(search.getContent().getBodyHtml());
-        String articleBody = searchHitModifier.extractTextFromHtml(search.getContent().getBodyHtml());
-
-        Explanation explanation = search.getExplanation();
-
-        if (explanation != null) {
-            String description = explanation.getDescription().startsWith("weight")
-                    ? explanation.getDescription()
-                    : explanation.getDetails().get(0).getDescription();
-
-            String searchedWord = searchHitModifier.extractSearchedWord(description);
-
-            articleTitle = searchHitModifier.boldingWord(searchedWord, articleTitle);
-            articleBody = searchHitModifier.boldingWord(searchedWord, articleBody);
+        String articleTitle;
+        List<String> headerHtmlHighLights = search.getHighlightField("articleTitle");
+        if (headerHtmlHighLights.size() == 0) {
+            articleTitle = search.getContent().getArticleTitle();
+        } else {
+            articleTitle = headerHtmlHighLights.get(0);
         }
 
-        articleBody = searchHitModifier.cutTextFromBodyText(articleBody);
+        String articleBody;
+        List<String> bodyHtmlHighLights = search.getHighlightField("bodyHtml");
+        if (bodyHtmlHighLights.size() == 0) {
+            articleBody = searchHitModifier.extractTextFromHtml(search.getContent().getBodyHtml());
+        } else {
+            articleBody = searchHitModifier.extractTagExceptBoldTag(bodyHtmlHighLights.get(0));
+        }
 
+        String articleImg = searchHitModifier.extractFirstImgFromHtml(search.getContent().getBodyHtml());
         return new ModifiedSearchResultDto(articleTitle, articleImg, articleBody);
     }
-
 }

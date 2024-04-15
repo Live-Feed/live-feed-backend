@@ -1,7 +1,7 @@
 package com.livefeed.livefeedservice.articlelist.service;
 
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
-import com.livefeed.livefeedservice.common.util.SearchQueryParam;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

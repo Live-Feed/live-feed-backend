@@ -4,10 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -23,42 +26,24 @@ public class SearchHitModifier {
     // html 로 되어있는 텍스트에서 순수 text 만 추출하는 메서드
     public String extractTextFromHtml(String html) {
         Document document = Jsoup.parse(html);
-        return document.text();
+        String bodyText = document.text();
+        return bodyText.substring(0, bodyText.length() % 500);
     }
 
-    // 본문에서 100글자 씩 잘라서 텍스트만 보여주는 메서드
-    public String cutTextFromBodyText(String text) {
-        int index = text.indexOf("<b>");
+    public String extractTagExceptBoldTag(String html) {
+        Document document = Jsoup.parse(html);
+        Element body = document.body();
+        String textOnly = body.text();
 
-        int leftBound = index - 200;
-        int rightBound = index + 200;
-        int textLength = text.length();
+        Elements elements = body.select("b");
 
-        if (index == -1) {
-            return textLength > rightBound ? text.substring(0, rightBound) + " ..." : text;
+        Set<String> keywords = elements.stream().map(Element::text).collect(Collectors.toSet());
+
+        for (String keyword : keywords) {
+            textOnly = textOnly.replace(keyword, "<b>" + keyword + "</b>");
         }
 
-        int leftCond = Math.max(leftBound, 0);
-        int rightCond = Math.min(rightBound, textLength);
-
-        return text.substring(leftCond, rightCond) + " ...";
-    }
-
-    // explain 을 통해 어떤 항목에 어떤 단어가 검색되었는지 추출하는 메서드 pair<타입, 단어> 형태
-    public String extractSearchedWord(String explain) {
-        int firstIndex = explain.indexOf("(");
-        int lastIndex = explain.indexOf(" ");
-
-        return explain.substring(firstIndex + 1, lastIndex).split(":")[1];
-    }
-
-    // 찾은 단어를 볼드 형식으로 변경해주는 메서드
-    public String boldingWord(String word, String text) {
-        String regex = "\\b" + Pattern.quote(word) + "\\b";
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(text);
-
-        return matcher.replaceAll("<b>$0</b>");
+        return textOnly;
     }
 }
 

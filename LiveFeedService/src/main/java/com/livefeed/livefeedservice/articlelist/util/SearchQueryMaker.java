@@ -1,10 +1,14 @@
-package com.livefeed.livefeedservice.common.util;
+package com.livefeed.livefeedservice.articlelist.util;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -25,9 +29,9 @@ public class SearchQueryMaker {
 
         if (isShouldSearchQuery(searchQueryParam)) {
             makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
-            makeExplainQuery(nativeQueryBuilder);
         }
 
+        makeHighlightQuery(nativeQueryBuilder, searchQueryParam.getType());
         makeQuerySize(nativeQueryBuilder, searchQueryParam.getSize());
         makeSortQuery(nativeQueryBuilder, searchQueryParam.getSort());
         makeSearchAfterQuery(nativeQueryBuilder, searchQueryParam.getLastId());
@@ -57,6 +61,19 @@ public class SearchQueryMaker {
         nativeQueryBuilder.withQuery(Query.of(q -> q.bool(b -> b.should(queryList))));
     }
 
+    private void makeHighlightQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types) {
+        HighlightParameters highlightParameters = HighlightParameters.builder()
+                .withNumberOfFragments(1)
+                .withFragmentSize(500)
+                .withPreTags("<b>")
+                .withPostTags("</b>")
+                .build();
+
+        List<HighlightField> highlightFields = types.stream().map(HighlightField::new).toList();
+
+        nativeQueryBuilder.withHighlightQuery(new HighlightQuery(new Highlight(highlightParameters, highlightFields), String.class));
+    }
+
     private void makeQuerySize(NativeQueryBuilder nativeQueryBuilder, int size) {
         nativeQueryBuilder.withMaxResults(size);
     }
@@ -75,9 +92,5 @@ public class SearchQueryMaker {
         if (pit != null) {
             nativeQueryBuilder.withPointInTime(new PointInTime(pit, Duration.ofMinutes(PIT_DURATION_MINUTES)));
         }
-    }
-
-    private void makeExplainQuery(NativeQueryBuilder nativeQueryBuilder) {
-        nativeQueryBuilder.withExplain(false);
     }
 }
