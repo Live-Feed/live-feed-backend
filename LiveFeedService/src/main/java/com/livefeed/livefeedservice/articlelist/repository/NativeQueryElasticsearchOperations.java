@@ -24,7 +24,6 @@ public class NativeQueryElasticsearchOperations implements SearchOperations {
     private final ElasticsearchOperations elasticsearchOperations;
     private final ElasticsearchClient elasticsearchClient;
     private final List<QueryMaker> queryMakerList;
-    private final SearchOrderIdQueryMaker searchOrderIdQueryMaker;
 
     private final String PIT_EXIST_TIME = "5m";
 
