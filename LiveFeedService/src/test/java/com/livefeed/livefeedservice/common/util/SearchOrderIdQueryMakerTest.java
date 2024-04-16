@@ -1,6 +1,6 @@
 package com.livefeed.livefeedservice.common.util;
 
-import com.livefeed.livefeedservice.articlelist.util.SearchQueryMaker;
+import com.livefeed.livefeedservice.articlelist.util.SearchOrderIdQueryMaker;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -25,10 +25,10 @@ import java.util.List;
 @Disabled
 @Slf4j
 @SpringBootTest
-class SearchQueryMakerTest {
+class SearchOrderIdQueryMakerTest {
 
     @Autowired
-    private SearchQueryMaker searchQueryMaker;
+    private SearchOrderIdQueryMaker searchOrderIdQueryMaker;
 
     @Autowired
     private ElasticsearchOperations elasticsearchOperations;
@@ -39,12 +39,12 @@ class SearchQueryMakerTest {
         // given
         List<String> types = List.of("title", "content");
         List<String> keywords = List.of("data", "analyse");
-        SearchQueryParam queryParam = SearchQueryParam.makeParam(types, keywords, 5, List.of("id-desc"), null, null);
+        SearchQueryParam queryParam = SearchQueryParam.makeParam(types, keywords, 5, List.of("id-desc"), null, null, false);
         // when
-        NativeQuery query = searchQueryMaker.makeArticleListQuery(queryParam);
+        NativeQuery query = searchOrderIdQueryMaker.makeArticleListQuery(queryParam);
         SearchHits<IndexName> searchHits = elasticsearchOperations.search(query, IndexName.class);
         // then
-        for (SearchHit<SearchQueryMakerTest.IndexName> searchHit : searchHits) {
+        for (SearchHit<SearchOrderIdQueryMakerTest.IndexName> searchHit : searchHits) {
             log.info("search info = {}", searchHit.getSortValues());
             log.info("search = {}", searchHit.getContent());
         }
