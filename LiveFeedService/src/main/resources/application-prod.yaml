@@ -27,6 +27,9 @@ spring:
       repositories:
         enabled: false
 
+  redis-pub-sub:
+    channel: ${REDIS_PUB_SUB_CHANNEL}
+
 management:
   server:
     port: ${ACTUATOR_EXPOSURE_PORT}

@@ -2,6 +2,7 @@ package com.livefeed.livefeedservice.newarticle.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
 
+    @Value("${spring.redis-pub-sub.channel}")
+    private String channelTopic;
+
     private final RedisProperties redisProperties;
 
     @Bean
@@ -31,7 +35,7 @@ public class RedisConfig {
     public RedisMessageListenerContainer redisMessageListenerContainer(MessageListener messageListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(messageListener, ChannelTopic.of("test-room"));
+        container.addMessageListener(messageListener, ChannelTopic.of(channelTopic));
         return container;
     }
 
