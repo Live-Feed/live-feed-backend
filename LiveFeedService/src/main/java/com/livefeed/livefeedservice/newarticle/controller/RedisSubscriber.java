@@ -2,6 +2,7 @@ package com.livefeed.livefeedservice.newarticle.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.livefeed.livefeedservice.newarticle.service.TermAnalyzeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -18,17 +19,17 @@ import java.util.Set;
 public class RedisSubscriber implements MessageListener {
 
     private final ObjectMapper objectMapper;
+    private final TermAnalyzeService termAnalyzeService;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         byte[] body = message.getBody();
-
         String str = new String(body, StandardCharsets.UTF_8);
 
-        log.info("body = {}", str);
         try {
-            Set<Long> set = objectMapper.readValue(str, new TypeReference<>() {});
-            log.info("message = {}", set);
+            Set<String> newArticleIds = objectMapper.readValue(str, new TypeReference<>() {});
+            log.info("redis subscribe message = {}", newArticleIds);
+            termAnalyzeService.noticeNewArticles(newArticleIds);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

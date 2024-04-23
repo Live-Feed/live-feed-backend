@@ -34,7 +34,17 @@
 <script>
     const eventSource = new EventSource('http://localhost:8084/api/sse/register');
 
+    eventSource.addEventListener("article update", function(event) {
+        console.log(event)
+        console.log('New event from server:', event.data);
+        const eventsDiv = document.getElementById('events');
+        const message = document.createElement('div');
+        message.textContent = event.data;
+        eventsDiv.appendChild(message);
+    })
+
     eventSource.onmessage = function(event) {
+        console.log(event)
         console.log('New event from server:', event.data);
         const eventsDiv = document.getElementById('events');
         const message = document.createElement('div');

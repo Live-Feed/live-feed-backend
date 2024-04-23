@@ -20,6 +20,13 @@ spring:
         show_sql: false
         format_sql: false
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      repositories:
+        enabled: false
+
 management:
   server:
     port: ${ACTUATOR_EXPOSURE_PORT}
