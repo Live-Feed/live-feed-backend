@@ -3,6 +3,7 @@ package com.livefeed.livefeedbatch.batch.reader;
 import com.livefeed.livefeedbatch.batch.common.driver.ChromeDriverProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -111,7 +112,13 @@ public class NaverNewsUrlReader extends AbstractPaginatedDataItemReader<String> 
 
     private void readArticles(WebDriver driver, List<String> articleUrls) {
         WebDriverWait webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".news_list .text")));
+        try {
+            webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".news_list .text")));
+        } catch (TimeoutException e) {
+            log.info("The article has not been uploaded yet.");
+            return;
+        }
+
         List<WebElement> articleList = driver.findElements(By.cssSelector(".news_list .text"));
 
         for (WebElement articleElement : articleList) {
