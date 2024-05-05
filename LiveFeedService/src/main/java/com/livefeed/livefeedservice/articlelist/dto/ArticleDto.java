@@ -6,6 +6,7 @@ public record ArticleDto(
         String pressCompany,
         String content,
         String photo,
-        String minutesAgo
+        String minutesAgo,
+        Float score
 ) {
 }

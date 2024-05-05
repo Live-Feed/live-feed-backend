@@ -8,23 +8,40 @@ import org.springframework.data.elasticsearch.core.query.HighlightQuery;
 import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
 import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class QueryMaker {
+@Component
+public class QueryMaker {
 
     private final int PIT_DURATION_MINUTES = 3;
 
-    abstract public NativeQuery makeArticleListQuery(SearchQueryParam searchQueryParam);
+    public boolean isRightQueryMaker(SearchQueryParam searchQueryParam) {
+        return true;
+    }
 
-    abstract public boolean isRightQueryMaker(SearchQueryParam searchQueryParam);
+    public NativeQuery makeArticleListQuery(SearchQueryParam searchQueryParam) {
+        NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
+
+        if (isShouldSearchQuery(searchQueryParam)) {
+            makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
+        }
+
+        makeHighlightQuery(nativeQueryBuilder, searchQueryParam.getType());
+        makeQuerySize(nativeQueryBuilder, searchQueryParam.getSize());
+        makeSortQuery(nativeQueryBuilder, searchQueryParam.getSort());
+        makeSearchAfterQuery(nativeQueryBuilder, searchQueryParam.getLastScore(), searchQueryParam.getLastId());
+        makePitQuery(nativeQueryBuilder, searchQueryParam.getPit());
+
+        return nativeQueryBuilder.build();
+    }
 
     protected boolean isShouldSearchQuery(SearchQueryParam searchQueryParam) {
         return searchQueryParam.getType() != null;
     }
-
 
     protected void makeShouldQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types, List<String> keywords) {
         List<Query> queryList = new ArrayList<>();
@@ -63,10 +80,18 @@ abstract public class QueryMaker {
         nativeQueryBuilder.withSort(sort);
     }
 
-    protected void makeSearchAfterQuery(NativeQueryBuilder nativeQueryBuilder, Long lastId) {
-        if (lastId != null) {
-            nativeQueryBuilder.withSearchAfter(List.of(lastId));
+    protected void makeSearchAfterQuery(NativeQueryBuilder nativeQueryBuilder, Double lastScore, Long lastId) {
+        List<Object> searchAfterList = new ArrayList<>();
+
+        if (lastScore != null) {
+            searchAfterList.add(lastScore);
         }
+
+        if (lastId != null) {
+            searchAfterList.add(lastId);
+        }
+
+        nativeQueryBuilder.withSearchAfter(searchAfterList);
     }
 
     protected void makePitQuery(NativeQueryBuilder nativeQueryBuilder, String pit) {

@@ -11,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.document.Explanation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -42,6 +40,7 @@ public class ArticleListService {
         return ArticleListDto.of(
                 articleList,
                 articleList.size() < searchQueryParam.getSize(),
+                articleList.size() > 0 ? articleList.get(articleList.size() - 1).score() : null,
                 articleList.size() > 0 ? articleList.get(articleList.size() - 1).articleId() : null,
                 pit
         );
@@ -60,7 +59,8 @@ public class ArticleListService {
                     search.getContent().getPressCompanyName(),
                     modifiedArticle.articleBody(),
                     modifiedArticle.articleImg(),
-                    search.getContent().getPublicationTime()
+                    search.getContent().getPublicationTime(),
+                    search.getScore()
             );
         }).toList();
     }

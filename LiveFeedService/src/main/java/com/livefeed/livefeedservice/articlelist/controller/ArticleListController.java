@@ -26,13 +26,13 @@ public class ArticleListController {
             @RequestParam(value = "type", required = false) List<String> type,
             @RequestParam(value = "keyword", required = false) List<String> keywords,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(value = "sort", required = false, defaultValue = "id-desc") List<String> sorts,
+            @RequestParam(value = "lastScore", required = false) Double lastScore,
             @RequestParam(value = "lastId", required = false) Long lastArticleId,
             @RequestParam(value = "pit", required = false) String pit,
             @RequestParam(value = "related", required = false, defaultValue = "false") boolean isRelatedQuery
             ) {
 
-        SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, sorts, lastArticleId, pit, isRelatedQuery);
+        SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(type, keywords, size, lastScore, lastArticleId, pit, isRelatedQuery);
         log.info("search article list controller, search param = {}", searchQueryParam);
         ArticleListDto data = articleListService.getArticleList(searchQueryParam);
 
