@@ -13,12 +13,24 @@ public class SearchQueryParam {
     private List<String> keywords;
     private int size;
     private Sort sort;
+    private Double lastScore;
     private Long lastId;
     private String pit;
     private boolean isRelatedQuery;
 
     private static final String ASC = "asc";
     private static final String DESC = "desc";
+
+    private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Double lastScore, Long lastId, String pit, boolean isRelatedQuery) {
+        this.type = type;
+        this.keywords = keywords;
+        this.size = size;
+        this.sort = sort;
+        this.lastScore = lastScore;
+        this.lastId = lastId;
+        this.pit = pit;
+        this.isRelatedQuery = isRelatedQuery;
+    }
 
     private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Long lastId, String pit, boolean isRelatedQuery) {
         this.type = type;
@@ -34,6 +46,19 @@ public class SearchQueryParam {
                                              List<String> sorts, Long lastId, String pit, boolean isRelatedQuery) {
         Sort targetSort  = makeSort(sorts);
         return new SearchQueryParam(type, keywords, size, targetSort, lastId, pit, isRelatedQuery);
+    }
+
+    public static SearchQueryParam makeParam(List<String> type, List<String> keywords, int size, Double lastScore,
+                                             Long lastId, String pit, boolean isRelatedQuery) {
+        Sort targetSort  = makeSort(isRelatedQuery);
+        return new SearchQueryParam(type, keywords, size, targetSort, lastScore, lastId, pit, isRelatedQuery);
+    }
+
+    private static Sort makeSort(boolean isRelatedQuery) {
+        if (isRelatedQuery) {
+            return Sort.by(Sort.Direction.DESC, "_score", "id");
+        }
+        return Sort.by(Sort.Direction.DESC, "id");
     }
 
     private static Sort makeSort(List<String> sorts) {
