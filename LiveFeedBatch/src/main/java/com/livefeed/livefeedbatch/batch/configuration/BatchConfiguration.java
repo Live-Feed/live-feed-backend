@@ -5,6 +5,7 @@ import com.livefeed.livefeedbatch.batch.common.converter.StringToUrlInfoConverte
 import com.livefeed.livefeedbatch.batch.common.converter.UrlInfoToStringConverter;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.converter.LocalDateTimeToStringConverter;
 import org.springframework.batch.core.converter.StringToLocalDateTimeConverter;
@@ -18,9 +19,10 @@ import org.springframework.core.convert.support.DefaultConversionService;
 
 @Configuration
 @EnableBatchProcessing(dataSourceRef = "batchDataSource", conversionServiceRef = "batchConversionService")
+@RequiredArgsConstructor
 public class BatchConfiguration {
-    // TODO: 2023/12/18 추후 하나의 객체로 통일
-    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final ObjectMapper objectMapper;
 
     @Bean
     @ConfigurationProperties("spring.datasource.batch")
