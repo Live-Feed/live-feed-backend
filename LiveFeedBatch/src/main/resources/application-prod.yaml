@@ -19,6 +19,9 @@ spring:
       configuration:
         maximum-pool-size: ${BATCH_DATABASE_MAXIMUM_POOL_SIZE}
 
+  redis-pub-sub:
+    channel: ${REDIS_PUB_SUB_CHANNEL}
+
   data:
     redis:
       repositories:

@@ -1,4 +1,4 @@
-package com.livefeed.livefeedbatch.batch.processor.redis.operations;
+package com.livefeed.livefeedbatch.batch.common.redis.operations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

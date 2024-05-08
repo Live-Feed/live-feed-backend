@@ -4,6 +4,7 @@ import com.livefeed.livefeedbatch.batch.common.dto.ItemDto;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.ParseResultDto;
 import com.livefeed.livefeedbatch.batch.domain.entity.Article;
+import com.livefeed.livefeedbatch.batch.util.NewArticleBucket;
 import com.livefeed.livefeedbatch.batch.writer.domain.DataSaver;
 import com.livefeed.livefeedbatch.batch.writer.elasticsearch.entity.ElasticsearchArticle;
 import com.livefeed.livefeedbatch.batch.writer.elasticsearch.repository.ArticleElasticsearchRepository;
@@ -36,6 +37,7 @@ public class NewsWriter implements ItemWriter<ItemDto> {
                 Article article = dataSaver.saveArticle(key, value);
                 ElasticsearchArticle elasticsearchArticle = ElasticsearchArticle.from(article, key, value);
                 successItem.add(elasticsearchArticle);
+                NewArticleBucket.add(article.getId());
             } catch (Exception e) {
                 log.error("DB Exception Occur message = {} and Error Article Title = {}", e.getMessage(), value.url());
             }

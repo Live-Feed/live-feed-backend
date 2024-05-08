@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
 @Slf4j
 public abstract class Parser {
 
-    protected final String OUTER_HTML = "outerHTML";
+    protected static final String OUTER_HTML = "outerHTML";
 
     public ParseResultDto parseWebPage(String url) {
         WebDriver driver = ChromeDriverProvider.getDriver();
@@ -29,6 +29,11 @@ public abstract class Parser {
 
     private ParseResultDto parse(String url, WebDriver driver) {
         driver.get(url);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         HeaderDto headerDto = parseHeader(driver);
         BodyDto bodyDto = parseBody(driver);
         return ParseResultDto.from(url, headerDto, bodyDto);

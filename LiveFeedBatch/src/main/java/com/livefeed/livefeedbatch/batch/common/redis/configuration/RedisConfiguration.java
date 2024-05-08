@@ -1,8 +1,10 @@
-package com.livefeed.livefeedbatch.batch.processor.redis.configuration;
+package com.livefeed.livefeedbatch.batch.common.redis.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,5 +33,10 @@ public class RedisConfiguration<K, V> {
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Boolean.class));
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisConnection redisConnection() {
+        return redisConnectionFactory().getConnection();
     }
 }
