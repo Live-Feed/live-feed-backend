@@ -24,7 +24,7 @@ class ArticleListServiceTest {
         // given
         SearchQueryParam searchQueryParam = SearchQueryParam.makeParam(List.of("articleTitle", "bodyHtml"), List.of("SSG"), 3, List.of("id-desc"), null, null, false);
         // when
-        ArticleListDto articleList = articleListService.getArticleList(searchQueryParam);
+        ArticleListDto articleList = articleListService.getArticleList(searchQueryParam, "sseKey");
         // then
 
     }

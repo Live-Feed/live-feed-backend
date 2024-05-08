@@ -17,7 +17,7 @@ public class ArticleListService {
 
     private static final String ARTICLE_INDEX_NAME = "articles";
 
-    public ArticleListDto getArticleList(SearchQueryParam searchQueryParam) {
+    public ArticleListDto getArticleList(SearchQueryParam searchQueryParam, String sseKey) {
         // pit가 설정이 안되어 있는 경우 pit를 먼저 가져온다.
         if (isFirstSearchRequest(searchQueryParam)) {
             searchQueryParam.setFirstRequestPit(searchOperations.getPit(ARTICLE_INDEX_NAME));
@@ -25,6 +25,10 @@ public class ArticleListService {
 
         // TODO: 12/10/23 엘라스틱서치 내부에서 에러가 발생하는 경우도 체크할 필요가 있음
         SearchResultDto searchResultDto = searchOperations.getSearchResultTemp(searchQueryParam);
+
+        // 사용자 검색 결과를 redis에 저장해야함
+
+
         return ArticleListDto.from(searchResultDto, searchQueryParam.getSize());
     }
 

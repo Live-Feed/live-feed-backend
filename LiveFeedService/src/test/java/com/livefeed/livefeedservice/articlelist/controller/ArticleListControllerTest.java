@@ -61,7 +61,7 @@ class ArticleListControllerTest {
 
         ArticleListDto data = ArticleListDto.from(searchResultDto, 2);
 
-        Mockito.doReturn(data).when(articleListService).getArticleList(Mockito.any(SearchQueryParam.class));
+        Mockito.doReturn(data).when(articleListService).getArticleList(Mockito.any(SearchQueryParam.class), Mockito.any());
 
         // when
         ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get(url)
