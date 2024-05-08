@@ -19,18 +19,14 @@ public class QueryMaker {
 
     private final int PIT_DURATION_MINUTES = 3;
 
-    public boolean isRightQueryMaker(SearchQueryParam searchQueryParam) {
-        return true;
-    }
-
     public NativeQuery makeArticleListQuery(SearchQueryParam searchQueryParam) {
         NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
 
         if (isShouldSearchQuery(searchQueryParam)) {
             makeShouldQuery(nativeQueryBuilder, searchQueryParam.getType(), searchQueryParam.getKeywords());
+            makeHighlightQuery(nativeQueryBuilder, searchQueryParam.getType());
         }
 
-        makeHighlightQuery(nativeQueryBuilder, searchQueryParam.getType());
         makeQuerySize(nativeQueryBuilder, searchQueryParam.getSize());
         makeSortQuery(nativeQueryBuilder, searchQueryParam.getSort());
         makeSearchAfterQuery(nativeQueryBuilder, searchQueryParam.getLastScore(), searchQueryParam.getLastId());
