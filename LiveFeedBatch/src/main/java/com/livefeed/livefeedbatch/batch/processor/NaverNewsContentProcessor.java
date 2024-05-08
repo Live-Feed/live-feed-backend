@@ -4,7 +4,7 @@ import com.livefeed.livefeedbatch.batch.common.dto.ItemDto;
 import com.livefeed.livefeedbatch.batch.common.dto.keydto.UrlInfo;
 import com.livefeed.livefeedbatch.batch.common.dto.processorvaluedto.ParseResultDto;
 import com.livefeed.livefeedbatch.batch.processor.parser.ParserProvider;
-import com.livefeed.livefeedbatch.batch.processor.redis.operations.RedisOperations;
+import com.livefeed.livefeedbatch.batch.common.redis.operations.RedisOperations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;

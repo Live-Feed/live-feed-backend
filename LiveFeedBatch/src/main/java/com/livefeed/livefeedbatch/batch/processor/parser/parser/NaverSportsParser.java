@@ -18,35 +18,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NaverSportsParser extends Parser {
 
-    private final Platform platform = Platform.NAVER;
-    private final Theme theme = Theme.SPORTS;
-
-    private static final Header header = Header.SPORTS;
-    private static final Body body = Body.SPORTS;
-
+    private static final Platform platform = Platform.NAVER;
+    private static final Theme theme = Theme.SPORTS;
 
     private final NameAndEmailParser nameAndEmailParser;
 
     @Override
     protected HeaderDto parseHeader(WebDriver driver) {
-        WebElement webElement = driver.findElement(By.cssSelector(header.innerHtml));
-
-        String html = webElement.getAttribute(OUTER_HTML);
-        String articleTitle = webElement.findElement(By.cssSelector(header.articleTitle)).getText();
-        String pressCompanyName = webElement.findElement(By.cssSelector(header.pressCompanyName)).getAttribute("alt");
-        String publicationTime = webElement.findElement(By.cssSelector(header.publicationTime)).getText();
-        String originArticleUrl = webElement.findElement(By.cssSelector(header.originArticleUrl)).getAttribute("href");
-
-        return HeaderDto.of(html, articleTitle, pressCompanyName, publicationTime, originArticleUrl);
+        return Header.SPORTS.parseHeader(driver);
     }
 
     @Override
     protected BodyDto parseBody(WebDriver driver) {
-        WebElement webElement = driver.findElement(By.cssSelector(body.innerHtml));
+        WebElement webElement = driver.findElement(By.cssSelector(Body.SPORTS.innerHtml));
 
-        String htmlTemp = webElement.getAttribute(OUTER_HTML);
-        String html = getHtml(htmlTemp);
-        String journalistNameAndEmail = webElement.findElement(By.cssSelector(body.journalistNameAndEmail)).getText();
+        String html = getHtml(webElement);
+        String journalistNameAndEmail = webElement.findElement(By.cssSelector(Body.SPORTS.journalistNameAndEmail)).getText();
         Pair<String, String> nameEmailPair = nameAndEmailParser.extractNameAndEmail(journalistNameAndEmail);
 
         return BodyDto.of(html, nameEmailPair.getFirst(), nameEmailPair.getSecond());
@@ -57,28 +44,44 @@ public class NaverSportsParser extends Parser {
         return key.platform() == platform && key.theme() == theme;
     }
 
-    private String getHtml(String htmlTemp) {
-        int index = htmlTemp.indexOf("<div class=\"reporter_area\"");
-        return htmlTemp.substring(0, index) + "</div>";
+    private String getHtml(WebElement webElement) {
+        return webElement.findElement(By.cssSelector("#comp_news_article")).getAttribute(OUTER_HTML);
     }
 
     @RequiredArgsConstructor
     private enum Header {
-        SPORTS("div.news_headline", "span#pressLogo img", "h4.title", "div.info span:nth-child(1)", "div.info a");
+        SPORTS("#content div.NewsEndMain_comp_article_head__Uqd6M", "a.NewsEndMain_article_head_press_logo__BrqAh img", "h2.NewsEndMain_article_title__kqEzS", "em.NewsEndMain_date__xjtsQ", "div.NewsEndMain_article_head_date_info__jGlzH a");
 
         private final String innerHtml;
         private final String pressCompanyName;
         private final String articleTitle;
         private final String publicationTime;
         private final String originArticleUrl;
+
+        private HeaderDto parseHeader(WebDriver webDriver) {
+            WebElement webElement = webDriver.findElement(By.cssSelector(innerHtml));
+            String html = htmlHeader(webElement);
+            String articleTitle = webElement.findElement(By.cssSelector(this.articleTitle)).getText();
+            String pressCompanyName = webElement.findElement(By.cssSelector(this.pressCompanyName)).getAttribute("alt");
+            String publicationTime = webElement.findElement(By.cssSelector(this.publicationTime)).getText();
+            String originArticleUrl = webElement.findElement(By.cssSelector(this.originArticleUrl)).getAttribute("href");
+
+            return HeaderDto.of(html, articleTitle, pressCompanyName, publicationTime, originArticleUrl);
+        }
+
+        private String htmlHeader(WebElement webElement) {
+            String headerLogoHtml = webElement.findElement(By.cssSelector("a.NewsEndMain_article_head_press_logo__BrqAh")).getAttribute(OUTER_HTML);
+            String titleHtml = webElement.findElement(By.cssSelector("div.NewsEndMain_article_head_title__ztaL4")).getAttribute(OUTER_HTML);
+            String dateInfoHtml  = webElement.findElement(By.cssSelector("div.NewsEndMain_article_head_date_info__jGlzH")).getAttribute(OUTER_HTML);
+            return "<div>" + headerLogoHtml + titleHtml + dateInfoHtml + "</div>";
+        }
     }
 
     @RequiredArgsConstructor
     private enum Body {
-        SPORTS("div#newsEndContents", "p.byline");
+        SPORTS("#content", "div.NewsEndMain_article_journalist_info__Cdr3D");
 
         private final String innerHtml;
         private final String journalistNameAndEmail;
     }
-
 }
