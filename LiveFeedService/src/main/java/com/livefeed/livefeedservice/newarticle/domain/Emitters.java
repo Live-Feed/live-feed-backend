@@ -55,6 +55,10 @@ public class Emitters {
     public void sendAlertMessage(Set<String> terms, Map<String, Set<String>> userKeywordMap) {
         for (String sseKey : userKeywordMap.keySet()) {
             Set<String> keywords = userKeywordMap.get(sseKey);
+            if (keywords == null) {
+                return;
+            }
+
             for (String keyword : keywords) {
                 if (terms.contains(keyword)) {
                     sendAlertMessage(sseKey);

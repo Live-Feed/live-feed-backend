@@ -7,5 +7,7 @@ public interface UserKeywordRepository {
 
     Set<String> getUserKeywords(String sseKey);
 
-    Long setUserKeywords(String sseKey, List<String> keywords);
+    int updateUserKeywords(String sseKey, List<String> newKeywords);
+
+    void deleteUserKeywords(String sseKey);
 }
