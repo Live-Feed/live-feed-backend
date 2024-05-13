@@ -33,12 +33,12 @@ jobs:
 #          java-version: '17'
 #
 #      - name: Gradle Test
-#        run: ./gradlew :LiveFeedBatch:test
+#        run: ./gradlew :LiveFeedViewsBatch:test
 
   build:
 #    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    environment: batch
+    environment: views-batch
 
     env:
       REGISTRY: ${{ secrets.REGISTRY }}
