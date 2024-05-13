@@ -1,6 +1,7 @@
 package com.livefeed.livefeedservice.articlelist.service;
 
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
+import com.livefeed.livefeedservice.articlelist.dto.KeywordEvent;
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
 import com.livefeed.livefeedservice.articlelist.repository.SearchOperations;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
@@ -16,6 +17,7 @@ public class ArticleListService {
 
     private final SearchOperations searchOperations;
     private final UserKeywordRepository userKeywordRepository;
+    private final KeywordEventPublisher eventPublisher;
 
     private static final String ARTICLE_INDEX_NAME = "articles";
 
@@ -33,7 +35,7 @@ public class ArticleListService {
         log.info("update keyword count = {}", updateCount);
 
         if (updateCount != 0) {
-            // 이벤트 발행
+            eventPublisher.publishKeywordEvent(new KeywordEvent(searchQueryParam.getKeywords()));
         }
 
         return ArticleListDto.from(searchResultDto, searchQueryParam.getSize());
