@@ -36,7 +36,7 @@ public class ViewsUpdateJobLauncher extends JobLauncherApplicationRunner {
         try {
             super.execute(job, jobParameters);
         } catch (Exception e) {
-            log.error("Failed to run value update job", e);
+            log.error("Failed to run views update job", e);
             throw new RuntimeException(e);
         }
     }
