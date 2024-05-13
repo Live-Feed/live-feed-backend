@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: LiveFeedViewsBatch
+
+  datasource:
+    app:
+      url: jdbc:oracle:thin:@(description= (retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1522)(host=adb.ap-chuncheon-1.oraclecloud.com))(connect_data=(service_name=g9be77f9c6aa728_notiedfeed_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+      username: service
+      password: Shxlemehsjt!123
+      driver-class-name: oracle.jdbc.OracleDriver
+      configuration:
+        maximum-pool-size: 2
+
+    batch:
+      url: jdbc:mariadb://localhost:3307/live_feed_batch?allowPublicKeyRetrieval=true&useSSL=false
+      username: root
+      password: password
+      driver-class-name: org.mariadb.jdbc.Driver
+
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: localhost
+      port: 6379
+
+    elasticsearch:
+      repositories:
+        enabled: false
+
+elasticsearch:
+  config:
+    host-and-port: 127.0.0.1:9200
+    user: elastic
+    password: o4YaRAo7ynsLOM9B5EUS
+
+server:
+  port: 8080
