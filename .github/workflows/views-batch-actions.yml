@@ -10,8 +10,8 @@ name: LiveFeedViewsBatch Module CI/CD
 on:
   pull_request:
     types: [opened, reopened, closed]
-    branches:
-      - 'main'
+#    branches:
+#      - 'main'
     paths:
       - 'LiveFeedViewsBatch/**'
 
