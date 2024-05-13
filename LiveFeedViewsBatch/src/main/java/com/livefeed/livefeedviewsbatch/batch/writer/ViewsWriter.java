@@ -24,6 +24,7 @@ public class ViewsWriter implements ItemWriter<ItemDto> {
         for (ItemDto item : items) {
             try {
                 rdbSaveService.setViews(item.key(), item.value());
+                log.info("update views, key: {}, value: {}", item.key(), item.value());
             } catch (Exception e) {
                 log.error("DB Exception Occur message = {} and Error Article Id = {}", e.getMessage(), item.key());
             }
