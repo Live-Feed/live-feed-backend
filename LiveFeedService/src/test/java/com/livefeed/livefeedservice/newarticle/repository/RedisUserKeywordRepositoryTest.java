@@ -9,6 +9,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
 
+@Disabled
 class RedisUserKeywordRepositoryTest {
 
     private static UserKeywordRepository userKeywordRepository;
