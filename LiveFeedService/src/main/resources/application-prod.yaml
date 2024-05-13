@@ -19,6 +19,7 @@ spring:
       hibernate:
         show_sql: false
         format_sql: false
+    open-in-view: false
 
   data:
     redis:

@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.newarticle.config;
+package com.livefeed.livefeedservice.common.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class RedisConfig {
+public class RedisConfiguration {
 
     @Value("${spring.redis-pub-sub.channel}")
     private String channelTopic;
