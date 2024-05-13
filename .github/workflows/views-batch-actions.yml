@@ -61,10 +61,10 @@ jobs:
 
       - name: Extract version variable
         run: |
-          echo "APP_VERSION=$(./gradlew :LiveFeedBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
+          echo "APP_VERSION=$(./gradlew :LiveFeedViewsBatch:properties -q | grep version | awk -F ' ' '{ print $2 }')" >> $GITHUB_ENV
 
       - name: Execute Gradle build
-        run: ./gradlew :LiveFeedBatch:clean :LiveFeedBatch:bootJar
+        run: ./gradlew :LiveFeedViewsBatch:clean :LiveFeedViewsBatch:bootJar
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -82,7 +82,7 @@ jobs:
       - name: Image build and push
         uses: docker/build-push-action@v4
         with:
-          context: ./LiveFeedBatch
+          context: ./LiveFeedViewsBatch
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
@@ -102,4 +102,4 @@ jobs:
 
       - name: Rolling update
         run: |
-          kubectl set image cronjob/views-batch-cron-job batch-container=ghcr.io/live-feed/live-feed-views-batch:${{ needs.build.outputs.APP_VERSION }} -n application
+          kubectl set image cronjob/views-batch-cron-job views-batch-container=ghcr.io/live-feed/live-feed-views-batch:${{ needs.build.outputs.APP_VERSION }} -n application
