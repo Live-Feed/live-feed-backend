@@ -5,6 +5,7 @@ import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
 import com.livefeed.livefeedservice.articlelist.service.ArticleListService;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -72,6 +73,7 @@ class ArticleListControllerTest {
                 .queryParam("sort", "id-desc")
                 .queryParam("lastId", "6")
                 .queryParam("pit", "3eaGBAEIYXJ0aWNsZXMWOVpGTDhfYTh")
+                .cookie(new Cookie("sseKey", "userSseKey"))
         );
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())

@@ -70,15 +70,11 @@ public class Emitters {
 
     private void sendAlertMessage(String sseKey) {
         SseEmitter sseEmitter = emitters.get(sseKey);
-        if (sseEmitter == null) {
-            log.info("이미 삭제된 sseKey 입니다. sseKey = {}", sseKey);
-            return;
-        }
-
         try {
             sseEmitter.send(SseEmitter.event().id(sseKey).name(EVENT_NAME).data(NEW_ARTICLE_ALERT_MESSAGE));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.warn("브라우저가 닫혀 해당 sseKey 로 연결된 브라우저가 없습니다. sseKey = {}", sseKey);
+            emitters.remove(sseKey);
         }
     }
 }
