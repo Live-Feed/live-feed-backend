@@ -22,7 +22,10 @@ public class WebConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 String[] urls = origins.toArray(new String[0]);
-                registry.addMapping("/**").allowedOrigins(urls);
+                registry.addMapping("/**")
+                        .allowedOrigins(urls)
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }

@@ -52,6 +52,10 @@ server:
 application:
   allow-origins: ${ALLOW_ORIGINS}
 
+cookie:
+  secure: true
+  domain: ${COOKIE_DOMAIN}
+
 decorator:
   datasource:
     p6spy:
