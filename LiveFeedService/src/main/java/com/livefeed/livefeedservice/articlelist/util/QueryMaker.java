@@ -79,7 +79,7 @@ public class QueryMaker {
     protected void makeSearchAfterQuery(NativeQueryBuilder nativeQueryBuilder, Double lastScore, Long lastId) {
         List<Object> searchAfterList = new ArrayList<>();
 
-        if (lastScore != null) {
+        if (lastScore != null && !lastScore.isNaN()) {
             searchAfterList.add(lastScore);
         }
 
