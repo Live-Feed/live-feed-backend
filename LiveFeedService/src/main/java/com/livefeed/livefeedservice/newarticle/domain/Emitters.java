@@ -1,5 +1,7 @@
 package com.livefeed.livefeedservice.newarticle.domain;
 
+import com.livefeed.livefeedservice.newarticle.repository.UserKeywordRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -13,14 +15,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Emitters {
 
-    private static final long SSE_TIMEOUT = 60 * 60 * 1000L;
+    private static final long SSE_TIMEOUT = 10 * 60 * 1000L;
     private static final String EVENT_NAME = "article update";
     private static final String NEW_ARTICLE_ALERT_MESSAGE = "new articles are registered";
     private static final String INITIAL_MESSAGE = "sse connected";
 
     private final ConcurrentHashMap<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+
+    private final UserKeywordRepository userKeywordRepository;
 
     public SseEmitter registerEmitter(String sseKey) {
         SseEmitter sseEmitter = new SseEmitter(SSE_TIMEOUT);
@@ -28,9 +33,10 @@ public class Emitters {
         emitters.put(sseKey, sseEmitter);
 
         sseEmitter.onCompletion(() -> {
-            log.info("{} sse onCompletion", sseKey);
-            sseEmitter.complete();
+            log.info("sse onCompletion sseKey = {}", sseKey);
+            // server sent event 연결이 끝난다면 emitters 목록과 redis 에서 등록된 키워드를 삭제합니다.
             emitters.remove(sseKey);
+            userKeywordRepository.deleteUserKeywords(sseKey);
         });
 
         sseEmitter.onTimeout(sseEmitter::complete);
@@ -39,7 +45,6 @@ public class Emitters {
             sseEmitter.send(SseEmitter.event().id(sseKey).data(INITIAL_MESSAGE));
         } catch (IOException e) {
             emitters.remove(sseKey);
-            throw new RuntimeException(e);
         }
         return sseEmitter;
     }
