@@ -25,33 +25,45 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NativeQueryElasticsearchOperations implements SearchOperations {
 
+//    private static final String ARTICLE_INDEX_NAME = "articles";
+    private static final String PIT_EXIST_TIME = "5m";
+
     private final ElasticsearchOperations elasticsearchOperations;
     private final ElasticsearchClient elasticsearchClient;
     private final QueryMaker queryMaker;
     private final SearchHitModifier searchHitModifier;
 
-    private final String PIT_EXIST_TIME = "5m";
-
     @Override
-    public String getPit(String indexName) {
-        try {
-            OpenPointInTimeResponse pit = elasticsearchClient.openPointInTime(b -> b.index(indexName)
-                    .keepAlive(Time.of(builder -> builder.time(PIT_EXIST_TIME))));
-            return pit.id();
-        } catch (Exception e) {
-            throw new UnableToGetPitException("pit 값을 생성할 수 없습니다.", e);
+    public SearchResultDto getSearchResult(SearchQueryParam searchQueryParam) {
+        // pit가 설정이 안되어 있는 경우 pit를 먼저 가져온다.
+        SearchQueryParam copySearchQueryParam;
+        if (isFirstSearchRequest(searchQueryParam)) {
+            copySearchQueryParam = SearchQueryParam.copyAndSetPit(searchQueryParam, getPit());
+        } else {
+            copySearchQueryParam = SearchQueryParam.copyAndSetPit(searchQueryParam, searchQueryParam.getPit());
         }
-    }
 
-    @Override
-    public SearchResultDto getSearchResultTemp(SearchQueryParam searchQueryParam) {
-        NativeQuery nativeQuery = queryMaker.makeArticleListQuery(searchQueryParam);
+        NativeQuery nativeQuery = queryMaker.makeArticleListQuery(copySearchQueryParam);
         SearchHits<ElasticsearchArticle> searchHits = elasticsearchOperations.search(nativeQuery, ElasticsearchArticle.class);
 
         List<ArticleDto> articleDtoList = makeArticleDtoList(searchHits);
         String pit = searchHits.getPointInTimeId();
 
         return new SearchResultDto(articleDtoList, pit);
+    }
+
+    private boolean isFirstSearchRequest(SearchQueryParam searchQueryParam) {
+        return searchQueryParam.getPit() == null || searchQueryParam.getPit().isEmpty();
+    }
+
+    private String getPit() {
+        try {
+            OpenPointInTimeResponse pit = elasticsearchClient.openPointInTime(b -> b.index("article")
+                    .keepAlive(Time.of(builder -> builder.time(PIT_EXIST_TIME))));
+            return pit.id();
+        } catch (Exception e) {
+            throw new UnableToGetPitException("pit 값을 생성할 수 없습니다.", e);
+        }
     }
 
     private List<ArticleDto> makeArticleDtoList(SearchHits<ElasticsearchArticle> searchResult) {
