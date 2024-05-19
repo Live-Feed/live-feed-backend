@@ -30,7 +30,7 @@ public class KeywordEventListener {
         keywordEvent.keywords()
                 .forEach(keyword -> zSetOperations.incrementScore(SORTED_SET_KEY, keyword, 1));
 
-        Set<String> keywordsRanking = zSetOperations.reverseRange(SORTED_SET_KEY, 0, 10);
+        Set<String> keywordsRanking = zSetOperations.reverseRange(SORTED_SET_KEY, 0, 9);
         // TODO: 5/17/24 기존 랭킹과 동일하면 보낼지 말지 논의 후 수정 필요
         log.info("keywordsRanking = {}", keywordsRanking);
         emitters.sendKeywordRankingMessage(keywordsRanking);
