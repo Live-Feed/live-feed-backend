@@ -1,6 +1,6 @@
 package com.livefeed.livefeedservice.newarticle.domain;
 
-import com.livefeed.livefeedservice.newarticle.repository.UserKeywordRepository;
+import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class Emitters {
 
     private final ConcurrentHashMap<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    private final UserKeywordRepository userKeywordRepository;
+    private final KeywordRepository keywordRepository;
 
     public SseEmitter registerEmitter(String sseKey) {
         SseEmitter sseEmitter = new SseEmitter(SSE_TIMEOUT);
@@ -34,7 +34,7 @@ public class Emitters {
             log.info("sse onCompletion sseKey = {}", sseKey);
             // server sent event 연결이 끝난다면 emitters 목록과 redis 에서 등록된 키워드를 삭제합니다.
             emitters.remove(sseKey);
-            userKeywordRepository.deleteUserKeywords(sseKey);
+            keywordRepository.deleteUserKeywords(sseKey);
         });
 
         sseEmitter.onTimeout(sseEmitter::complete);

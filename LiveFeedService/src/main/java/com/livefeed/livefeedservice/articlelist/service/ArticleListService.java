@@ -5,7 +5,7 @@ import com.livefeed.livefeedservice.articlelist.dto.KeywordEvent;
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
 import com.livefeed.livefeedservice.articlelist.repository.SearchOperations;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
-import com.livefeed.livefeedservice.newarticle.repository.UserKeywordRepository;
+import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class ArticleListService {
 
     private final SearchOperations searchOperations;
-    private final UserKeywordRepository userKeywordRepository;
+    private final KeywordRepository keywordRepository;
     private final KeywordEventPublisher eventPublisher;
 
     public ArticleListDto getArticleList(SearchQueryParam searchQueryParam, String sseKey) {
@@ -24,7 +24,7 @@ public class ArticleListService {
         SearchResultDto searchResultDto = searchOperations.getSearchResult(searchQueryParam);
 
         // 사용자 검색 결과를 redis에 저장해야함
-        int updateCount = userKeywordRepository.updateUserKeywords(sseKey, searchQueryParam.getKeywords());
+        int updateCount = keywordRepository.updateUserKeywords(sseKey, searchQueryParam.getKeywords());
         log.info("update keyword count = {}", updateCount);
 
         if (updateCount != 0) {

@@ -10,9 +10,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import java.util.List;
 
 @Disabled
-class RedisUserKeywordRepositoryTest {
+class RedisKeywordRepositoryTest {
 
-    private static UserKeywordRepository userKeywordRepository;
+    private static KeywordRepository keywordRepository;
     private final String sseKey = "sseKey";
 
     @BeforeAll
@@ -28,12 +28,12 @@ class RedisUserKeywordRepositoryTest {
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.afterPropertiesSet();
 
-        userKeywordRepository = new RedisUserKeywordRepository(redisTemplate);
+        keywordRepository = new RedisKeywordRepository(redisTemplate);
     }
     
     @AfterEach
     void tearDown() {
-        userKeywordRepository.deleteUserKeywords(sseKey);
+        keywordRepository.deleteUserKeywords(sseKey);
     }
 
     @DisplayName("기존에 등록된 키워드가 없고 새로 등록할 키워드도 없는 경우 0을 반환합니다.")
@@ -41,7 +41,7 @@ class RedisUserKeywordRepositoryTest {
     void noKeyWords() {
         // given
         // when
-        int result = userKeywordRepository.updateUserKeywords(sseKey, List.of());
+        int result = keywordRepository.updateUserKeywords(sseKey, List.of());
         // then
         Assertions.assertThat(result).isEqualTo(0);
     }
@@ -50,8 +50,8 @@ class RedisUserKeywordRepositoryTest {
     @DisplayName("키워드를 등록했을때 변화가 없는 경우 0을 반환합니다.")
     void returnZero() {
         // when
-        int first = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
-        int second = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
+        int first = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
+        int second = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
         // then
         Assertions.assertThat(first).isEqualTo(2);
         Assertions.assertThat(second).isEqualTo(0);
@@ -62,8 +62,8 @@ class RedisUserKeywordRepositoryTest {
     void setUserKeyword() {
         // given
         // when
-        int first = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
-        int second = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1"));
+        int first = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
+        int second = keywordRepository.updateUserKeywords(sseKey, List.of("key1"));
         // then
         Assertions.assertThat(first).isEqualTo(2);
         Assertions.assertThat(second).isEqualTo(1);
@@ -74,8 +74,8 @@ class RedisUserKeywordRepositoryTest {
     void setUserKeywordRemove() {
         // given
         // when
-        int first = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
-        int second = userKeywordRepository.updateUserKeywords(sseKey, List.of());
+        int first = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
+        int second = keywordRepository.updateUserKeywords(sseKey, List.of());
 
         // then
         Assertions.assertThat(first).isEqualTo(2);
@@ -87,8 +87,8 @@ class RedisUserKeywordRepositoryTest {
     void setUserKeywordAnother() {
         // given
         // when
-        int first = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
-        int second = userKeywordRepository.updateUserKeywords(sseKey, List.of("key1", "key3", "key4"));
+        int first = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key2"));
+        int second = keywordRepository.updateUserKeywords(sseKey, List.of("key1", "key3", "key4"));
 
         // then
         Assertions.assertThat(first).isEqualTo(2);
