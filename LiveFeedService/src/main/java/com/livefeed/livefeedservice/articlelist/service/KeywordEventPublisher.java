@@ -14,7 +14,6 @@ public class KeywordEventPublisher {
     private final ApplicationEventPublisher eventPublisher;
 
     public void publishKeywordEvent(KeywordEvent keywordEvent) {
-        log.info("keywordEvent = {}", keywordEvent);
         eventPublisher.publishEvent(keywordEvent);
     }
 }

@@ -25,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NativeQueryElasticsearchOperations implements SearchOperations {
 
-//    private static final String ARTICLE_INDEX_NAME = "articles";
     private static final String PIT_EXIST_TIME = "5m";
 
     private final ElasticsearchOperations elasticsearchOperations;
@@ -58,7 +57,7 @@ public class NativeQueryElasticsearchOperations implements SearchOperations {
 
     private String getPit() {
         try {
-            OpenPointInTimeResponse pit = elasticsearchClient.openPointInTime(b -> b.index("article")
+            OpenPointInTimeResponse pit = elasticsearchClient.openPointInTime(b -> b.index("articles")
                     .keepAlive(Time.of(builder -> builder.time(PIT_EXIST_TIME))));
             return pit.id();
         } catch (Exception e) {
