@@ -5,10 +5,10 @@ WORKDIR /app
 ENV active_profile=prod
 ENV TZ=Asia/Seoul
 
-RUN apt-get update && \
-    apt-get install -y tzdata && \
+# 시간대 설정
+RUN dnf install -y tzdata && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone
+    echo $TZ > /etc/timezone \
 
 RUN chmod a+x /app
 
