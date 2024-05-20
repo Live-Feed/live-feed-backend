@@ -11,6 +11,7 @@ import com.livefeed.livefeedservice.articlelist.util.QueryMaker;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import com.livefeed.livefeedservice.common.exception.UnableToGetPitException;
 import com.livefeed.livefeedservice.elasticsearch.entity.ElasticsearchArticle;
+import com.livefeed.livefeedservice.views.ViewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -29,6 +30,7 @@ public class NativeQueryElasticsearchOperations implements SearchOperations {
     private final ElasticsearchClient elasticsearchClient;
     private final QueryMaker queryMaker;
     private final SearchHitModifier searchHitModifier;
+    private final ViewsService viewsService;
 
     private final String PIT_EXIST_TIME = "5m";
 
@@ -64,7 +66,8 @@ public class NativeQueryElasticsearchOperations implements SearchOperations {
                     modifiedArticle.articleBody(),
                     modifiedArticle.articleImg(),
                     search.getContent().getPublicationTime(),
-                    search.getScore()
+                    search.getScore(),
+                    viewsService.getOrSet(search.getContent().getId())
             );
         }).toList();
     }

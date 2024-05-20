@@ -8,7 +8,7 @@ ENV TZ=Asia/Seoul
 # 시간대 설정
 RUN microdnf install -y tzdata && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone \
+    echo $TZ > /etc/timezone
 
 RUN chmod a+x /app
 

@@ -41,8 +41,10 @@ public class Article {
 
     private LocalDateTime createdAt;
 
+    private int views;
+
     @Builder
-    private Article(PressCompany pressCompany, Category category, String title, String originArticleUrl, String contentHeader, String contentBody, String journalistName, String publicationTime) {
+    private Article(PressCompany pressCompany, Category category, String title, String originArticleUrl, String contentHeader, String contentBody, String journalistName, String publicationTime, int views) {
         this.pressCompany = pressCompany;
         this.category = category;
         this.title = title;
@@ -51,5 +53,10 @@ public class Article {
         this.contentBody = contentBody;
         this.journalistName = journalistName;
         this.publicationTime = publicationTime;
+        this.views = views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

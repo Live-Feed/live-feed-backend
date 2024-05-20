@@ -42,6 +42,13 @@ public class Article {
 
     private LocalDateTime createdAt;
 
+    private int views;
+
+    @PrePersist
+    public void initializeViews() {
+        this.views = 0;
+    }
+
     @Builder
     private Article(PressCompany pressCompany, Category category, String title, String originArticleUrl, String contentHeader, String contentBody, String journalistName, String publicationTime) {
         this.pressCompany = pressCompany;

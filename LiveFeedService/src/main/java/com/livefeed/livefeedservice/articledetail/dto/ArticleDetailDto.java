@@ -10,7 +10,8 @@ public record ArticleDetailDto(
         String publicationTime,
         String articleUrl,
         String contentHeader,
-        String contentBody
+        String contentBody,
+        int views
 ) {
 
     public static ArticleDetailDto from(Article article) {
@@ -22,7 +23,8 @@ public record ArticleDetailDto(
                 article.getPublicationTime(),
                 article.getOriginArticleUrl(),
                 article.getContentHeader(),
-                article.getContentBody()
+                article.getContentBody(),
+                article.getViews()
         );
     }
 }

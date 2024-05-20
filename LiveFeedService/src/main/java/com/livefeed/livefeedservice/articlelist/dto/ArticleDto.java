@@ -7,6 +7,7 @@ public record ArticleDto(
         String content,
         String photo,
         String minutesAgo,
-        Float score
+        Float score,
+        int views
 ) {
 }
