@@ -13,35 +13,31 @@ class SearchQueryParamTest {
 
     @DisplayName("요청 파라미터로 받은 정보들을 elasticsearch에서 사용할 쿼리에 파라미터 dto로 변환하는 테스트")
     @Test
-    void makeSearchQueryParam() {
+    void makeRelatedSearchQueryParam() {
         // given
         List<String> keywords = List.of("key1", "key2");
         List<String> type = List.of("type1");
         int size = 5;
-        List<String> sorts = List.of("id-desc", "title-asc");
         Long lastId = null;
         String pit = null;
         // when
-        SearchQueryParam result = SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit, false);
+        SearchQueryParam result = SearchQueryParam.makeParam(type, keywords, size, 12.5, lastId, pit, true);
         // then
-        assertThat(result.getSort()).isEqualTo(Sort.by(Sort.Order.desc("id"), Sort.Order.asc("title")));
-        assertThat(result.getSort()).isNotEqualTo(Sort.by(Sort.Order.asc("title"), Sort.Order.desc("id")));
+        assertThat(result.getSort()).isEqualTo(Sort.by(Sort.Order.desc("_score"), Sort.Order.desc("id")));
     }
 
-    @DisplayName("요청 파라미터로 받은 정보들 중에 정렬 파라미터의 값이 asc, desc 값이 아니면 에러를 발생시킨다.")
+    @DisplayName("요청 파라미터로 받은 정보들을 elasticsearch에서 사용할 쿼리에 파라미터 dto로 변환하는 테스트")
     @Test
-    void notAllowParam() {
+    void makeNotRelatedSearchQueryParam() {
         // given
         List<String> keywords = List.of("key1", "key2");
         List<String> type = List.of("type1");
         int size = 5;
-        List<String> sorts = List.of("id-descc", "title-ascc");
         Long lastId = null;
         String pit = null;
         // when
+        SearchQueryParam result = SearchQueryParam.makeParam(type, keywords, size, 12.5, lastId, pit, false);
         // then
-        assertThatThrownBy(() -> SearchQueryParam.makeParam(keywords, type, size, sorts, lastId, pit, false))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("올바르지 않은 정렬 정보입니다.");
+        assertThat(result.getSort()).isEqualTo(Sort.by(Sort.Order.desc("id")));
     }
 }

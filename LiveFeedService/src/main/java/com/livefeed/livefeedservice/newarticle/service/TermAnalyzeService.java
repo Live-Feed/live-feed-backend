@@ -2,7 +2,7 @@ package com.livefeed.livefeedservice.newarticle.service;
 
 import com.livefeed.livefeedservice.newarticle.domain.Emitters;
 import com.livefeed.livefeedservice.newarticle.repository.TermVectorRepository;
-import com.livefeed.livefeedservice.newarticle.repository.UserKeywordRepository;
+import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class TermAnalyzeService {
 
     private final TermVectorRepository termVectorRepository;
-    private final UserKeywordRepository userKeywordRepository;
+    private final KeywordRepository keywordRepository;
     private final Emitters emitters;
 
     public void noticeNewArticles(Set<String> newArticleIDs) {
@@ -34,7 +34,7 @@ public class TermAnalyzeService {
     private Map<String, Set<String>> findConnectedUserKeywords(List<String> sseKeyList) {
         return sseKeyList.stream().collect(Collectors.toMap(
                 sseKey -> sseKey,
-                userKeywordRepository::getUserKeywords
+                keywordRepository::getUserKeywords
         ));
     }
 }

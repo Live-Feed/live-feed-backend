@@ -32,26 +32,15 @@ public class SearchQueryParam {
         this.isRelatedQuery = isRelatedQuery;
     }
 
-    private SearchQueryParam(List<String> type, List<String> keywords, int size, Sort sort, Long lastId, String pit, boolean isRelatedQuery) {
-        this.type = type;
-        this.keywords = keywords;
-        this.size = size;
-        this.sort = sort;
-        this.lastId = lastId;
-        this.pit = pit;
-        this.isRelatedQuery = isRelatedQuery;
-    }
-
-    public static SearchQueryParam makeParam(List<String> type, List<String> keywords, int size,
-                                             List<String> sorts, Long lastId, String pit, boolean isRelatedQuery) {
-        Sort targetSort  = makeSort(sorts);
-        return new SearchQueryParam(type, keywords, size, targetSort, lastId, pit, isRelatedQuery);
-    }
-
     public static SearchQueryParam makeParam(List<String> type, List<String> keywords, int size, Double lastScore,
                                              Long lastId, String pit, boolean isRelatedQuery) {
         Sort targetSort  = makeSort(isRelatedQuery);
         return new SearchQueryParam(type, keywords, size, targetSort, lastScore, lastId, pit, isRelatedQuery);
+    }
+
+    public static SearchQueryParam copyAndSetPit(SearchQueryParam origin, String pit) {
+        return new SearchQueryParam(origin.type, origin.getKeywords(), origin.getSize(),
+                origin.getSort(), origin.getLastScore(), origin.getLastId(), pit, origin.isRelatedQuery());
     }
 
     private static Sort makeSort(boolean isRelatedQuery) {
@@ -59,27 +48,6 @@ public class SearchQueryParam {
             return Sort.by(Sort.Direction.DESC, "_score", "id");
         }
         return Sort.by(Sort.Direction.DESC, "id");
-    }
-
-    private static Sort makeSort(List<String> sorts) {
-
-        List<Sort.Order> orders = sorts.stream().map(sort -> {
-            String[] sortStringArray = sort.split("-");
-            if (sortStringArray.length <= 1) throw new IllegalArgumentException("올바르지 않은 정렬 정보입니다.");
-
-            String conditionValue = sortStringArray[0];
-            String conditionOrder = sortStringArray[1];
-
-            if (conditionOrder.equals(ASC)) {
-                return Sort.Order.asc(conditionValue);
-            } else if (conditionOrder.equals(DESC)) {
-                return Sort.Order.desc(conditionValue);
-            } else {
-                throw new IllegalArgumentException("올바르지 않은 정렬 정보입니다.");
-            }
-        }).toList();
-
-        return Sort.by(orders);
     }
 
     public void setFirstRequestPit(String pit) {

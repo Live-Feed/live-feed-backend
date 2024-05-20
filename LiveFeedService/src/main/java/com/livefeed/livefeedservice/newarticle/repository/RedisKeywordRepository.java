@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class RedisUserKeywordRepository implements UserKeywordRepository {
+public class RedisKeywordRepository implements KeywordRepository {
 
     private static final long REDIS_TTL_DAY = 1;
 
@@ -53,10 +53,9 @@ public class RedisUserKeywordRepository implements UserKeywordRepository {
 
     @Override
     public void deleteUserKeywords(String sseKey) {
-        SetOperations<String, String> setOperations = redisTemplate.opsForSet();
         Set<String> existedKeywords = getUserKeywords(sseKey);
         if (!existedKeywords.isEmpty()) {
-            setOperations.remove(sseKey, (Object[]) existedKeywords.toArray(new String[0]));
+            redisTemplate.delete(sseKey);
         }
     }
 

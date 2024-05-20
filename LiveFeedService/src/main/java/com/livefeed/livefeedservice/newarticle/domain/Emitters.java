@@ -1,16 +1,13 @@
 package com.livefeed.livefeedservice.newarticle.domain;
 
-import com.livefeed.livefeedservice.newarticle.repository.UserKeywordRepository;
+import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -19,13 +16,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Emitters {
 
     private static final long SSE_TIMEOUT = 10 * 60 * 1000L;
-    private static final String EVENT_NAME = "article update";
+    private static final String ARTICLE_UPDATE_EVENT_NAME = "article update";
     private static final String NEW_ARTICLE_ALERT_MESSAGE = "new articles are registered";
     private static final String INITIAL_MESSAGE = "sse connected";
+    private static final String KEYWORD_RANKING_UPDATE_EVENT_NAME = "keywords ranking update";
 
     private final ConcurrentHashMap<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
-    private final UserKeywordRepository userKeywordRepository;
+    private final KeywordRepository keywordRepository;
 
     public SseEmitter registerEmitter(String sseKey) {
         SseEmitter sseEmitter = new SseEmitter(SSE_TIMEOUT);
@@ -36,7 +34,7 @@ public class Emitters {
             log.info("sse onCompletion sseKey = {}", sseKey);
             // server sent event 연결이 끝난다면 emitters 목록과 redis 에서 등록된 키워드를 삭제합니다.
             emitters.remove(sseKey);
-            userKeywordRepository.deleteUserKeywords(sseKey);
+            keywordRepository.deleteUserKeywords(sseKey);
         });
 
         sseEmitter.onTimeout(sseEmitter::complete);
@@ -73,10 +71,22 @@ public class Emitters {
         }
     }
 
+    public void sendKeywordRankingMessage(Set<String> keywordsRanking) {
+        emitters.keySet().forEach(key -> {
+            try {
+                SseEmitter emitter = emitters.get(key);
+                emitter.send(SseEmitter.event().name(KEYWORD_RANKING_UPDATE_EVENT_NAME).data(keywordsRanking));
+            } catch (IOException e) {
+                log.warn("브라우저가 닫혀 해당 sseKey 로 연결된 브라우저가 없습니다. sseKey = {}", key);
+                emitters.remove(key);
+            }
+        });
+    }
+
     private void sendAlertMessage(String sseKey) {
         SseEmitter sseEmitter = emitters.get(sseKey);
         try {
-            sseEmitter.send(SseEmitter.event().id(sseKey).name(EVENT_NAME).data(NEW_ARTICLE_ALERT_MESSAGE));
+            sseEmitter.send(SseEmitter.event().id(sseKey).name(ARTICLE_UPDATE_EVENT_NAME).data(NEW_ARTICLE_ALERT_MESSAGE));
         } catch (IOException e) {
             log.warn("브라우저가 닫혀 해당 sseKey 로 연결된 브라우저가 없습니다. sseKey = {}", sseKey);
             emitters.remove(sseKey);
