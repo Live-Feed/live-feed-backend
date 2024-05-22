@@ -1,5 +1,6 @@
 package com.livefeed.livefeedservice.newarticle.domain;
 
+import com.livefeed.livefeedservice.articlelist.repository.KeywordRankRepository;
 import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +19,12 @@ public class Emitters {
     private static final long SSE_TIMEOUT = 10 * 60 * 1000L;
     private static final String ARTICLE_UPDATE_EVENT_NAME = "article update";
     private static final String NEW_ARTICLE_ALERT_MESSAGE = "new articles are registered";
-    private static final String INITIAL_MESSAGE = "sse connected";
     private static final String KEYWORD_RANKING_UPDATE_EVENT_NAME = "keywords ranking update";
 
     private final ConcurrentHashMap<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 
     private final KeywordRepository keywordRepository;
+    private final KeywordRankRepository keywordRankRepository;
 
     public SseEmitter registerEmitter(String sseKey) {
         SseEmitter sseEmitter = new SseEmitter(SSE_TIMEOUT);
@@ -40,7 +41,8 @@ public class Emitters {
         sseEmitter.onTimeout(sseEmitter::complete);
 
         try {
-            sseEmitter.send(SseEmitter.event().id(sseKey).data(INITIAL_MESSAGE));
+            Set<String> topRankKeywords = keywordRankRepository.getTopRankKeywords();
+            sseEmitter.send(SseEmitter.event().name(KEYWORD_RANKING_UPDATE_EVENT_NAME).data(topRankKeywords));
         } catch (IOException e) {
             emitters.remove(sseKey);
         }
@@ -71,7 +73,7 @@ public class Emitters {
         }
     }
 
-    public void sendKeywordRankingMessage(Set<String> keywordsRanking) {
+    public void sendKeywordRankingMessageToAllUser(Set<String> keywordsRanking) {
         emitters.keySet().forEach(key -> {
             try {
                 SseEmitter emitter = emitters.get(key);

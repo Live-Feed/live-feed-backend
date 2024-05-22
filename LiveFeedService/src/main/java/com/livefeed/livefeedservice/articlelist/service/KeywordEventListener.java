@@ -32,7 +32,7 @@ public class KeywordEventListener {
         Set<String> existedTopRankKeywords = keywordRankRepository.getExistedTopRankKeywords();
 
         if (isDifferentKeywordsRank(existedTopRankKeywords, updatedTopRankKeywords)) {
-            emitters.sendKeywordRankingMessage(updatedTopRankKeywords);
+            emitters.sendKeywordRankingMessageToAllUser(updatedTopRankKeywords);
             keywordRankRepository.updateTopRankKeywords(updatedTopRankKeywords);
         }
     }
