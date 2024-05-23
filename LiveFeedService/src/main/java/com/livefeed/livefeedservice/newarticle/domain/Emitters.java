@@ -78,7 +78,7 @@ public class Emitters {
             try {
                 SseEmitter emitter = emitters.get(key);
                 emitter.send(SseEmitter.event().name(KEYWORD_RANKING_UPDATE_EVENT_NAME).data(keywordsRanking));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.warn("브라우저가 닫혀 해당 sseKey 로 연결된 브라우저가 없습니다. sseKey = {}", key);
                 emitters.remove(key);
             }
@@ -89,7 +89,7 @@ public class Emitters {
         SseEmitter sseEmitter = emitters.get(sseKey);
         try {
             sseEmitter.send(SseEmitter.event().id(sseKey).name(ARTICLE_UPDATE_EVENT_NAME).data(NEW_ARTICLE_ALERT_MESSAGE));
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("브라우저가 닫혀 해당 sseKey 로 연결된 브라우저가 없습니다. sseKey = {}", sseKey);
             emitters.remove(sseKey);
         }
