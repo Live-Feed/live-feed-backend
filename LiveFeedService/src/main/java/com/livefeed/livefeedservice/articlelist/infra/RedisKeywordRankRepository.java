@@ -1,5 +1,6 @@
-package com.livefeed.livefeedservice.articlelist.repository;
+package com.livefeed.livefeedservice.articlelist.infra;
 
+import com.livefeed.livefeedservice.articlelist.domain.repository.KeywordRankRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;

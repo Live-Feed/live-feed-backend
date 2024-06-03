@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.articlelist.repository;
+package com.livefeed.livefeedservice.articlelist.domain.repository;
 
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;

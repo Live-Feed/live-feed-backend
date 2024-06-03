@@ -1,6 +1,6 @@
 package com.livefeed.livefeedservice.newarticle.domain;
 
-import com.livefeed.livefeedservice.articlelist.repository.KeywordRankRepository;
+import com.livefeed.livefeedservice.articlelist.domain.repository.KeywordRankRepository;
 import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

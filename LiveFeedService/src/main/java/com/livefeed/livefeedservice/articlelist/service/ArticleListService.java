@@ -1,9 +1,10 @@
 package com.livefeed.livefeedservice.articlelist.service;
 
+import com.livefeed.livefeedservice.articlelist.domain.repository.KeywordEventPublisher;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleListDto;
 import com.livefeed.livefeedservice.articlelist.dto.KeywordEvent;
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
-import com.livefeed.livefeedservice.articlelist.repository.SearchOperations;
+import com.livefeed.livefeedservice.articlelist.domain.repository.SearchOperations;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import com.livefeed.livefeedservice.newarticle.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
