@@ -49,11 +49,4 @@ public class SearchQueryParam {
         }
         return Sort.by(Sort.Direction.DESC, "id");
     }
-
-    public void setFirstRequestPit(String pit) {
-        if (pit == null || pit.isBlank()) {
-            throw new IllegalArgumentException("정확한 pit 값이 입력되지 않았습니다.");
-        }
-        this.pit = pit;
-    }
 }

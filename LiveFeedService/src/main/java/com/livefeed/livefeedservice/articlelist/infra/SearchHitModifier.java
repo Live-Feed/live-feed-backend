@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.articlelist.domain;
+package com.livefeed.livefeedservice.articlelist.infra;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -8,8 +8,6 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j

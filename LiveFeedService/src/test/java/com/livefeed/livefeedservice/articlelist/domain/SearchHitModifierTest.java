@@ -1,5 +1,6 @@
 package com.livefeed.livefeedservice.articlelist.domain;
 
+import com.livefeed.livefeedservice.articlelist.infra.SearchHitModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
