@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.articlelist.repository;
+package com.livefeed.livefeedservice.articlelist.infra;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.Time;
@@ -7,6 +7,7 @@ import com.livefeed.livefeedservice.articlelist.domain.SearchHitModifier;
 import com.livefeed.livefeedservice.articlelist.dto.ArticleDto;
 import com.livefeed.livefeedservice.articlelist.dto.ModifiedSearchResultDto;
 import com.livefeed.livefeedservice.articlelist.dto.SearchResultDto;
+import com.livefeed.livefeedservice.articlelist.domain.repository.SearchOperations;
 import com.livefeed.livefeedservice.articlelist.util.QueryMaker;
 import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import com.livefeed.livefeedservice.common.exception.UnableToGetPitException;

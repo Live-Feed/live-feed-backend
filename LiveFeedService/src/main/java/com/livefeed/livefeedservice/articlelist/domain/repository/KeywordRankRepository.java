@@ -1,4 +1,4 @@
-package com.livefeed.livefeedservice.articlelist.repository;
+package com.livefeed.livefeedservice.articlelist.domain.repository;
 
 import java.util.List;
 import java.util.Set;

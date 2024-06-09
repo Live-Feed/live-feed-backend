@@ -29,7 +29,8 @@ spring:
         enabled: false
 
   redis-pub-sub:
-    channel: ${REDIS_PUB_SUB_CHANNEL}
+    new-article-ids-channel: ${REDIS_ARTICLE_CHANNEL}
+    keyword-channel: ${REDIS_KEYWORD_CHANNEL}
 
 management:
   server:
