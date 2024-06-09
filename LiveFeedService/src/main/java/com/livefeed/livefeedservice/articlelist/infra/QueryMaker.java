@@ -1,6 +1,7 @@
-package com.livefeed.livefeedservice.articlelist.util;
+package com.livefeed.livefeedservice.articlelist.infra;
 
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
+import com.livefeed.livefeedservice.articlelist.util.SearchQueryParam;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
@@ -17,7 +18,7 @@ import java.util.List;
 @Component
 public class QueryMaker {
 
-    private final int PIT_DURATION_MINUTES = 3;
+    private final int PIT_DURATION_MINUTES = 5;
 
     public NativeQuery makeArticleListQuery(SearchQueryParam searchQueryParam) {
         NativeQueryBuilder nativeQueryBuilder = NativeQuery.builder();
@@ -35,11 +36,11 @@ public class QueryMaker {
         return nativeQueryBuilder.build();
     }
 
-    protected boolean isShouldSearchQuery(SearchQueryParam searchQueryParam) {
+    private boolean isShouldSearchQuery(SearchQueryParam searchQueryParam) {
         return searchQueryParam.getType() != null;
     }
 
-    protected void makeShouldQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types, List<String> keywords) {
+    private void makeShouldQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types, List<String> keywords) {
         List<Query> queryList = new ArrayList<>();
 
         if (keywords == null) {
@@ -55,7 +56,7 @@ public class QueryMaker {
         nativeQueryBuilder.withQuery(Query.of(q -> q.bool(b -> b.should(queryList))));
     }
 
-    protected void makeHighlightQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types) {
+    private void makeHighlightQuery(NativeQueryBuilder nativeQueryBuilder, List<String> types) {
         HighlightParameters highlightParameters = HighlightParameters.builder()
                 .withNumberOfFragments(1)
                 .withFragmentSize(500)
@@ -68,15 +69,15 @@ public class QueryMaker {
         nativeQueryBuilder.withHighlightQuery(new HighlightQuery(new Highlight(highlightParameters, highlightFields), String.class));
     }
 
-    protected void makeQuerySize(NativeQueryBuilder nativeQueryBuilder, int size) {
+    private void makeQuerySize(NativeQueryBuilder nativeQueryBuilder, int size) {
         nativeQueryBuilder.withMaxResults(size);
     }
 
-    protected void makeSortQuery(NativeQueryBuilder nativeQueryBuilder, Sort sort) {
+    private void makeSortQuery(NativeQueryBuilder nativeQueryBuilder, Sort sort) {
         nativeQueryBuilder.withSort(sort);
     }
 
-    protected void makeSearchAfterQuery(NativeQueryBuilder nativeQueryBuilder, Double lastScore, Long lastId) {
+    private void makeSearchAfterQuery(NativeQueryBuilder nativeQueryBuilder, Double lastScore, Long lastId) {
         List<Object> searchAfterList = new ArrayList<>();
 
         if (lastScore != null && !lastScore.isNaN()) {
@@ -90,7 +91,7 @@ public class QueryMaker {
         nativeQueryBuilder.withSearchAfter(searchAfterList);
     }
 
-    protected void makePitQuery(NativeQueryBuilder nativeQueryBuilder, String pit) {
+    private void makePitQuery(NativeQueryBuilder nativeQueryBuilder, String pit) {
         if (pit != null) {
             nativeQueryBuilder.withPointInTime(new org.springframework.data.elasticsearch.core.query.Query.PointInTime(pit, Duration.ofMinutes(PIT_DURATION_MINUTES)));
         }
